@@ -34,19 +34,17 @@ window.addEventListener("resize", function(event){
 
 let loadingScreen = new LoadingScreen();
 
-//setActiveScreen(loadingScreen);
+setActiveScreen(loadingScreen);
 
-/*
+
 loader
-  .add('bg', 'assets/bg.png');
+  .add('walker', 'assets/Monster/walker.png');
 
 
 
 loader.onProgress.add(loadingScreen.progress.bind(loadingScreen));
 loader.load(setup);
-*/
 
-setup();
 
 let esc = keyboard("Escape");
 esc.press = () => {
