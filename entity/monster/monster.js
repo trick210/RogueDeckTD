@@ -1,15 +1,9 @@
-class Walker extends Entity {
+class Monster extends Entity {
 
-  constructor(posX, posY) {
-    super(posX, posY, 64, 64, resources['walker'].texture);
+  constructor(posX, posY, entityWidth, entityHeight) {
+    super(posX, posY, entityWidth, entityHeight);
 
     this.tag = "monster";
-
-    this.speed = 3;
-
-    this.damage = 1;
-
-    this.hp = 60;
 
     this.tileIndex = 0;
 

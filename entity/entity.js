@@ -1,7 +1,7 @@
-class Entity extends PIXI.Sprite {
+class Entity extends PIXI.Container {
 
-  constructor(posX, posY, entityWidth, entityHeight, texture) {
-    super(texture);
+  constructor(posX, posY, entityWidth, entityHeight) {
+    super();
 
     this.x = posX;
     this.y = posY;
