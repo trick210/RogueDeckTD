@@ -1,16 +1,14 @@
 class Entity extends PIXI.Container {
 
-  constructor(posX, posY, entityWidth, entityHeight) {
+  constructor(posX, posY) {
     super();
 
     this.x = posX;
     this.y = posY;
-    this.width = entityWidth;
-    this.height = entityHeight;
 
     this.layer = 0;
 
-    this.tag = "entity";
+    this.type = entityType.NONE;
   }
 
   update() {
@@ -20,4 +18,10 @@ class Entity extends PIXI.Container {
   remove() {
     gameScreen.entityContainer.removeChild(this);
   }
+}
+
+const entityType = {
+  NONE: "none",
+  MONSTER: "monster",
+  TOWER: "tower",
 }

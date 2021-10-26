@@ -38,7 +38,7 @@ setActiveScreen(loadingScreen);
 
 
 loader
-  .add('walker', 'assets/Monster/walker.png');
+  .add('walker', 'assets/monster/walker.png');
 
 
 
@@ -81,6 +81,17 @@ function update(time) {
   activeScreen.update();
 
   requestAnimationFrame(update);
+}
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
 }
 
 function keyboard(value) {

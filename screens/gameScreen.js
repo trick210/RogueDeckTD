@@ -17,9 +17,21 @@ class GameScreen {
 
     this.currentMonsterList = [];
 
+    this.deck = [];
+    this.hand = [];
+
+    this.selectedCard = null;
+
     this.levelStarted = false;
 
     this.spawnClock = 0;
+
+    this.setupDeck();
+    this.drawCard();
+    this.drawCard();
+    this.drawCard();
+    this.drawCard();
+    this.drawCard();
   }
 
   update() {
@@ -38,7 +50,7 @@ class GameScreen {
         this.spawnClock -= 1000;
       }
 
-      if (this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.tag == "monster").length == 0) {
+      if (this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0) {
         this.levelStarted = false;
         this.ui.startButton.enable();
       }
@@ -65,11 +77,36 @@ class GameScreen {
 
   }
 
+  setupDeck() {
+    for (let i = 0; i < 5; i++) {
+      this.deck.push(new Card(new BaseTower()));
+      this.deck.push(new Card(new CannonBlast()));
+      this.deck.push(new Card(new Overcharge()));
+    }
+
+    shuffle(this.deck);
+  }
+
+  drawCard() {
+    let card = this.deck.shift()
+    this.hand.push(card);
+    this.ui.cardToHand(card)
+  }
+
+  selectCard(card) {
+    if (this.selectedCard != null) {
+      this.selectedCard.deselect();
+    }
+    this.selectedCard = card;
+    this.selectedCard.select();
+  }
 
 
   sortEntities() {
     this.entityContainer.children.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
   }
+
+
 
 
 }

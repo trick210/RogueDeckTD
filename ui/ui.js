@@ -11,7 +11,7 @@ class UI {
 
     this.buttons = [];
 
-    this.startButton = new Button("Start", width - 240, 50, 200, 75, this.gs.startLevel.bind(this.gs));
+    this.startButton = new Button("Start", width - 240, 20, 200, 75, this.gs.startLevel.bind(this.gs));
 
     this.buttons.push(this.startButton);
 
@@ -25,6 +25,16 @@ class UI {
       this.container.addChild(this.buttons[i].container);
     }
 
+    this.handContainer = [];
+
+    for (let i = 0; i < 5; i++) {
+      let ctn = new PIXI.Container();
+      ctn.x = 20 + i * 200;
+      ctn.y = 20;
+      this.handContainer.push(ctn);
+      this.container.addChild(ctn);
+    }
+
   }
 
   update() {
@@ -35,6 +45,15 @@ class UI {
 
     
 
+  }
+
+  cardToHand(card) {
+    for (let i = 0; i < this.handContainer.length; i++) {
+      if (this.handContainer[i].children.length == 0) {
+        this.handContainer[i].addChild(card);
+        break;
+      }
+    }
   }
 
 

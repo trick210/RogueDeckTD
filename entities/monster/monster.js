@@ -1,9 +1,9 @@
 class Monster extends Entity {
 
-  constructor(posX, posY, entityWidth, entityHeight) {
-    super(posX, posY, entityWidth, entityHeight);
+  constructor(posX, posY) {
+    super(posX, posY);
 
-    this.tag = "monster";
+    this.type = entityType.MONSTER;
 
     this.tileIndex = 0;
 
