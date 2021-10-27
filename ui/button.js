@@ -93,7 +93,7 @@ class Button {
 
   disable() {
     this.rect.interactive = false;
-    this.rect.tint = 0xFFC8C8;
+    this.rect.tint = 0x808080;
   }
 
 

@@ -10,11 +10,11 @@ class Card extends PIXI.Container {
 
     switch (cardObject.cardType) {
       case cardType.TOWER:
-        this.fill = 0xAAFFFF;
+        this.fill = 0xAAFFAA;
         break;
 
       case cardType.SPELL:
-        this.fill = 0xFFFFAA;
+        this.fill = 0xFFAAFF;
         break;
 
       case cardType.CURSE:

@@ -13,7 +13,7 @@ class Walker extends Monster {
 
     this.damage = 1;
 
-    this.hp = 60;
+    this.hp = 100;
 
  
   }

@@ -9,6 +9,14 @@ class Monster extends Entity {
 
     this.oldvx = 0;
     this.oldvy = 0;
+
+    this.hpBar = new PIXI.Graphics();
+    this.hpBar.beginFill(0xFF3030);
+    this.hpBar.drawRect(8, -15, 48, 5);
+    this.hpBar.endFill();
+    this.addChild(this.hpBar);
+
+
   }
 
   update() {
@@ -37,7 +45,7 @@ class Monster extends Entity {
 
     } else {
 
-      //deal damage
+      gameScreen.hp -= Math.ceil(this.hp / 100)
       this.remove();
     }
 

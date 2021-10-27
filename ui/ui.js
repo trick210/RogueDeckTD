@@ -35,6 +35,42 @@ class UI {
       this.container.addChild(ctn);
     }
 
+    this.pileSprite = new PIXI.Graphics();
+    this.pileSprite.lineStyle(5, 0x000000, 1);
+    this.pileSprite.beginFill(0xA0A0A0);
+    this.pileSprite.drawRect(width - 660, 20, 175, 250);
+    this.pileSprite.drawRect(width - 460, 20, 175, 250);
+    this.pileSprite.endFill();
+    this.container.addChild(this.pileSprite);
+
+    this.deckText = new PIXI.Text("Deck", {fontFamily: 'Arial', fontSize: 24, fill: 0x000000, align: 'center'});
+    this.deckText.anchor.set(0.5);
+    this.deckText.x = width - 660 + 87;
+    this.deckText.y = 125;
+    this.container.addChild(this.deckText);
+
+    this.discardText = new PIXI.Text("Discard Pile", {fontFamily: 'Arial', fontSize: 24, fill: 0x000000, align: 'center'});
+    this.discardText.anchor.set(0.5);
+    this.discardText.x = width - 460 + 87;
+    this.discardText.y = 125;
+    this.container.addChild(this.discardText);
+
+    this.roundText = new PIXI.Text("Round: 0", {fontFamily: 'Arial', fontSize: 36, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 5});
+    this.roundText.x = width - 240;
+    this.roundText.y = 120;
+    this.container.addChild(this.roundText);
+
+    this.hpText = new PIXI.Text("HP: 0", {fontFamily: 'Arial', fontSize: 36, fill: 0x00FF00, stroke: 'black', strokeThickness: 5});
+    this.hpText.x = width - 240;
+    this.hpText.y = 170;
+    this.container.addChild(this.hpText);
+
+    this.energyText = new PIXI.Text("Energy: 0", {fontFamily: 'Arial', fontSize: 36, fill: 0xFFD700, stroke: 'black', strokeThickness: 5});
+    this.energyText.x = width - 240;
+    this.energyText.y = 220;
+    this.container.addChild(this.energyText);
+
+
   }
 
   update() {
@@ -43,6 +79,11 @@ class UI {
       this.buttons[i].update();
     }
 
+    this.deckText.text = `Deck\n\n${this.gs.deck.length} cards`
+    this.discardText.text = `Discard Pile\n\n${this.gs.discardPile.length} cards`
+    this.roundText.text = `Round: ${this.gs.round}`;
+    this.hpText.text = `HP: ${this.gs.hp}`;
+    this.energyText.text = `Energy: ${this.gs.energy}`;
     
 
   }
@@ -50,10 +91,15 @@ class UI {
   cardToHand(card) {
     for (let i = 0; i < this.handContainer.length; i++) {
       if (this.handContainer[i].children.length == 0) {
+        card.handIndex = i;
         this.handContainer[i].addChild(card);
         break;
       }
     }
+  }
+
+  removeFromHand(index) {
+    this.handContainer[index].removeChildAt(0);
   }
 
 

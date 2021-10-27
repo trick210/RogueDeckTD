@@ -10,7 +10,7 @@ class GrassMap {
 
     this.bg = new Sprite(PIXI.Texture.WHITE);
     this.bg.width = width;
-    this.bg.height = height;
+    this.bg.height = height - 300;
     this.bg.tint = 0x00AA00;
 
     this.tileContainer = new PIXI.Container();
