@@ -9,12 +9,18 @@ class Monster extends Entity {
 
     this.oldvx = 0;
     this.oldvy = 0;
+    this.oldhp = 0;;
 
     this.hpBar = new PIXI.Graphics();
-    this.hpBar.beginFill(0xFF3030);
-    this.hpBar.drawRect(8, -15, 48, 5);
-    this.hpBar.endFill();
     this.addChild(this.hpBar);
+
+    let hpFrame = new PIXI.Graphics();
+    hpFrame.lineStyle(1, 0x000000, 1);
+    hpFrame.beginFill(0xFFFFFF, 0);
+    hpFrame.drawRect(8, -15, 48, 5);
+    hpFrame.endFill();
+
+    this.addChild(hpFrame);
 
 
   }
@@ -49,6 +55,23 @@ class Monster extends Entity {
       this.remove();
     }
 
+
+    if (this.oldhp != this.hp) {
+      this.hpBar.clear();
+      this.hpBar.beginFill(0xFF3030);
+      this.hpBar.drawRect(8, -15, 48 * (this.hp / this.maxHP), 5);
+      this.hpBar.endFill();
+
+      this.oldhp = this.hp;
+    }
+
+  }
+
+  recieveDamage(amount) {
+    this.hp -= amount;
+    if (this.hp <= 0) {
+      this.remove();
+    }
   }
 
 }

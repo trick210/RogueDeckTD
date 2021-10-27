@@ -3,6 +3,8 @@ let gameScreen;
 let deathScreen;
 let activeScreen = null;
 
+let collider = new Bump(PIXI);
+
 
 let width = 1920;
 let height = 1080;
@@ -38,7 +40,8 @@ setActiveScreen(loadingScreen);
 
 
 loader
-  .add('walker', 'assets/monster/walker.png');
+  .add('walker', 'assets/monster/walker.png')
+  .add('baseTower', 'assets/tower/baseTower.png');
 
 
 

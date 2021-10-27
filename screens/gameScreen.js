@@ -16,9 +16,15 @@ class GameScreen {
     this.container.addChild(this.entityContainer);
     this.container.addChild(this.ui.container);
 
+    this.map.container.interactive = true;
+    this.map.container.on("pointermove", this.hoverMap.bind(this));
+    this.map.container.on('pointerover', this.enterMap.bind(this));
+    this.map.container.on("pointerout", this.leaveMap.bind(this));
+    this.map.container.on("pointertap", this.clickMap.bind(this));
+
     this.round = 1;
     this.hp = 100;
-    this.energy = 5;
+    this.energy = 3;
 
     this.currentMonsterList = [];
 
@@ -67,7 +73,7 @@ class GameScreen {
   }
 
   checkEnd() {
-    if (this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0) {
+    if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0) {
         this.levelStarted = false;
         this.ui.startButton.enable();
         this.round++;
@@ -123,6 +129,7 @@ class GameScreen {
   drawPhase() {
 
     this.discardHand();
+    this.energy = 3;
 
     let turretCard = this.drawTurret();
     let remainingCards = 4;
@@ -149,22 +156,74 @@ class GameScreen {
   }
 
   discardHand() {
-    for (let i = 0; i < this.hand.length; i++) {
-      let card = this.hand[i];
-      card.deselect();
-      this.ui.removeFromHand(card.handIndex);
-      this.discardPile.push(card);
+    while (this.hand.length != 0) {
+      let card = this.hand[0];
+      this.discardCard(card);
     }
-    this.hand = [];
-    this.selectedCard = null;
+  }
+
+  discardCard(card) {
+    
+    this.ui.removeFromHand(card.handIndex);
+    this.discardPile.push(card);
+    this.hand.splice(this.hand.indexOf(card), 1);
+
+    if (this.selectedCard == card) {
+      card.deselect();
+      this.selectedCard = null;
+    } 
+  }
+
+  destroyCard(card) {
+    
+    this.ui.removeFromHand(card.handIndex);
+    this.hand.splice(this.hand.indexOf(card), 1);
+
+    if (this.selectedCard == card) {
+      card.deselect();
+      this.selectedCard = null;
+    } 
   }
 
   selectCard(card) {
     if (this.selectedCard != null) {
       this.selectedCard.deselect();
     }
-    this.selectedCard = card;
-    this.selectedCard.select();
+
+    if (card.select()) {
+      this.selectedCard = card;
+    }
+    
+  }
+
+  hoverMap(e) {
+    let pos = e.data.global;
+
+    if (this.selectedCard != null) {
+      this.selectedCard.hoverMap(pos);
+    }
+  }
+
+  enterMap(e) {
+    let pos = e.data.global;
+
+    if (this.selectedCard != null) {
+      this.selectedCard.enterMap(pos);
+    }
+  }
+
+  leaveMap() {
+    if (this.selectedCard != null) {
+      this.selectedCard.leaveMap();
+    }
+  }
+
+  clickMap(e) {
+    let pos = e.data.global;
+
+    if (this.selectedCard != null) {
+      this.selectedCard.clickMap(pos);
+    }
   }
 
 

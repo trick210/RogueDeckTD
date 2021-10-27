@@ -32,12 +32,14 @@ class GrassMap {
 
     this.level = [];
 
-    for (let l = 0; l < 5; l++) {
+    for (let l = 1; l <= 20; l++) {
 
       let monster = [];
 
-      for (let i = 0; i < 10; i++) {
-        monster.push(new Walker(this.startPos[0] * this.gridSize, this.startPos[1] * this.gridSize))
+      for (let i = 0; i < l * 10; i++) {
+        let walker = new Walker(this.startPos[0] * this.gridSize, this.startPos[1] * this.gridSize);
+        walker.spawnIndex = i;
+        monster.push(walker);
       }
 
       this.level.push(monster);

@@ -18,10 +18,15 @@ class Entity extends PIXI.Container {
   remove() {
     gameScreen.entityContainer.removeChild(this);
   }
+
+  addToStage() {
+    gameScreen.entityContainer.addChild(this);
+  }
 }
 
 const entityType = {
   NONE: "none",
   MONSTER: "monster",
   TOWER: "tower",
+  PROJECTILE: "projectile",
 }

@@ -88,11 +88,42 @@ class Card extends PIXI.Container {
   }
 
   select() {
-    this.cardFrame.tint = 0xFF0000;
+    if (gameScreen.energy >= this.cost) {
+      this.cardFrame.tint = 0xFF0000;
+      return true;
+    }
+
+    return false;
   }
 
   deselect() {
     this.cardFrame.tint = 0x000000;
+  }
+
+
+  hoverMap(pos) {
+    this.cardObject.hoverMap(pos);
+  }
+
+  enterMap(pos) {
+    this.cardObject.enterMap(pos);
+  }
+
+  leaveMap() {
+    this.cardObject.leaveMap();
+  }
+
+  clickMap(pos) {
+    if (this.cardObject.clickMap(pos)) {
+      if (this.type == cardType.TOWER) {
+        gameScreen.destroyCard(this);
+      } else {
+        gameScreen.discardCard(this);
+      }
+
+      gameScreen.energy -= this.cost;
+      
+    }
   }
 }
 

@@ -8,6 +8,25 @@ class Spell {
 
   }
 
+
+  enterMap(pos) {
+    
+
+  }
+
+  hoverMap(pos) {
+
+    
+  }
+
+  leaveMap() {
+    
+  }
+
+  clickMap(pos) {
+    return true;
+  }
+
 }
 
 const spellTags = {

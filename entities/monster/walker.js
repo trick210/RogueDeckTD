@@ -6,6 +6,8 @@ class Walker extends Monster {
     this.texture = new PIXI.Sprite(resources['walker'].texture);
     this.texture.width = 64;
     this.texture.height = 64;
+    this.texture.circular = true;
+    this.texture.radius = 32;
 
     this.addChild(this.texture);
 
@@ -13,7 +15,8 @@ class Walker extends Monster {
 
     this.damage = 1;
 
-    this.hp = 100;
+    this.hp = 200;
+    this.maxHP = this.hp;
 
  
   }
