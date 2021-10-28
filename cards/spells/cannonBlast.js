@@ -8,12 +8,14 @@ class CannonBlast extends Spell {
     this.cost = 1;
 
     this.dmg = 200;
-    this.radius = 100;
+    this.radius = 150;
 
 
     this.tags.push(spellTags.AOE);
     this.tags.push(spellTags.INSTANT);
     this.tags.push(spellTags.DAMAGE);
+
+    this.tar = null;
 
   }
 
@@ -25,6 +27,21 @@ class CannonBlast extends Spell {
       "Radius: " + this.radius;
 
     return text;
+  }
+
+  update() {
+    if (this.targets != null) {
+        this.targets.forEach(target => {
+        if (target.type == entityType.MONSTER) {
+          target.recieveDamage(this.dmg)
+        }
+      });
+      this.remove();
+    }
+  }
+
+  hitTargets(targets) {
+    this.targets = targets;
   }
 
 }

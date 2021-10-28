@@ -1,18 +1,17 @@
 class Tower extends Entity {
 
-  constructor(range) {
+  constructor() {
     super(0, 0);
 
     this.cardType = cardType.TOWER;
     this.type = entityType.TOWER;
 
-    this.range = range;
+    this.range = 0;
 
     this.tags = [];
 
     this.onMap = false;
     this.placed = false;
-    this.canPlace = false;
 
     this.rangeCollider = new PIXI.Sprite();
     this.rangeCollider.circular = true;
@@ -20,10 +19,6 @@ class Tower extends Entity {
     this.addChild(this.rangeCollider);
 
     this.rangeCircle = new PIXI.Graphics();
-    this.rangeCircle.lineStyle(4, 0x808080, 0.5);
-    this.rangeCircle.beginFill(0xFFFFFF, 0.2);
-    this.rangeCircle.drawCircle(0, 0, this.range);
-    this.rangeCircle.endFill();
 
     this.layerOffset = 100;
     this.layer += this.layerOffset;
@@ -39,21 +34,24 @@ class Tower extends Entity {
 
     for (let i = this.buffs.length - 1; i >= 0; i--) {
       let buff = this.buffs[i];
-      
-      switch(buff.buffedStat) {
-        case statTags.DAMAGE:
-          this.dmg += this.baseDmg * buff.buff;
-          break;
-
-        default:
-      }
 
       if (buff.tags.includes(spellTags.TIMED)) {
         buff.duration -= deltaTime;
         if (buff.duration <= 0) {
           this.buffs.splice(this.buffs.indexOf(buff), 1);
+          continue;
         }
       }
+
+      switch(buff.buffedStat) {
+        case statTags.DAMAGE:
+          this.dmg += this.baseDmg * buff.effect;
+          break;
+
+        default:
+      }
+
+      
     }
 
     if (this.buffs.length == 0) {
@@ -67,6 +65,11 @@ class Tower extends Entity {
     this.x = pos.x;
     this.y = pos.Y;
 
+    this.rangeCircle.clear();
+    this.rangeCircle.lineStyle(4, 0x808080, 0.5);
+    this.rangeCircle.beginFill(0xFFFFFF, 0.2);
+    this.rangeCircle.drawCircle(0, 0, this.range);
+    this.rangeCircle.endFill();
     this.rangeCircle.tint = 0xAAAAAA;
 
     this.onMap = true;
@@ -85,18 +88,9 @@ class Tower extends Entity {
     this.x = pos.x;
     this.y = pos.y;
 
-    let obstacles = gameScreen.map.tileContainer.children.concat(
-      gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER && e != this).map(e => e.texture));
+    let hit = this.canPlace(pos);
 
-    let hit = collider.hit(this.texture, obstacles, false, false, true);
-
-    this.canPlace = !hit;
-
-    if (hit) {
-      this.rangeCircle.tint = 0xFF8080;
-    } else {
-      this.rangeCircle.tint = 0xAAAAAA;
-    }
+    this.rangeCircle.tint = !hit ? 0xFF8080 : 0xAAAAAA;
   }
 
   leaveMap() {
@@ -106,7 +100,10 @@ class Tower extends Entity {
   }
 
   clickMap(pos) {
-    if (this.canPlace) {
+    if (this.canPlace(pos)) {
+      this.x = pos.x;
+      this.y = pos.y;
+
       this.removeChild(this.rangeCircle);
       this.placed = true;
       this.layer -= this.layerOffset;
@@ -117,6 +114,13 @@ class Tower extends Entity {
     }
 
     return false;
+  }
+
+  canPlace(pos) {
+    let obstacles = gameScreen.map.tileContainer.children.concat(
+      gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER && e != this).map(e => e.texture));
+
+    return !collider.hit(this.texture, obstacles, false, false, true);
   }
 
   enter() {

@@ -8,7 +8,7 @@ class Overcharge extends Spell {
     this.cost = 1;
 
     this.duration = 3000;
-    this.buff = 1;
+    this.effect = 1;
 
     this.buffedStat = statTags.DAMAGE;
 
@@ -22,23 +22,27 @@ class Overcharge extends Spell {
 
   getCardText() {
     let text = 
-      (this.buff * 100) + "% bonus attack\ndamage\n\n" +
+      (this.effect * 100) + "% bonus attack\ndamage\n\n" +
       "Duration: " + (this.duration / 1000) + " seconds\n";
 
     return text;
   }
 
   clickTarget(target) {
-    if (target.type != entityType.TOWER) {
-      return false;
-    }
 
     if (!target.tags.includes(towerTags.DAMAGE)) {
       return false;
     }
 
+    let statBuff = new Object();
+    statBuff.duration = this.duration;
+    statBuff.effect = this.effect;
+    statBuff.buffedStat = this.buffedStat;
 
-    target.buffs.push(this);
+    statBuff.tags = this.tags;
+
+
+    target.buffs.push(statBuff);
 
     return true;
   }

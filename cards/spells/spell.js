@@ -1,17 +1,37 @@
-class Spell {
+class Spell extends Entity {
 
   constructor() {
+    super(0, 0);
 
     this.cardType = cardType.SPELL;
 
     this.tags = [];
+
+    this.onMap = false;
+    this.rangeCircle = new PIXI.Graphics();
+
+    this.layer = 1000;
 
   }
 
 
   enterMap(pos) {
     
-    
+    if (this.tags.includes(spellTags.AOE)) {
+      this.x = pos.x;
+      this.y = pos.Y;
+
+      this.rangeCircle.clear();
+      this.rangeCircle.lineStyle(4, 0xFF5050, 1);
+      this.rangeCircle.beginFill(0xAAAAAA, 0.4);
+      this.rangeCircle.drawCircle(0, 0, this.radius);
+      this.rangeCircle.endFill();
+
+      this.onMap = true;
+
+      this.addChildAt(this.rangeCircle, 0);
+      this.addToStage();
+    }
 
   }
 
@@ -33,19 +53,28 @@ class Spell {
         gameScreen.map.container.buttonMode = false;
       }
     }
+
+    if (this.tags.includes(spellTags.AOE)) {
+      if (!this.onMap) {
+        return;
+      }
+
+      this.x = pos.x;
+      this.y = pos.y;
+    }
     
   }
 
   leaveMap() {
-
-    
-    
+    this.removeChild(this.rangeCircle);
+    this.remove();
+    this.onMap = false;    
   }
 
   clickMap(pos) {
 
     if (this.tags.includes(spellTags.TARGETED)) {
-      let clickable = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER || e.type == entityType.MONSTER);
+      let clickable = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER);
       let target = null;
       for (let i = 0; i < clickable.length; i++) {
         if (collider.hitTestPoint(pos, clickable[i].texture)) {
@@ -67,6 +96,33 @@ class Spell {
       
     }
 
+    if (this.tags.includes(spellTags.AOE)) {
+      let targetsHit = [];
+      let possibleTargets = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER || e.type == entityType.MONSTER);
+
+      this.x = pos.x;
+      this.y = pos.y;
+
+      let rangeCollider = new PIXI.Sprite();
+      rangeCollider.circular = true;
+      rangeCollider.radius = this.radius;
+      this.addChild(rangeCollider);
+
+      possibleTargets.forEach(target => {
+        if (collider.hit(rangeCollider, target.texture, false, false, true)) {
+          targetsHit.push(target);
+        }
+      });
+
+      this.removeChild(rangeCollider);
+      this.removeChild(this.rangeCircle);
+
+      this.hitTargets(targetsHit);
+
+      return true;
+
+    }
+
     return false;;
   }
 
@@ -79,12 +135,13 @@ const spellTags = {
   DAMAGE: "Damage",
   BUFF: "Buff",
   TIMED: "Timed",
-  INSTANT: "instant",
+  INSTANT: "Instant",
   DELAYED: "Delayed",
   AOE: "AOE",
   DOT: "DOT",
   CRIPPLE: "Cripple",
-  TARGETED: "Targeted",
+  TARGET_TOWER: "Target tower",
+  TARGET_MONSTER: "Target tower",
 }
 
 const statTags = {

@@ -1,7 +1,7 @@
 class BaseTower extends Tower {
 
   constructor() {
-    super(200);
+    super();
 
     this.name = "Base Tower";
 
@@ -10,6 +10,9 @@ class BaseTower extends Tower {
     this.baseDmg = 50;
     this.dmg = this.baseDmg;
     this.attackSpeed = 2;
+
+    this.range = 200;
+    this.rangeCollider.radius = this.range;
 
     this.missileSpeed = 15;
 
@@ -41,11 +44,13 @@ class BaseTower extends Tower {
   }
 
   update() {
+
     if (this.placed && gameScreen.levelStarted) {
 
       super.update();
 
       this.projectileColor = this.buffed ? 0xFFFF00 : 0xFF00FF;
+      this.texture.tint = this.buffed ? 0xFF00FF : 0xFFFFFF;
 
       if (this.shootCD < 1000 / this.attackSpeed) {
         this.shootCD += deltaTime;
@@ -59,10 +64,19 @@ class BaseTower extends Tower {
 
       for (let i = 0; i < monster.length; i++) {
         let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
-        if (collision.collided) {
+        if (collision) {
           monsterHit = monster[i];
-          vx = collision.vx / collision.mag;
-          vy = collision.vy / collision.mag;
+          vx = monsterHit.texture.gx + monsterHit.texture.width / 2 - monsterHit.texture.xAnchorOffset - 
+            (this.rangeCollider.gx + this.rangeCollider.width / 2 - this.rangeCollider.xAnchorOffset);
+
+          vy = monsterHit.texture.gy + monsterHit.texture.width / 2 - monsterHit.texture.yAnchorOffset - 
+            (this.rangeCollider.gy + this.rangeCollider.width / 2 - this.rangeCollider.yAnchorOffset);
+
+          let mag = Math.sqrt(vx * vx + vy * vy);
+
+          vx = vx / mag;
+          vy = vy / mag;
+
           break;
         }
       }
@@ -140,7 +154,7 @@ class BaseProjectile extends Entity {
 
     for (let i = 0; i < monster.length; i++) {
       let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
-      if (collision.collided) {
+      if (collision) {
         monsterHit = monster[i];
         break;
       }
