@@ -90,6 +90,7 @@ class Card extends PIXI.Container {
   select() {
     if (gameScreen.energy >= this.cost) {
       this.cardFrame.tint = 0xFF0000;
+      gameScreen.entityContainer.interactiveChildren = false;
       return true;
     }
 
@@ -98,6 +99,7 @@ class Card extends PIXI.Container {
 
   deselect() {
     this.cardFrame.tint = 0x000000;
+    gameScreen.entityContainer.interactiveChildren = true;
   }
 
 

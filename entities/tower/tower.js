@@ -21,10 +21,46 @@ class Tower extends Entity {
 
     this.rangeCircle = new PIXI.Graphics();
     this.rangeCircle.lineStyle(4, 0x808080, 0.5);
-    this.rangeCircle.beginFill(0xFFFFFF, 0.5);
+    this.rangeCircle.beginFill(0xFFFFFF, 0.2);
     this.rangeCircle.drawCircle(0, 0, this.range);
     this.rangeCircle.endFill();
 
+    this.layerOffset = 100;
+    this.layer += this.layerOffset;
+
+    this.buffs = [];
+    this.buffed = false;
+
+  }
+
+  update() {
+
+    this.dmg = this.baseDmg;
+
+    for (let i = this.buffs.length - 1; i >= 0; i--) {
+      let buff = this.buffs[i];
+      
+      switch(buff.buffedStat) {
+        case statTags.DAMAGE:
+          this.dmg += this.baseDmg * buff.buff;
+          break;
+
+        default:
+      }
+
+      if (buff.tags.includes(spellTags.TIMED)) {
+        buff.duration -= deltaTime;
+        if (buff.duration <= 0) {
+          this.buffs.splice(this.buffs.indexOf(buff), 1);
+        }
+      }
+    }
+
+    if (this.buffs.length == 0) {
+      this.buffed = false;
+    } else {
+      this.buffed = true;
+    }
   }
 
   enterMap(pos) {
@@ -71,8 +107,9 @@ class Tower extends Entity {
 
   clickMap(pos) {
     if (this.canPlace) {
-      //this.removeChild(this.rangeCircle);
+      this.removeChild(this.rangeCircle);
       this.placed = true;
+      this.layer -= this.layerOffset;
       this.texture.interactive = true;
       this.texture.on('pointerover', this.enter.bind(this));
       this.texture.on("pointerout", this.leave.bind(this));
@@ -84,10 +121,12 @@ class Tower extends Entity {
 
   enter() {
     this.addChildAt(this.rangeCircle, 0);
+    this.layer += this.layerOffset;
   }
 
   leave() {
     this.removeChild(this.rangeCircle);
+    this.layer -= this.layerOffset;
   }
 
 }

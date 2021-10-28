@@ -5,9 +5,10 @@ class BaseTower extends Tower {
 
     this.name = "Base Tower";
 
-    this.cost = 1;
+    this.cost = 2;
 
-    this.dmg = 50;
+    this.baseDmg = 50;
+    this.dmg = this.baseDmg;
     this.attackSpeed = 2;
 
     this.missileSpeed = 15;
@@ -35,11 +36,16 @@ class BaseTower extends Tower {
     this.addChild(this.texture);
 
     this.shootCD = 1000 / this.attackSpeed;
+    this.projectileColor = 0xFF00FF;
     
   }
 
   update() {
     if (this.placed && gameScreen.levelStarted) {
+
+      super.update();
+
+      this.projectileColor = this.buffed ? 0xFFFF00 : 0xFF00FF;
 
       if (this.shootCD < 1000 / this.attackSpeed) {
         this.shootCD += deltaTime;
@@ -63,7 +69,7 @@ class BaseTower extends Tower {
 
       if (monsterHit != null) {
         
-        let missile = new BaseProjectile(this.x, this.y, vx, vy, this.dmg, this.missileSpeed, this.range);
+        let missile = new BaseProjectile(this.x, this.y, vx, vy, this.dmg, this.missileSpeed, this.range, this.projectileColor);
         missile.addToStage();
 
         this.shootCD = deltaTime;
@@ -86,7 +92,7 @@ class BaseTower extends Tower {
 
 class BaseProjectile extends Entity {
 
-  constructor(posX, posY, vx, vy, dmg, speed, range) {
+  constructor(posX, posY, vx, vy, dmg, speed, range, color) {
     super(posX, posY);
 
     this.type = entityType.PROJECTILE;
@@ -100,7 +106,7 @@ class BaseProjectile extends Entity {
 
     this.texture = new PIXI.Graphics();
     this.texture.lineStyle(2, 0x000000, 1);
-    this.texture.beginFill(0xFF00FF);
+    this.texture.beginFill(color);
     this.texture.drawCircle(0, 0, 10);
     this.texture.endFill();
     this.addChild(this.texture);
