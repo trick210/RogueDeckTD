@@ -15,7 +15,7 @@ class CannonBlast extends Spell {
     this.tags.push(spellTags.INSTANT);
     this.tags.push(spellTags.DAMAGE);
 
-    this.tar = null;
+    this.targets = null;
 
   }
 
@@ -31,11 +31,12 @@ class CannonBlast extends Spell {
 
   update() {
     if (this.targets != null) {
-        this.targets.forEach(target => {
+      this.targets.forEach(target => {
         if (target.type == entityType.MONSTER) {
           target.recieveDamage(this.dmg)
         }
       });
+      this.targets = null;
       this.remove();
     }
   }

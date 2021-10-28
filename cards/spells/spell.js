@@ -4,6 +4,7 @@ class Spell extends Entity {
     super(0, 0);
 
     this.cardType = cardType.SPELL;
+    this.entityType = entityType.SPELL_EFFECT
 
     this.tags = [];
 
@@ -19,7 +20,7 @@ class Spell extends Entity {
     
     if (this.tags.includes(spellTags.AOE)) {
       this.x = pos.x;
-      this.y = pos.Y;
+      this.y = pos.y;
 
       this.rangeCircle.clear();
       this.rangeCircle.lineStyle(4, 0xFF5050, 1);

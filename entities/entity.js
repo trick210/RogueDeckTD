@@ -29,4 +29,5 @@ const entityType = {
   MONSTER: "monster",
   TOWER: "tower",
   PROJECTILE: "projectile",
+  SPELL_EFFECT: "spell effect",
 }
