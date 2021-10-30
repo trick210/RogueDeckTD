@@ -18,7 +18,7 @@ class BaseTower extends Tower {
 
     this.dps = this.dmg * this.attackSpeed;
 
-    this.tags.push(towerTags.MISSILES);
+    this.tags.push(towerTags.BULLET);
     this.tags.push(towerTags.DAMAGE);
 
     /*

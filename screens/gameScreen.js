@@ -20,11 +20,31 @@ class GameScreen {
     this.map.container.on("pointermove", this.hoverMap.bind(this));
     this.map.container.on('pointerover', this.enterMap.bind(this));
     this.map.container.on("pointerout", this.leaveMap.bind(this));
-    this.map.container.on("pointertap", this.clickMap.bind(this));
+    this.map.container.on("click", this.clickMap.bind(this));
+    this.map.container.on("rightclick", this.deselectCard.bind(this));
+
+    this.ui.bg.interactive = true;
+    this.ui.bg.on("rightclick", this.deselectCard.bind(this));
+    this.ui.bg.on("click", this.deselectCard.bind(this));
+
+    keyboard("1").press = () => this.selectCardFromIndex(0);
+    keyboard("2").press = () => this.selectCardFromIndex(1);
+    keyboard("3").press = () => this.selectCardFromIndex(2);
+    keyboard("4").press = () => this.selectCardFromIndex(3);
+    keyboard("5").press = () => this.selectCardFromIndex(4);
+    keyboard("6").press = () => this.selectCardFromIndex(5);
+    keyboard("7").press = () => this.selectCardFromIndex(6);
+    keyboard("8").press = () => this.selectCardFromIndex(7);
+    keyboard("9").press = () => this.selectCardFromIndex(8);
+    keyboard("0").press = () => this.selectCardFromIndex(9);
+
+    keyboard(" ").press = () => this.startLevel();
+
+    this.mouseOnMap = false;
 
     this.round = 1;
     this.hp = 100;
-    this.energy = 3;
+    this.energy = 5;
 
     this.currentMonsterList = [];
 
@@ -106,7 +126,14 @@ class GameScreen {
       this.reshuffle();
     }
 
-    return this.deck.shift()
+    let card = this.deck.shift();
+
+    if (this.hand.length < 10) {
+      this.hand.push(card);
+      this.ui.cardToHand(card);
+    } else {
+      this.discardPile.push(card);
+    }
     
   }
 
@@ -119,32 +146,31 @@ class GameScreen {
       if (this.deck[i].type == cardType.TOWER) {
         let card = this.deck[i];
         this.deck.splice(i, 1);
-        return card;
+        
+        if (this.hand.length < 10) {
+          this.hand.push(card);
+          this.ui.cardToHand(card);
+        } else {
+          this.discardPile.push(card);
+        }
+
+        return true;
       }
     }
 
-    return null;
+    return false;
   }
 
   drawPhase() {
 
     this.discardHand();
-    this.energy = 3;
+    this.energy = 5;
 
-    let turretCard = this.drawTurret();
-    let remainingCards = 4;
-
-    if (turretCard == null) {
-      remainingCards = 5;
-    } else {
-      this.hand.push(turretCard);
-      this.ui.cardToHand(turretCard);
-    }
+    let remainingCards = this.drawTurret() ? 4 : 5;
 
     for (let i = 0; i < remainingCards; i++) {
       let card = this.drawCard();
-      this.hand.push(card);
-      this.ui.cardToHand(card);
+      
     }
     
   }
@@ -164,9 +190,9 @@ class GameScreen {
 
   discardCard(card) {
     
-    this.ui.removeFromHand(card.handIndex);
-    this.discardPile.push(card);
     this.hand.splice(this.hand.indexOf(card), 1);
+    this.ui.removeFromHand(card);
+    this.discardPile.push(card);
 
     if (this.selectedCard == card) {
       card.deselect();
@@ -176,8 +202,8 @@ class GameScreen {
 
   destroyCard(card) {
     
-    this.ui.removeFromHand(card.handIndex);
     this.hand.splice(this.hand.indexOf(card), 1);
+    this.ui.removeFromHand(card);
 
     if (this.selectedCard == card) {
       card.deselect();
@@ -186,14 +212,44 @@ class GameScreen {
   }
 
   selectCard(card) {
-    if (this.selectedCard != null) {
-      this.selectedCard.deselect();
-    }
+    this.deselectCard();
 
     if (card.select()) {
       this.selectedCard = card;
     }
+
+    this.ui.bringCardToFront(card);
     
+  }
+
+  deselectCard() {
+    if (this.selectedCard != null) {
+      if (this.mouseOnMap) this.selectedCard.leaveMap();
+      this.selectedCard.deselect();
+      this.selectedCard = null;
+      this.ui.bringCardToFront(null);
+    }
+  }
+
+  selectCardFromIndex(index) {
+
+    if (index >= this.hand.length) {
+      return;
+    }
+
+    let card = this.hand[index];
+
+    if (this.mouseOnMap) {
+      if (this.selectedCard != null) {
+        this.selectedCard.leaveMap();
+      }
+    }
+
+    this.selectCard(card);
+
+    if (this.mouseOnMap && this.selectedCard != null) {
+      this.selectedCard.enterMap(this.mousePos);
+    }
   }
 
   hoverMap(e) {
@@ -207,12 +263,17 @@ class GameScreen {
   enterMap(e) {
     let pos = e.data.global;
 
+    this.mouseOnMap = true;
+    this.mousePos = pos;
+
     if (this.selectedCard != null) {
       this.selectedCard.enterMap(pos);
     }
   }
 
   leaveMap() {
+    this.mouseOnMap = false;
+
     if (this.selectedCard != null) {
       this.selectedCard.leaveMap();
     }

@@ -25,15 +25,9 @@ class UI {
       this.container.addChild(this.buttons[i].container);
     }
 
-    this.handContainer = [];
+    this.handContainer = new PIXI.Container();
+    this.container.addChild(this.handContainer);
 
-    for (let i = 0; i < 5; i++) {
-      let ctn = new PIXI.Container();
-      ctn.x = 20 + i * 200;
-      ctn.y = 20;
-      this.handContainer.push(ctn);
-      this.container.addChild(ctn);
-    }
 
     this.pileSprite = new PIXI.Graphics();
     this.pileSprite.lineStyle(5, 0x000000, 1);
@@ -89,17 +83,50 @@ class UI {
   }
 
   cardToHand(card) {
-    for (let i = 0; i < this.handContainer.length; i++) {
-      if (this.handContainer[i].children.length == 0) {
-        card.handIndex = i;
-        this.handContainer[i].addChild(card);
-        break;
-      }
-    }
+    this.handContainer.addChild(card);
+    this.redrawCards();
   }
 
-  removeFromHand(index) {
-    this.handContainer[index].removeChildAt(0);
+  removeFromHand(card) {
+    this.handContainer.removeChild(card);
+    this.redrawCards();
+  }
+
+  redrawCards() {
+    let cards = this.gs.hand;
+    let distX = Math.min(200, 1000 / cards.length);
+    for (let i = 0; i < cards.length; i++) {
+
+      cards[i].handIndex = i;
+      cards[i].x = 20 + i * distX;
+      cards[i].y = 20;
+
+      if (cards[i] != this.gs.selectedCard) {
+        cards[i].cardFrame.tint = 0x00000;
+      }
+
+    }
+
+    this.handContainer.children.sort((a, b) => b.handIndex - a.handIndex);
+  }
+
+  bringCardToFront(card) {
+    let cards = this.gs.hand;
+    for (let i = 0; i < cards.length; i++) {
+      cards[i].handIndex = i;
+      if (cards[i] != this.gs.selectedCard) {
+        cards[i].cardFrame.tint = 0x00000;
+      }
+    }
+
+    if (card != null) {
+      card.handIndex = -1;
+      if (card != this.gs.selectedCard) {
+        card.cardFrame.tint = 0xFFFF00;
+      }
+    }
+
+    this.handContainer.children.sort((a, b) => b.handIndex - a.handIndex);
   }
 
 

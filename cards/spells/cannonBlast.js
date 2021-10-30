@@ -41,8 +41,27 @@ class CannonBlast extends Spell {
     }
   }
 
-  hitTargets(targets) {
-    this.targets = targets;
+  hitTargets(pos) {
+    this.targets = [];
+    let possibleTargets = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER);
+
+    this.x = pos.x;
+    this.y = pos.y;
+
+    let rangeCollider = new PIXI.Sprite();
+    rangeCollider.circular = true;
+    rangeCollider.radius = this.radius;
+    this.addChild(rangeCollider);
+
+    possibleTargets.forEach(target => {
+      if (collider.hit(rangeCollider, target.texture, false, false, true)) {
+        this.targets.push(target);
+      }
+    });
+
+    this.removeChild(rangeCollider);
+
+      
   }
 
 }

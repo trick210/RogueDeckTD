@@ -38,7 +38,7 @@ class Spell extends Entity {
 
   hoverMap(pos) {
 
-    if (this.tags.includes(spellTags.TARGETED)) {
+    if (this.tags.includes(spellTags.TARGET_TOWER)) {
       let clickable = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER);
       let target = null;
       for (let i = 0; i < clickable.length; i++) {
@@ -74,7 +74,7 @@ class Spell extends Entity {
 
   clickMap(pos) {
 
-    if (this.tags.includes(spellTags.TARGETED)) {
+    if (this.tags.includes(spellTags.TARGET_TOWER)) {
       let clickable = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER);
       let target = null;
       for (let i = 0; i < clickable.length; i++) {
@@ -98,27 +98,10 @@ class Spell extends Entity {
     }
 
     if (this.tags.includes(spellTags.AOE)) {
-      let targetsHit = [];
-      let possibleTargets = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER || e.type == entityType.MONSTER);
 
-      this.x = pos.x;
-      this.y = pos.y;
-
-      let rangeCollider = new PIXI.Sprite();
-      rangeCollider.circular = true;
-      rangeCollider.radius = this.radius;
-      this.addChild(rangeCollider);
-
-      possibleTargets.forEach(target => {
-        if (collider.hit(rangeCollider, target.texture, false, false, true)) {
-          targetsHit.push(target);
-        }
-      });
-
-      this.removeChild(rangeCollider);
       this.removeChild(this.rangeCircle);
 
-      this.hitTargets(targetsHit);
+      this.hitTargets(pos);
 
       return true;
 

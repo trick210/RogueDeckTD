@@ -9,6 +9,8 @@ class Entity extends PIXI.Container {
     this.layer = 0;
 
     this.type = entityType.NONE;
+
+    this.entered = false;
   }
 
   update() {

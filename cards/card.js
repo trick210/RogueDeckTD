@@ -5,7 +5,7 @@ class Card extends PIXI.Container {
 
     this.cardObject = cardObject;
 
-    this.cardWidth = 175;
+    this.cardWidth = 180;
     this.cardHeight = 250;
 
     switch (cardObject.cardType) {
@@ -39,31 +39,32 @@ class Card extends PIXI.Container {
     this.cardBG.endFill();
     this.addChild(this.cardBG);
 
-    let topFrame = new PIXI.Graphics();
-    topFrame.beginFill(0x000000);
-    topFrame.drawRect(0, 0, this.cardWidth, 40);
-    topFrame.endFill();
-    this.addChild(topFrame);
+    let titleFrame = new PIXI.Graphics();
+    titleFrame.beginFill(0x000000);
+    titleFrame.drawRect(this.cardWidth - 40, 0, 40, this.height);
+    titleFrame.endFill();
+    this.addChild(titleFrame);
 
-    this.cardName = new PIXI.Text(this.name, {fontFamily: 'Arial', fontSize: 20, fill: 0xFFFFFF});
-    this.cardName.x = 5;
-    this.cardName.y = 5;
+    this.cardName = new PIXI.Text(this.name, {fontFamily: 'Arial', fontSize: 20, fontWeight: 'bold', fill: 0xFFFFFF});
+    this.cardName.x = this.cardWidth - 5;
+    this.cardName.y = 40;
+    this.cardName.rotation = Math.PI / 2
     this.addChild(this.cardName);
 
-    this.cardCost = new PIXI.Text(this.cost, {fontFamily: 'Arial', fontSize: 20, fill: 0xFFD700});
+    this.cardCost = new PIXI.Text(this.cost, {fontFamily: 'Arial', fontSize: 24, fontWeight: 'bold', fill: 0xFFD700});
     this.cardCost.anchor.set(1, 0);
     this.cardCost.x = this.cardWidth - 5;
     this.cardCost.y = 5;
     this.addChild(this.cardCost);
 
-    this.cardText = new PIXI.Text(this.text, {fontFamily: 'Arial', fontSize: 16, fill: 0x000000});
+    this.cardText = new PIXI.Text(this.text, {fontFamily: 'Arial', fontSize: 14, fill: 0x000000});
     this.cardText.x = 10;
-    this.cardText.y = 50;
+    this.cardText.y = 10;
     this.addChild(this.cardText);
 
     this.typeText = new PIXI.Text(this.type, {fontFamily: 'Arial', fontSize: 12, fill: 0x000000});
-    this.typeText.anchor.set(1, 1);
-    this.typeText.x = this.cardWidth - 5;
+    this.typeText.anchor.set(0, 1);
+    this.typeText.x = 5;
     this.typeText.y = this.cardHeight - 5;
     this.addChild(this.typeText);
 
@@ -79,7 +80,9 @@ class Card extends PIXI.Container {
 
     this.interactive = true;
     this.buttonMode = true;
-    this.on('pointertap', this.click.bind(this));
+    this.on('click', this.click.bind(this));
+    this.on('pointerover', this.enter.bind(this));
+    this.on("pointerout", this.leave.bind(this));
 
   }
 
@@ -87,10 +90,22 @@ class Card extends PIXI.Container {
     gameScreen.selectCard(this);
   }
 
+  enter() {
+    gameScreen.ui.bringCardToFront(this);
+  }
+
+  leave() {
+    gameScreen.ui.bringCardToFront(gameScreen.selectedCard);
+  }
+
   select() {
     if (gameScreen.energy >= this.cost) {
       this.cardFrame.tint = 0xFF0000;
       gameScreen.entityContainer.interactiveChildren = false;
+      gameScreen.entityContainer.children.forEach(entity => {
+        if (entity.entered) entity.leave();
+      });
+
       return true;
     }
 

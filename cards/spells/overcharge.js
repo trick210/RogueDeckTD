@@ -15,15 +15,16 @@ class Overcharge extends Spell {
 
     this.tags.push(spellTags.TIMED);
     this.tags.push(spellTags.BUFF);
-    this.tags.push(spellTags.TARGETED);
+    this.tags.push(spellTags.TARGET_TOWER);
 
   }
 
 
   getCardText() {
     let text = 
-      (this.effect * 100) + "% bonus attack\ndamage\n\n" +
-      "Duration: " + (this.duration / 1000) + " seconds\n";
+      "Gives a tower\n" +
+      (this.effect * 100) + "% bonus\nattack damage\n" +
+      "for " + (this.duration / 1000) + " seconds";
 
     return text;
   }

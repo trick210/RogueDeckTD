@@ -34,6 +34,8 @@ window.addEventListener("resize", function(event){
   scale = scaleToWindow(app.renderer.view, '#2C3539');
 });
 
+document.oncontextmenu = document.body.oncontextmenu = function(e) {e.preventDefault();}
+
 let loadingScreen = new LoadingScreen();
 
 setActiveScreen(loadingScreen);

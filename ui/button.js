@@ -39,12 +39,12 @@ class Button {
 
     this.rect.interactive = true;
     this.rect.buttonMode = true;
-    this.rect.on('pointerdown', this.onButtonDown.bind(this));
-    this.rect.on('pointerup', this.onButtonUp.bind(this));
-    this.rect.on('pointerupoutside', this.onButtonUp.bind(this));
-    this.rect.on('pointerover', this.onButtonOver.bind(this));
-    this.rect.on('pointerout', this.onButtonOut.bind(this));
-    this.rect.on('pointertap', this.click.bind(this));
+    this.rect.on('mousedown', this.onButtonDown.bind(this));
+    this.rect.on('mouseup', this.onButtonUp.bind(this));
+    this.rect.on('mouseupoutside', this.onButtonUp.bind(this));
+    this.rect.on('mouseover', this.onButtonOver.bind(this));
+    this.rect.on('mouseout', this.onButtonOut.bind(this));
+    this.rect.on('click', this.click.bind(this));
     
   }
 

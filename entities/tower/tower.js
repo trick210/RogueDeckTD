@@ -63,14 +63,17 @@ class Tower extends Entity {
 
   enterMap(pos) {
     this.x = pos.x;
-    this.y = pos.Y;
+    this.y = pos.y;
 
     this.rangeCircle.clear();
     this.rangeCircle.lineStyle(4, 0x808080, 0.5);
     this.rangeCircle.beginFill(0xFFFFFF, 0.2);
     this.rangeCircle.drawCircle(0, 0, this.range);
     this.rangeCircle.endFill();
-    this.rangeCircle.tint = 0xAAAAAA;
+    
+    let hit = this.canPlace(pos);
+
+    this.rangeCircle.tint = !hit ? 0xFF8080 : 0xAAAAAA;
 
     this.onMap = true;
 
@@ -125,11 +128,13 @@ class Tower extends Entity {
 
   enter() {
     this.addChildAt(this.rangeCircle, 0);
+    this.entered = true;
     this.layer += this.layerOffset;
   }
 
   leave() {
     this.removeChild(this.rangeCircle);
+    this.entered = false;
     this.layer -= this.layerOffset;
   }
 
@@ -137,7 +142,7 @@ class Tower extends Entity {
 
 
 const towerTags = {
-  MISSILE: "Tower shots spawn missiles",
+  BULLET: "Tower shots spawn bullets",
   DAMAGE: "Tower deals damage to enemies",
   DEPLOYMENT: "Tower activates an effect upon deployment",
   CRIPPLE: "Tower reduces at least one stat",
