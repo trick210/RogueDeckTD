@@ -10,7 +10,7 @@ class Overcharge extends Spell {
     this.duration = 3000;
     this.effect = 1;
 
-    this.buffedStat = statTags.DAMAGE;
+    this.buffedStat = buffTags.DAMAGE;
 
 
     this.tags.push(spellTags.TIMED);
@@ -35,12 +35,10 @@ class Overcharge extends Spell {
       return false;
     }
 
-    let statBuff = new Object();
-    statBuff.duration = this.duration;
-    statBuff.effect = this.effect;
-    statBuff.buffedStat = this.buffedStat;
+    let buffEffect = tower => { tower.dmg += tower.baseDmg * this.effect; };
 
-    statBuff.tags = this.tags;
+    let statBuff = new Buff("Overcharge", this.buffedStat, buffEffect);
+    statBuff.setDuration(this.duration);
 
 
     target.buffs.push(statBuff);

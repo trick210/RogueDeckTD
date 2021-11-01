@@ -42,8 +42,8 @@ class Monster extends Entity {
       this.oldvx = vx;
       this.oldvy = vy;
 
-      this.x += vx * this.speed * (deltaTime / 20);
-      this.y += vy * this.speed * (deltaTime / 20);
+      this.x += vx * this.speed * (deltaTime / 1000);
+      this.y += vy * this.speed * (deltaTime / 1000);
 
       if (-vx * (this.x - tiles[this.tileIndex + 1][0] * gridSize) <= 0 && -vy * (this.y - tiles[this.tileIndex + 1][1] * gridSize) <= 0) {
         this.tileIndex++;

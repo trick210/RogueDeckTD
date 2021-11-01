@@ -43,7 +43,8 @@ setActiveScreen(loadingScreen);
 
 loader
   .add('walker', 'assets/monster/walker.png')
-  .add('baseTower', 'assets/tower/baseTower.png');
+  .add('baseTower', 'assets/tower/baseTower.png')
+  .add('minigunTower', 'assets/tower/minigunTower.png');
 
 
 

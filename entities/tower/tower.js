@@ -6,8 +6,6 @@ class Tower extends Entity {
     this.cardType = cardType.TOWER;
     this.type = entityType.TOWER;
 
-    this.range = 0;
-
     this.tags = [];
 
     this.onMap = false;
@@ -15,7 +13,7 @@ class Tower extends Entity {
 
     this.rangeCollider = new PIXI.Sprite();
     this.rangeCollider.circular = true;
-    this.rangeCollider.radius = this.range;
+    this.rangeCollider.radius = 0;
     this.addChild(this.rangeCollider);
 
     this.rangeCircle = new PIXI.Graphics();
@@ -31,11 +29,12 @@ class Tower extends Entity {
   update() {
 
     this.dmg = this.baseDmg;
+    this.attackSpeed = this.baseAS;
 
     for (let i = this.buffs.length - 1; i >= 0; i--) {
       let buff = this.buffs[i];
 
-      if (buff.tags.includes(spellTags.TIMED)) {
+      if (buff.tags.includes(buffTags.TIMED)) {
         buff.duration -= deltaTime;
         if (buff.duration <= 0) {
           this.buffs.splice(this.buffs.indexOf(buff), 1);
@@ -43,12 +42,9 @@ class Tower extends Entity {
         }
       }
 
-      switch(buff.buffedStat) {
-        case statTags.DAMAGE:
-          this.dmg += this.baseDmg * buff.effect;
-          break;
+      for (let j = 0; j < buff.stacks; j++) {
 
-        default:
+        buff.effect(this);
       }
 
       
@@ -59,6 +55,37 @@ class Tower extends Entity {
     } else {
       this.buffed = true;
     }
+  }
+
+  getMonsterInRange() {
+    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
+
+    let monsterHit = [];
+
+    for (let i = 0; i < monster.length; i++) {
+      let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
+      if (collision) {
+        monsterHit.push(monster[i]);
+      }
+    }
+    return monsterHit;
+  }
+
+  getVector(monster) {
+    let v = new Object();
+
+    v.vx = monster.texture.gx + monster.texture.width / 2 - monster.texture.xAnchorOffset - 
+      (this.rangeCollider.gx + this.rangeCollider.width / 2 - this.rangeCollider.xAnchorOffset);
+
+    v.vy = monster.texture.gy + monster.texture.width / 2 - monster.texture.yAnchorOffset - 
+      (this.rangeCollider.gy + this.rangeCollider.width / 2 - this.rangeCollider.yAnchorOffset);
+
+    let mag = Math.sqrt(v.vx * v.vx + v.vy * v.vy);
+
+    v.vx /= mag;
+    v.vy /= mag;
+
+    return v;
   }
 
   enterMap(pos) {
@@ -138,6 +165,27 @@ class Tower extends Entity {
     this.layer -= this.layerOffset;
   }
 
+  setDMG(dmg) {
+    this.baseDmg = dmg;
+    this.dmg = dmg;
+  }
+
+  setAS(as) {
+    this.baseAS = as
+    this.attackSpeed = as;
+  }
+
+  setRange(range) {
+    this.baseRange = range;
+    this.range = range;
+    this.rangeCollider.radius = range;
+  }
+
+  setMissileSpeed(speed) {
+    this.baseMissileSpeed = speed;
+    this.missileSpeed = speed;
+  }
+
 }
 
 
@@ -156,4 +204,102 @@ const towerTags = {
   ON_KILL: "Tower activates an effect upon killing an enemy",
   ON_COOLDOWN: "Tower has an effect that activates every X seconds",
   MULTI_SHOT: "Tower can attack multiple targets simultaneously",
+}
+
+const buffTags = {
+
+  DAMAGE: "Damage",
+  ATTACKSPEED: "Attack speed",
+  TIMED: "Timed",
+  STACKS: "Stacks",
+}
+
+class Buff {
+  constructor(name, buffedStat, effect) {
+    this.name = name;
+    this.buffedStat = buffedStat;
+    this.effect = effect;
+
+    this.stacks = 1;
+
+    this.tags = [];
+  }
+
+  setDuration(duration) {
+    this.duration = duration;
+    this.baseDuration = duration;
+    this.tags.push(buffTags.TIMED);
+  }
+
+  setStacks(stacks, maxStacks) {
+    this.stacks = stacks;
+    this.maxStacks = maxStacks;
+    this.tags.push(buffTags.STACKS);
+  }
+}
+
+
+class Bullet extends Entity {
+
+  constructor(posX, posY, vx, vy, dmg, speed, range, color) {
+    super(posX, posY);
+
+    this.type = entityType.PROJECTILE;
+
+    this.layer = 10;
+    this.vx = vx;
+    this.vy = vy;
+    this.dmg = dmg;
+    this.range = range;
+    this.speed = speed;
+
+    this.texture = new PIXI.Graphics();
+    this.texture.lineStyle(2, 0x000000, 1);
+    this.texture.beginFill(color);
+    this.texture.drawCircle(0, 0, 10);
+    this.texture.endFill();
+    this.addChild(this.texture);
+
+    this.rangeCollider = new PIXI.Sprite();
+    this.rangeCollider.circular = true;
+    this.rangeCollider.radius = 5;
+    this.addChild(this.rangeCollider);
+
+    this.distance = 0;
+  }
+
+  update() {
+
+    if (this.distance >= this.range) {
+      this.remove();
+    }
+
+    let distX = this.vx * this.speed * (deltaTime / 1000);
+    let distY = this.vy * this.speed * (deltaTime / 1000);
+
+    this.x += distX;
+    this.y += distY;
+
+    this.distance += Math.sqrt(distX * distX + distY * distY);
+
+    
+    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
+
+    let monsterHit = null;
+
+    for (let i = 0; i < monster.length; i++) {
+      let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
+      if (collision) {
+        monsterHit = monster[i];
+        break;
+      }
+    }
+
+    if (monsterHit != null) {
+      monsterHit.recieveDamage(this.dmg);
+      this.remove();
+    }
+    
+  }
+
 }

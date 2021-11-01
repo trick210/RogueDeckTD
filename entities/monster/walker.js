@@ -11,7 +11,7 @@ class Walker extends Monster {
 
     this.addChild(this.texture);
 
-    this.speed = 3;
+    this.speed = 150;
 
     this.damage = 1;
 

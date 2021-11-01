@@ -113,10 +113,14 @@ class GameScreen {
 
   setupDeck() {
     for (let i = 0; i < 5; i++) {
-      this.deck.push(new Card(new BaseTower()));
       this.deck.push(new Card(new CannonBlast()));
       this.deck.push(new Card(new Overcharge()));
     }
+    this.deck.push(new Card(new MinigunTower()));
+    this.deck.push(new Card(new MinigunTower()));
+    this.deck.push(new Card(new BaseTower()));
+    this.deck.push(new Card(new BaseTower()));
+    this.deck.push(new Card(new BaseTower()));
 
     shuffle(this.deck);
   }
@@ -163,6 +167,7 @@ class GameScreen {
 
   drawPhase() {
 
+    this.deselectCard();
     this.discardHand();
     this.energy = 5;
 

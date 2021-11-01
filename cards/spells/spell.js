@@ -127,8 +127,3 @@ const spellTags = {
   TARGET_TOWER: "Target tower",
   TARGET_MONSTER: "Target tower",
 }
-
-const statTags = {
-
-  DAMAGE: "Damage",
-}

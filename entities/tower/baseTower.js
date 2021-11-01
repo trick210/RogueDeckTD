@@ -7,14 +7,13 @@ class BaseTower extends Tower {
 
     this.cost = 2;
 
-    this.baseDmg = 50;
-    this.dmg = this.baseDmg;
-    this.attackSpeed = 2;
+    this.setDMG(50);
 
-    this.range = 200;
-    this.rangeCollider.radius = this.range;
+    this.setAS(2);
 
-    this.missileSpeed = 15;
+    this.setRange(200);
+
+    this.setMissileSpeed(500);
 
     this.dps = this.dmg * this.attackSpeed;
 
@@ -57,36 +56,16 @@ class BaseTower extends Tower {
         return;
       }
 
-      let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
+      let targets = this.getMonsterInRange();
 
-      let monsterHit = null;
-      let vx, vy;
+      if (targets.length != 0) {
 
-      for (let i = 0; i < monster.length; i++) {
-        let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
-        if (collision) {
-          monsterHit = monster[i];
-          vx = monsterHit.texture.gx + monsterHit.texture.width / 2 - monsterHit.texture.xAnchorOffset - 
-            (this.rangeCollider.gx + this.rangeCollider.width / 2 - this.rangeCollider.xAnchorOffset);
-
-          vy = monsterHit.texture.gy + monsterHit.texture.width / 2 - monsterHit.texture.yAnchorOffset - 
-            (this.rangeCollider.gy + this.rangeCollider.width / 2 - this.rangeCollider.yAnchorOffset);
-
-          let mag = Math.sqrt(vx * vx + vy * vy);
-
-          vx = vx / mag;
-          vy = vy / mag;
-
-          break;
-        }
-      }
-
-      if (monsterHit != null) {
+        let v = this.getVector(targets[0]);
         
-        let missile = new BaseProjectile(this.x, this.y, vx, vy, this.dmg, this.missileSpeed, this.range, this.projectileColor);
+        let missile = new Bullet(this.x, this.y, v.vx, v.vy, this.dmg, this.missileSpeed, this.range, this.projectileColor);
         missile.addToStage();
 
-        this.shootCD = deltaTime;
+        this.shootCD -= 1000 / this.attackSpeed;
       }
     }
   }
@@ -100,71 +79,6 @@ class BaseTower extends Tower {
       "DPS: " + this.dps;
 
     return text;
-  }
-
-}
-
-class BaseProjectile extends Entity {
-
-  constructor(posX, posY, vx, vy, dmg, speed, range, color) {
-    super(posX, posY);
-
-    this.type = entityType.PROJECTILE;
-
-    this.layer = 10;
-    this.vx = vx;
-    this.vy = vy;
-    this.dmg = dmg;
-    this.range = range;
-    this.speed = speed;
-
-    this.texture = new PIXI.Graphics();
-    this.texture.lineStyle(2, 0x000000, 1);
-    this.texture.beginFill(color);
-    this.texture.drawCircle(0, 0, 10);
-    this.texture.endFill();
-    this.addChild(this.texture);
-
-    this.rangeCollider = new PIXI.Sprite();
-    this.rangeCollider.circular = true;
-    this.rangeCollider.radius = 5;
-    this.addChild(this.rangeCollider);
-
-    this.distance = 0;
-  }
-
-  update() {
-
-    if (this.distance >= this.range) {
-      this.remove();
-    }
-
-    let distX = this.vx * this.speed * (deltaTime / 20);
-    let distY = this.vy * this.speed * (deltaTime / 20);
-
-    this.x += distX;
-    this.y += distY;
-
-    this.distance += Math.sqrt(distX * distX + distY * distY);
-
-    
-    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
-
-    let monsterHit = null;
-
-    for (let i = 0; i < monster.length; i++) {
-      let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
-      if (collision) {
-        monsterHit = monster[i];
-        break;
-      }
-    }
-
-    if (monsterHit != null) {
-      monsterHit.recieveDamage(this.dmg);
-      this.remove();
-    }
-    
   }
 
 }
