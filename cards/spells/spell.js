@@ -88,6 +88,8 @@ class Spell extends Entity {
         let result = this.clickTarget(target);
 
         if (result) {
+          target.enter();
+          target.click();
           gameScreen.map.container.buttonMode = false;
           return true;
         }

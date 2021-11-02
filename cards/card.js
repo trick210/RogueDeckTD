@@ -81,8 +81,8 @@ class Card extends PIXI.Container {
     this.interactive = true;
     this.buttonMode = true;
     this.on('click', this.click.bind(this));
-    this.on('pointerover', this.enter.bind(this));
-    this.on("pointerout", this.leave.bind(this));
+    this.on('mouseover', this.enter.bind(this));
+    this.on("mouseout", this.leave.bind(this));
 
   }
 

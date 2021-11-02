@@ -1,12 +1,11 @@
-class Button {
+class Button extends PIXI.Container {
 
-  constructor(text, posX, posY, btnWidth, btnHeight, fn) {
+  constructor(text, posX, posY, btnWidth, btnHeight, fn, fontSize = 24) {
+    super();
 
     this.text = text;
     this.x = posX;
     this.y = posY;
-    this.width = btnWidth;
-    this.height = btnHeight;
     this.fn = fn;
 
     this.isDown = false;
@@ -16,25 +15,24 @@ class Button {
     this.hoverFill = 0xDCDCDC;
     this.downFill = 0xC8C8C8;
 
-    this.container = new PIXI.Container();
 
     this.rect = new PIXI.Graphics();    
    
     this.rect.lineStyle(6, 0x000000, 1);
     this.rect.beginFill(0xFFFFFF);
-    this.rect.drawRoundedRect(this.x, this.y, this.width, this.height, 10);
+    this.rect.drawRoundedRect(0, 0, btnWidth, btnHeight, 10);
     this.rect.endFill();
 
     this.rect.tint = this.standardFill;
 
-    this.container.addChild(this.rect);
+    this.addChild(this.rect);
 
-    this.btnText = new PIXI.Text(text, {fontFamily: 'Arial', fontSize: 30, fill: 'black', align: 'center'});
-    this.btnText.x = this.x + this.width / 2;
-    this.btnText.y = this.y + this.height / 2;
+    this.btnText = new PIXI.Text(text, {fontFamily: 'Arial', fontSize: fontSize, fill: 'black', align: 'center'});
+    this.btnText.x = btnWidth / 2;
+    this.btnText.y = btnHeight / 2;
     this.btnText.anchor.set(0.5);
 
-    this.container.addChild(this.btnText);
+    this.addChild(this.btnText);
 
 
     this.rect.interactive = true;

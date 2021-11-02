@@ -21,7 +21,7 @@ class GameScreen {
     this.map.container.on('pointerover', this.enterMap.bind(this));
     this.map.container.on("pointerout", this.leaveMap.bind(this));
     this.map.container.on("click", this.clickMap.bind(this));
-    this.map.container.on("rightclick", this.deselectCard.bind(this));
+    this.map.container.on("rightclick", this.rightClickMap.bind(this));
 
     this.ui.bg.interactive = true;
     this.ui.bg.on("rightclick", this.deselectCard.bind(this));
@@ -285,11 +285,19 @@ class GameScreen {
   }
 
   clickMap(e) {
+
+    this.ui.showTowerInfo(null);
+
     let pos = e.data.global;
 
     if (this.selectedCard != null) {
       this.selectedCard.clickMap(pos);
     }
+  }
+
+  rightClickMap(e) {
+    this.deselectCard();
+    this.ui.showTowerInfo(null);
   }
 
 

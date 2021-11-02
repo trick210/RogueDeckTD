@@ -24,68 +24,51 @@ class Tower extends Entity {
     this.buffs = [];
     this.buffed = false;
 
+    this.clicked = false;
+    this.entered = false;
+
   }
 
   update() {
 
-    this.dmg = this.baseDmg;
-    this.attackSpeed = this.baseAS;
+    if (this.placed && gameScreen.levelStarted) {
 
-    for (let i = this.buffs.length - 1; i >= 0; i--) {
-      let buff = this.buffs[i];
+      this.dmg = this.baseDmg;
+      this.attackSpeed = this.baseAS;
 
-      if (buff.tags.includes(buffTags.TIMED)) {
-        buff.duration -= deltaTime;
-        if (buff.duration <= 0) {
-          this.buffs.splice(this.buffs.indexOf(buff), 1);
-          continue;
+      for (let i = this.buffs.length - 1; i >= 0; i--) {
+        let buff = this.buffs[i];
+
+        if (buff.tags.includes(buffTags.TIMED)) {
+          buff.duration -= deltaTime;
+          if (buff.duration <= 0) {
+            this.buffs.splice(this.buffs.indexOf(buff), 1);
+            continue;
+          }
         }
+
+        for (let j = 0; j < buff.stacks; j++) {
+
+          buff.effect(this);
+        }
+
+        
       }
 
-      for (let j = 0; j < buff.stacks; j++) {
-
-        buff.effect(this);
-      }
-
-      
-    }
-
-    if (this.buffs.length == 0) {
-      this.buffed = false;
-    } else {
-      this.buffed = true;
-    }
-  }
-
-  getMonsterInRange() {
-    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
-
-    let monsterHit = [];
-
-    for (let i = 0; i < monster.length; i++) {
-      let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
-      if (collision) {
-        monsterHit.push(monster[i]);
+      if (this.buffs.length == 0) {
+        this.buffed = false;
+      } else {
+        this.buffed = true;
       }
     }
-    return monsterHit;
-  }
 
-  getVector(monster) {
-    let v = new Object();
-
-    v.vx = monster.texture.gx + monster.texture.width / 2 - monster.texture.xAnchorOffset - 
-      (this.rangeCollider.gx + this.rangeCollider.width / 2 - this.rangeCollider.xAnchorOffset);
-
-    v.vy = monster.texture.gy + monster.texture.width / 2 - monster.texture.yAnchorOffset - 
-      (this.rangeCollider.gy + this.rangeCollider.width / 2 - this.rangeCollider.yAnchorOffset);
-
-    let mag = Math.sqrt(v.vx * v.vx + v.vy * v.vy);
-
-    v.vx /= mag;
-    v.vy /= mag;
-
-    return v;
+    if (this.entered) {
+      this.rangeCircle.clear();
+      this.rangeCircle.lineStyle(4, 0x808080, 0.5);
+      this.rangeCircle.beginFill(0xFFFFFF, 0);
+      this.rangeCircle.drawCircle(0, 0, this.range);
+      this.rangeCircle.endFill();
+    }
   }
 
   enterMap(pos) {
@@ -138,8 +121,12 @@ class Tower extends Entity {
       this.placed = true;
       this.layer -= this.layerOffset;
       this.texture.interactive = true;
-      this.texture.on('pointerover', this.enter.bind(this));
-      this.texture.on("pointerout", this.leave.bind(this));
+      this.texture.on('mouseover', this.enter.bind(this));
+      this.texture.on("mouseout", this.leave.bind(this));
+      this.texture.on("click", this.click.bind(this));
+
+      this.enter();
+      this.click();
       return true;
     }
 
@@ -154,15 +141,26 @@ class Tower extends Entity {
   }
 
   enter() {
-    this.addChildAt(this.rangeCircle, 0);
-    this.entered = true;
-    this.layer += this.layerOffset;
+    if (!this.clicked) {
+      this.addChildAt(this.rangeCircle, 0);
+      this.layer += 5;
+      this.entered = true;
+    }
   }
 
   leave() {
-    this.removeChild(this.rangeCircle);
-    this.entered = false;
-    this.layer -= this.layerOffset;
+    if (!this.clicked) {
+      this.removeChild(this.rangeCircle);
+      this.layer -= 5;
+      this.entered = false;
+    }
+  }
+
+  click() {
+    if (!this.clicked) {
+      this.clicked = true;
+      gameScreen.ui.showTowerInfo(this);
+    }
   }
 
   setDMG(dmg) {
@@ -236,70 +234,4 @@ class Buff {
     this.maxStacks = maxStacks;
     this.tags.push(buffTags.STACKS);
   }
-}
-
-
-class Bullet extends Entity {
-
-  constructor(posX, posY, vx, vy, dmg, speed, range, color) {
-    super(posX, posY);
-
-    this.type = entityType.PROJECTILE;
-
-    this.layer = 10;
-    this.vx = vx;
-    this.vy = vy;
-    this.dmg = dmg;
-    this.range = range;
-    this.speed = speed;
-
-    this.texture = new PIXI.Graphics();
-    this.texture.lineStyle(2, 0x000000, 1);
-    this.texture.beginFill(color);
-    this.texture.drawCircle(0, 0, 10);
-    this.texture.endFill();
-    this.addChild(this.texture);
-
-    this.rangeCollider = new PIXI.Sprite();
-    this.rangeCollider.circular = true;
-    this.rangeCollider.radius = 5;
-    this.addChild(this.rangeCollider);
-
-    this.distance = 0;
-  }
-
-  update() {
-
-    if (this.distance >= this.range) {
-      this.remove();
-    }
-
-    let distX = this.vx * this.speed * (deltaTime / 1000);
-    let distY = this.vy * this.speed * (deltaTime / 1000);
-
-    this.x += distX;
-    this.y += distY;
-
-    this.distance += Math.sqrt(distX * distX + distY * distY);
-
-    
-    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
-
-    let monsterHit = null;
-
-    for (let i = 0; i < monster.length; i++) {
-      let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
-      if (collision) {
-        monsterHit = monster[i];
-        break;
-      }
-    }
-
-    if (monsterHit != null) {
-      monsterHit.recieveDamage(this.dmg);
-      this.remove();
-    }
-    
-  }
-
 }

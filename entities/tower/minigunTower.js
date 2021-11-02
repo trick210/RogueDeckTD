@@ -1,4 +1,4 @@
-class MinigunTower extends Tower {
+class MinigunTower extends BulletTower {
 
   constructor() {
     super();
@@ -13,12 +13,8 @@ class MinigunTower extends Tower {
 
     this.setRange(200);
 
-    this.setMissileSpeed(600)
+    this.setMissileSpeed(600);
 
-    this.dps = this.dmg * this.attackSpeed;
-
-    this.tags.push(towerTags.BULLET);
-    this.tags.push(towerTags.DAMAGE);
     
     this.texture = new PIXI.Sprite(resources['minigunTower'].texture);
     this.texture.width = 64;
@@ -48,10 +44,9 @@ class MinigunTower extends Tower {
   }
 
   update() {
+    super.update();
 
     if (this.placed && gameScreen.levelStarted) {
-
-      super.update();
 
       //this.projectileColor = this.buffed ? 0x00FFFF : 0x0000FF;
       //this.texture.tint = this.buffed ? 0xFF00FF : 0xFFFFFF;
@@ -89,6 +84,8 @@ class MinigunTower extends Tower {
           this.stackClock -= this.stackCD;
         }
       }
+    } else {
+      this.barrelSpeed.stacks = 0;
     }
   }
 

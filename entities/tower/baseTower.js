@@ -1,4 +1,4 @@
-class BaseTower extends Tower {
+class BaseTower extends BulletTower {
 
   constructor() {
     super();
@@ -14,11 +14,6 @@ class BaseTower extends Tower {
     this.setRange(200);
 
     this.setMissileSpeed(500);
-
-    this.dps = this.dmg * this.attackSpeed;
-
-    this.tags.push(towerTags.BULLET);
-    this.tags.push(towerTags.DAMAGE);
 
     /*
     this.texture = new PIXI.Graphics();
@@ -43,10 +38,9 @@ class BaseTower extends Tower {
   }
 
   update() {
+    super.update();
 
     if (this.placed && gameScreen.levelStarted) {
-
-      super.update();
 
       this.projectileColor = this.buffed ? 0xFFFF00 : 0xFF00FF;
       this.texture.tint = this.buffed ? 0xFF00FF : 0xFFFFFF;
