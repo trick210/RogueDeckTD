@@ -18,7 +18,7 @@ class Button extends PIXI.Container {
 
     this.rect = new PIXI.Graphics();    
    
-    this.rect.lineStyle(6, 0x000000, 1);
+    this.rect.lineStyle(4, 0x000000, 1);
     this.rect.beginFill(0xFFFFFF);
     this.rect.drawRoundedRect(0, 0, btnWidth, btnHeight, 10);
     this.rect.endFill();

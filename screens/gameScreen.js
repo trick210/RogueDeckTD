@@ -70,7 +70,7 @@ class GameScreen {
     if (this.levelStarted) {
       this.spawnClock += deltaTime;
 
-      if (this.spawnClock > 10000 / this.monsterInWave) {
+      if (this.spawnClock > 10000 / (this.monsterInWave - 1)) {
         
         let monster = this.currentMonsterList.shift();
 
@@ -78,7 +78,7 @@ class GameScreen {
           this.entityContainer.addChild(monster);
         }
 
-        this.spawnClock -= 10000 / this.monsterInWave;
+        this.spawnClock -= 10000 / (this.monsterInWave - 1);
       }
 
     }
@@ -107,7 +107,7 @@ class GameScreen {
     if (!this.levelStarted) {
       this.currentMonsterList = this.map.getWave(this.round);
       this.monsterInWave = this.currentMonsterList.length;
-      this.spawnClock = 10000 / this.monsterInWave
+      this.spawnClock = 10000 / (this.monsterInWave - 1);
       this.levelStarted = true;
       this.ui.startButton.disable();
     }
@@ -115,12 +115,14 @@ class GameScreen {
   }
 
   setupDeck() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       this.deck.push(new Card(new CannonBlast()));
       this.deck.push(new Card(new Overcharge()));
+      this.deck.push(new Card(new Refine()));
     }
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new MinigunTower()));
+    this.deck.push(new Card(new BaseTower()));
     this.deck.push(new Card(new BaseTower()));
     this.deck.push(new Card(new BaseTower()));
     this.deck.push(new Card(new BaseTower()));

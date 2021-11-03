@@ -18,6 +18,10 @@ class Tower extends Entity {
 
     this.rangeCircle = new PIXI.Graphics();
 
+    this.buffContainer = new PIXI.Container();
+    this.buffContainer.on('childAdded', this.sortBuffs.bind(this));
+    this.buffContainer.on('childRemoved', this.sortBuffs.bind(this));
+
     this.layerOffset = 100;
     this.layer += this.layerOffset;
 
@@ -42,10 +46,13 @@ class Tower extends Entity {
           buff.duration -= deltaTime;
           if (buff.duration <= 0) {
             this.buffs.splice(this.buffs.indexOf(buff), 1);
+            this.buffContainer.removeChild(buff.iconContainer);
             continue;
           }
         }
       }
+
+      buff.updateBuffIcon();
 
       for (let j = 0; j < buff.stacks; j++) {
 
@@ -184,6 +191,19 @@ class Tower extends Entity {
     this.missileSpeed = speed;
   }
 
+  addBuff(buff) {
+    this.buffs.push(buff);
+    this.buffContainer.addChild(buff.iconContainer);
+  }
+
+  sortBuffs() {
+    for (let i = 0; i < this.buffs.length; i++) {
+      let buff = this.buffs[i];
+      buff.iconContainer.x = (i % 4) * 40;
+      buff.iconContainer.y = Math.floor(i / 4) * 40;
+    }
+  }
+
 }
 
 
@@ -221,6 +241,47 @@ class Buff {
     this.stacks = 1;
 
     this.tags = [];
+
+    this.iconContainer = new PIXI.Container();
+
+    this.icon = new PIXI.Graphics();
+    this.icon.beginFill(0xAAFFAA);
+    this.icon.drawRect(0, 0, 32, 32);
+    this.icon.endFill();
+    this.iconContainer.addChild(this.icon);
+
+    this.cdArc = new PIXI.Graphics();
+    this.iconContainer.addChild(this.cdArc);
+
+    this.iconFrame = new PIXI.Graphics();
+    this.iconFrame.lineStyle(4, 0x000000, 1);
+    this.iconFrame.beginFill(0x000000, 0);
+    this.iconFrame.drawRect(0, 0, 32, 32);
+    this.iconFrame.endFill();
+    this.iconContainer.addChild(this.iconFrame);
+
+    this.iconText = new PIXI.Text(this.name.charAt(0), {fontFamily: 'Arial', fontSize: 20, fill: 'black', align: 'center'});
+    this.iconText.x = 12;
+    this.iconText.y = 12;
+    this.iconText.anchor.set(0.5);
+    this.iconContainer.addChild(this.iconText);
+
+    this.stackText = new PIXI.Text("", {fontFamily: 'Arial', fontSize: 14, fill: 'red', align: 'center'});
+    this.stackText.x = 30;
+    this.stackText.y = 30;
+    this.stackText.anchor.set(1);
+    this.iconContainer.addChild(this.stackText);
+
+    
+
+    let mask = new PIXI.Graphics();
+    this.iconContainer.addChild(mask);
+    mask.lineStyle(4, 0x000000, 1);
+    mask.beginFill(0xAAFFAA);
+    mask.drawRect(0, 0, 32, 32);
+    mask.endFill();
+
+    this.iconContainer.mask = mask;
   }
 
   setDuration(duration) {
@@ -233,5 +294,19 @@ class Buff {
     this.stacks = stacks;
     this.maxStacks = maxStacks;
     this.tags.push(buffTags.STACKS);
+  }
+
+  updateBuffIcon() {
+    if (this.stacks > 1 || this.tags.includes(buffTags.STACKS)) {
+      this.stackText.text = this.stacks;
+    }
+
+    if (this.tags.includes(buffTags.TIMED)) {
+      this.cdArc.clear();
+      this.cdArc.beginFill(0x808080, 0.5);
+      this.cdArc.arc(16, 16, 64, - Math.PI / 2, - Math.PI / 2 + (2 * Math.PI * (this.baseDuration - this.duration) / this.baseDuration) + 0.01, true);
+      this.cdArc.lineTo(16, 16);
+      this.cdArc.endFill();
+    }
   }
 }

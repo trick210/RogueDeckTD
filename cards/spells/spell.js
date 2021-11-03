@@ -121,6 +121,7 @@ const spellTags = {
   DAMAGE: "Damage",
   BUFF: "Buff",
   TIMED: "Timed",
+  PERMANENT: "Permanent",
   INSTANT: "Instant",
   DELAYED: "Delayed",
   AOE: "AOE",

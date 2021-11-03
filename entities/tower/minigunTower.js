@@ -33,7 +33,7 @@ class MinigunTower extends BulletTower {
     this.barrelSpeed = new Buff("Barrel Speed", buffTags.ATTACKSPEED, buffEffect);
     this.barrelSpeed.setStacks(0, 6);
 
-    this.buffs.push(this.barrelSpeed);
+    this.addBuff(this.barrelSpeed);
 
     this.stackLoss = 4;
     this.stackLossPassive = 1;

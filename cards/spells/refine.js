@@ -1,19 +1,18 @@
-class Overcharge extends Spell {
+class Refine extends Spell {
 
   constructor() {
     super();
 
-    this.name = "Overcharge";
+    this.name = "Refine";
 
     this.cost = 1;
 
-    this.duration = 3000;
-    this.effect = 1;
+    this.effect = 0.1;
 
     this.buffedStat = buffTags.DAMAGE;
 
 
-    this.tags.push(spellTags.TIMED);
+    this.tags.push(spellTags.PERMANET);
     this.tags.push(spellTags.BUFF);
     this.tags.push(spellTags.TARGET_TOWER);
 
@@ -23,8 +22,7 @@ class Overcharge extends Spell {
   getCardText() {
     let text = 
       "Gives a tower\n" +
-      (this.effect * 100) + "% bonus\nattack damage\n" +
-      "for " + (this.duration / 1000) + " seconds";
+      (this.effect * 100) + "% bonus\nattack damage";
 
     return text;
   }
@@ -37,9 +35,7 @@ class Overcharge extends Spell {
 
     let buffEffect = tower => { tower.dmg += tower.baseDmg * this.effect; };
 
-    let statBuff = new Buff("Overcharge", this.buffedStat, buffEffect);
-    statBuff.setDuration(this.duration);
-
+    let statBuff = new Buff(this.name, this.buffedStat, buffEffect);
 
     target.addBuff(statBuff);
 

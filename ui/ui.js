@@ -53,6 +53,9 @@ class UI {
     this.towerInfoTargets.y = 10;
     this.towerInfoContainer.addChild(this.towerInfoTargets);
 
+    this.towerInfoDestroy = new Button("Destroy Tower", 10, 200, 150, 40, this.destroyTower.bind(this), 16);
+    this.towerInfoContainer.addChild(this.towerInfoDestroy);
+
 
     this.roundText = new PIXI.Text("Round: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
     this.roundText.x = width - 190;
@@ -155,6 +158,8 @@ class UI {
         this.towerInfoContainer.removeChild(this.currentTower.buttonContainer);
         this.towerInfoContainer.removeChild(this.towerInfoTargets);
       }
+
+      this.towerInfoContainer.removeChild(this.currentTower.buffContainer);
     }
 
     if (tower == null) {
@@ -173,7 +178,18 @@ class UI {
       this.currentTower.buttonContainer.y = 45;
     }
 
+    this.currentTower.buffContainer.x = 200;
+    this.currentTower.buffContainer.y = 20;
+    this.towerInfoContainer.addChild(this.currentTower.buffContainer);
 
+
+  }
+
+  destroyTower() {
+    if (this.currentTower != null) {
+      this.currentTower.remove();
+      this.showTowerInfo(null);
+    }
   }
 
 
