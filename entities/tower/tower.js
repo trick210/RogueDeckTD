@@ -31,14 +31,13 @@ class Tower extends Entity {
 
   update() {
 
-    if (this.placed && gameScreen.levelStarted) {
+    this.dmg = this.baseDmg;
+    this.attackSpeed = this.baseAS;
 
-      this.dmg = this.baseDmg;
-      this.attackSpeed = this.baseAS;
+    for (let i = this.buffs.length - 1; i >= 0; i--) {
+      let buff = this.buffs[i];
 
-      for (let i = this.buffs.length - 1; i >= 0; i--) {
-        let buff = this.buffs[i];
-
+      if (this.placed && gameScreen.levelStarted) {
         if (buff.tags.includes(buffTags.TIMED)) {
           buff.duration -= deltaTime;
           if (buff.duration <= 0) {
@@ -46,21 +45,22 @@ class Tower extends Entity {
             continue;
           }
         }
+      }
 
-        for (let j = 0; j < buff.stacks; j++) {
+      for (let j = 0; j < buff.stacks; j++) {
 
-          buff.effect(this);
-        }
+        buff.effect(this);
+      }
 
         
-      }
-
-      if (this.buffs.length == 0) {
-        this.buffed = false;
-      } else {
-        this.buffed = true;
-      }
     }
+
+    if (this.buffs.length == 0) {
+      this.buffed = false;
+    } else {
+      this.buffed = true;
+    }
+    
 
     if (this.entered) {
       this.rangeCircle.clear();

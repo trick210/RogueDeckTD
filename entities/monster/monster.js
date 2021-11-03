@@ -67,6 +67,11 @@ class Monster extends Entity {
 
   }
 
+  setHP(hp) {
+    this.hp = hp;
+    this.maxHP = hp;
+  }
+
   recieveDamage(amount) {
     this.hp -= amount;
     if (this.hp <= 0) {

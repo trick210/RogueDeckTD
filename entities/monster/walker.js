@@ -1,6 +1,6 @@
 class Walker extends Monster {
 
-  constructor(posX, posY) {
+  constructor(posX, posY, hp) {
     super(posX, posY);
 
     this.texture = new PIXI.Sprite(resources['walker'].texture);
@@ -15,8 +15,7 @@ class Walker extends Monster {
 
     this.damage = 1;
 
-    this.hp = 200;
-    this.maxHP = this.hp;
+    this.setHP(hp);
 
  
   }

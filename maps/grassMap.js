@@ -17,7 +17,6 @@ class GrassMap {
 
     this.setupMap();
 
-    this.setupMonster();
 
 
 
@@ -28,24 +27,54 @@ class GrassMap {
 
 
 
-  setupMonster() {
 
-    this.level = [];
+  getWave(round) {
 
-    for (let l = 1; l <= 20; l++) {
+    let totalHP = 2000;
+    let totalMonster = 10;
 
-      let monster = [];
+    if (round != 1) {
+      totalMonster = 2 + Math.floor(Math.random() * 14);
+    }
 
-      for (let i = 0; i < l * 10; i++) {
-        let walker = new Walker(this.startPos[0] * this.gridSize, this.startPos[1] * this.gridSize);
-        walker.spawnIndex = i;
-        monster.push(walker);
-      }
+    switch (round) {
+      case 1:
+        break;
 
-      this.level.push(monster);
+      case 2:
+        totalHP = 3000; 
+        break;
+
+      case 3:
+        totalHP = 4200;
+        break;
+
+      case 4:
+        totalHP = 5460;
+        break;
+
+      case 5:
+        totalHP = 6552;
+        break;
+
+      default:
+        totalHP = 6552;
+        for (let i = 0; i < round - 5; i++) {
+          totalHP += Math.floor(totalHP * 0.1);
+        }
+        break;
 
     }
 
+    let monster = [];
+
+    for (let i = 0; i < totalMonster; i++) {
+      let walker = new Walker(this.startPos[0] * this.gridSize, this.startPos[1] * this.gridSize, Math.floor(totalHP / totalMonster));
+      walker.spawnIndex = i;
+      monster.push(walker);
+    }
+
+    return monster;
   }
 
 

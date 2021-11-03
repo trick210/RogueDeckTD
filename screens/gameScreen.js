@@ -47,6 +47,7 @@ class GameScreen {
     this.energy = 5;
 
     this.currentMonsterList = [];
+    this.monsterInWave = this.currentMonsterList.length;
 
     this.deck = [];
     this.hand = [];
@@ -69,7 +70,7 @@ class GameScreen {
     if (this.levelStarted) {
       this.spawnClock += deltaTime;
 
-      if (this.spawnClock > 1000) {
+      if (this.spawnClock > 10000 / this.monsterInWave) {
         
         let monster = this.currentMonsterList.shift();
 
@@ -77,7 +78,7 @@ class GameScreen {
           this.entityContainer.addChild(monster);
         }
 
-        this.spawnClock -= 1000;
+        this.spawnClock -= 10000 / this.monsterInWave;
       }
 
     }
@@ -104,7 +105,9 @@ class GameScreen {
   startLevel() {
 
     if (!this.levelStarted) {
-      this.currentMonsterList = this.map.level.shift();
+      this.currentMonsterList = this.map.getWave(this.round);
+      this.monsterInWave = this.currentMonsterList.length;
+      this.spawnClock = 10000 / this.monsterInWave
       this.levelStarted = true;
       this.ui.startButton.disable();
     }
