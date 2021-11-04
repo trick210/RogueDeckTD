@@ -7,9 +7,13 @@ class MinigunTower extends BulletTower {
 
     this.cost = 3;
 
+    this.setTC(4);
+
     this.setDMG(20);
 
     this.setAS(4);
+
+    this.initialAS = this.baseAS;
 
     this.setRange(200);
 
@@ -27,13 +31,17 @@ class MinigunTower extends BulletTower {
     this.projectileColor = 0x0000FF;
 
     this.ASBuff = 1;
+    this.stacks = 0;
+    this.maxStacks = 6;
 
+    /*
     let buffEffect = tower => { tower.attackSpeed += this.ASBuff };
 
     this.barrelSpeed = new Buff("Barrel Speed", buffTags.ATTACKSPEED, buffEffect);
     this.barrelSpeed.setStacks(0, 6);
 
     this.addBuff(this.barrelSpeed);
+    */
 
     this.stackLoss = 4;
     this.stackLossPassive = 1;
@@ -44,6 +52,9 @@ class MinigunTower extends BulletTower {
   }
 
   update() {
+
+    this.baseAS = this.initialAS + this.stacks * this.ASBuff;
+
     super.update();
 
     if (this.placed && gameScreen.levelStarted) {
@@ -61,9 +72,9 @@ class MinigunTower extends BulletTower {
       if (targets.length != 0) {
 
         if (this.oldTarget == targets[0]) {
-          this.barrelSpeed.stacks = Math.min(this.barrelSpeed.maxStacks, this.barrelSpeed.stacks + 1);
+          this.stacks = Math.min(this.maxStacks, this.stacks + 1);
         } else {
-          this.barrelSpeed.stacks = Math.max(0, this.barrelSpeed.stacks - this.stackLoss);
+          this.stacks = Math.max(0, this.stacks - this.stackLoss);
         }
 
         this.stackClock = 0;
@@ -80,12 +91,12 @@ class MinigunTower extends BulletTower {
         this.stackClock += deltaTime;
 
         if (this.stackClock >= this.stackCD) {
-          this.barrelSpeed.stacks = Math.max(0, this.barrelSpeed.stacks - this.stackLossPassive);
+          this.stacks = Math.max(0, this.stacks - this.stackLossPassive);
           this.stackClock -= this.stackCD;
         }
       }
     } else {
-      this.barrelSpeed.stacks = 0;
+      this.stacks = 0;
     }
   }
 
@@ -93,11 +104,11 @@ class MinigunTower extends BulletTower {
   getCardText() {
     let text = 
       "Damage: " + this.dmg + "\n" +
-      "Attack speed: " + this.attackSpeed + " - " + (this.attackSpeed + this.barrelSpeed.maxStacks * this.ASBuff) + "\n\n" +
+      "Attack speed: " + this.attackSpeed + " - " + (this.attackSpeed + this.maxStacks * this.ASBuff) + "\n\n" +
       "Shooting the same\n" +
       "target consecutively\n" +
       "grants a stack of\n" +
-      "BarrelSpeed up to " + this.barrelSpeed.maxStacks + ".\n" +
+      "BarrelSpeed up to " + this.maxStacks + ".\n" +
       "Lose " + this.stackLoss + " stacks upon\n" +
       "switching targets.\n" +
       "Lose "+ this.stackLossPassive + " stack each\n" +
@@ -107,6 +118,18 @@ class MinigunTower extends BulletTower {
 
 
     return text;
+  }
+
+  getStats() {
+    let text = 
+      "TC: " + this.TC +
+      "\nDamage: " + this.dmg +
+      "\nAttack speed: " + this.attackSpeed +
+      "\nRange: " + this.range +
+      "\nDPS: " + this.getDPS() +
+      "\n\nBarrel Speed: " + this.stacks + " stacks"
+
+      return text;
   }
 
 }

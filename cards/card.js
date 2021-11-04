@@ -57,6 +57,14 @@ class Card extends PIXI.Container {
     this.cardCost.y = 5;
     this.addChild(this.cardCost);
 
+    if (this.type == cardType.TOWER) {
+      this.cardTC = new PIXI.Text(this.cardObject.TC, {fontFamily: 'Arial', fontSize: 24, fontWeight: 'bold', fill: 0xFF0000});
+      this.cardTC.anchor.set(1);
+      this.cardTC.x = this.cardWidth - 5;
+      this.cardTC.y = this.cardHeight - 5;
+      this.addChild(this.cardTC);
+    }
+
     this.cardText = new PIXI.Text(this.text, {fontFamily: 'Arial', fontSize: 14, fill: 0x000000});
     this.cardText.x = 10;
     this.cardText.y = 10;

@@ -63,7 +63,7 @@ function setup() {
 
   gameScreen = new GameScreen();
   menuScreen = new MenuScreen();
-  //deathScreen = new DeathScreen();
+  deathScreen = new DeathScreen();
 
   setActiveScreen(menuScreen);
 

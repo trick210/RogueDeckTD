@@ -27,24 +27,41 @@ class GameScreen {
     this.ui.bg.on("rightclick", this.deselectCard.bind(this));
     this.ui.bg.on("click", this.deselectCard.bind(this));
 
-    keyboard("1").press = () => this.selectCardFromIndex(0);
-    keyboard("2").press = () => this.selectCardFromIndex(1);
-    keyboard("3").press = () => this.selectCardFromIndex(2);
-    keyboard("4").press = () => this.selectCardFromIndex(3);
-    keyboard("5").press = () => this.selectCardFromIndex(4);
-    keyboard("6").press = () => this.selectCardFromIndex(5);
-    keyboard("7").press = () => this.selectCardFromIndex(6);
-    keyboard("8").press = () => this.selectCardFromIndex(7);
-    keyboard("9").press = () => this.selectCardFromIndex(8);
-    keyboard("0").press = () => this.selectCardFromIndex(9);
+    this.key1 = keyboard("1");
+    this.key2 = keyboard("2");
+    this.key3 = keyboard("3");
+    this.key4 = keyboard("4");
+    this.key5 = keyboard("5");
+    this.key6 = keyboard("6");
+    this.key7 = keyboard("7");
+    this.key8 = keyboard("8");
+    this.key9 = keyboard("9");
+    this.key0 = keyboard("0");
 
-    keyboard(" ").press = () => this.startLevel();
+    this.keySpace = keyboard(" ");
+
+    this.key1.press = () => this.selectCardFromIndex(0);
+    this.key2.press = () => this.selectCardFromIndex(1);
+    this.key3.press = () => this.selectCardFromIndex(2);
+    this.key4.press = () => this.selectCardFromIndex(3);
+    this.key5.press = () => this.selectCardFromIndex(4);
+    this.key6.press = () => this.selectCardFromIndex(5);
+    this.key7.press = () => this.selectCardFromIndex(6);
+    this.key8.press = () => this.selectCardFromIndex(7);
+    this.key9.press = () => this.selectCardFromIndex(8);
+    this.key0.press = () => this.selectCardFromIndex(9);
+
+    this.keySpace.press = () => this.startLevel();
+
 
     this.mouseOnMap = false;
 
     this.round = 1;
     this.hp = 100;
     this.energy = 5;
+
+    this.currentTC = 0;
+    this.maxTC = 12;
 
     this.currentMonsterList = [];
     this.monsterInWave = this.currentMonsterList.length;
@@ -87,9 +104,17 @@ class GameScreen {
       this.entityContainer.children[i].update();
     }
 
+    if (this.hp <= 0) {
+      this.cleanup();
+      setActiveScreen(deathScreen);
+    }
+
+    this.currentTC = this.entityContainer.children.filter(child => child.type == entityType.TOWER && child.placed).map(t => t.TC).reduce((a, b) => a + b, 0);
+
     this.sortEntities();
 
     this.ui.update();
+
     
   }
 
@@ -308,6 +333,21 @@ class GameScreen {
 
   sortEntities() {
     this.entityContainer.children.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
+  }
+
+  cleanup() {
+    this.key1.unsubscribe();
+    this.key2.unsubscribe();
+    this.key3.unsubscribe();
+    this.key4.unsubscribe();
+    this.key5.unsubscribe();
+    this.key6.unsubscribe();
+    this.key7.unsubscribe();
+    this.key8.unsubscribe();
+    this.key9.unsubscribe();
+    this.key0.unsubscribe();
+
+    this.keySpace.unsubscribe();
   }
 
 

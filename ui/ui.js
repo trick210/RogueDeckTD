@@ -49,11 +49,11 @@ class UI {
     this.towerInfoContainer.addChild(this.towerInfoText);
 
     this.towerInfoTargets = new PIXI.Text("Targets", {fontFamily: 'Arial', fontSize: 20, fill: 0x000000});
-    this.towerInfoTargets.x = 400;
+    this.towerInfoTargets.x = 410;
     this.towerInfoTargets.y = 10;
     this.towerInfoContainer.addChild(this.towerInfoTargets);
 
-    this.towerInfoDestroy = new Button("Destroy Tower", 10, 200, 150, 40, this.destroyTower.bind(this), 16);
+    this.towerInfoDestroy = new Button("Destroy Tower", 240, 200, 160, 40, this.destroyTower.bind(this), 16);
     this.towerInfoContainer.addChild(this.towerInfoDestroy);
 
 
@@ -64,23 +64,28 @@ class UI {
 
     this.hpText = new PIXI.Text("HP: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0x00FF00, stroke: 'black', strokeThickness: 3});
     this.hpText.x = width - 190;
-    this.hpText.y = 120;
+    this.hpText.y = 110;
     this.container.addChild(this.hpText);
 
     this.energyText = new PIXI.Text("Energy: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFD700, stroke: 'black', strokeThickness: 3});
     this.energyText.x = width - 190;
-    this.energyText.y = 160;
+    this.energyText.y = 140;
     this.container.addChild(this.energyText);
 
     this.deckText = new PIXI.Text("Deck: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
     this.deckText.x = width - 190;
-    this.deckText.y = 200;
+    this.deckText.y = 170;
     this.container.addChild(this.deckText);
 
     this.discardText = new PIXI.Text("Discard Pile: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
     this.discardText.x = width - 190;
-    this.discardText.y = 240;
+    this.discardText.y = 200;
     this.container.addChild(this.discardText);
+
+    this.TCText = new PIXI.Text("TC: 0 / 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.TCText.x = width - 190;
+    this.TCText.y = 230;
+    this.container.addChild(this.TCText);
 
 
   }
@@ -92,6 +97,7 @@ class UI {
     this.roundText.text = `Round: ${this.gs.round}`;
     this.hpText.text = `HP: ${this.gs.hp}`;
     this.energyText.text = `Energy: ${this.gs.energy}`;
+    this.TCText.text = `TC: ${this.gs.currentTC} / ${this.gs.maxTC}`
 
     if (this.currentTower != null) {
       this.towerInfoName.text = this.currentTower.name;
@@ -174,12 +180,12 @@ class UI {
     if (this.currentTower.buttonContainer != null) {
       this.towerInfoContainer.addChild(this.currentTower.buttonContainer);
       this.towerInfoContainer.addChild(this.towerInfoTargets);
-      this.currentTower.buttonContainer.x = 400;
-      this.currentTower.buttonContainer.y = 45;
+      this.currentTower.buttonContainer.x = 410;
+      this.currentTower.buttonContainer.y = 50;
     }
 
-    this.currentTower.buffContainer.x = 200;
-    this.currentTower.buffContainer.y = 20;
+    this.currentTower.buffContainer.x = 240;
+    this.currentTower.buffContainer.y = 10;
     this.towerInfoContainer.addChild(this.currentTower.buffContainer);
 
 

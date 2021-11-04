@@ -7,6 +7,8 @@ class BaseTower extends BulletTower {
 
     this.cost = 2;
 
+    this.setTC(2);
+
     this.setDMG(50);
 
     this.setAS(2);

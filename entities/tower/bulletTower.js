@@ -114,10 +114,11 @@ class BulletTower extends Tower {
 
   getStats() {
     let text = 
-      "Damage: " + this.dmg +
+      "TC: " + this.TC +
+      "\nDamage: " + this.dmg +
       "\nAttack speed: " + this.attackSpeed +
       "\nRange: " + this.range +
-      "\nDPS: " + this.dmg * this.attackSpeed;
+      "\nDPS: " + this.getDPS();
 
       return text;
   }

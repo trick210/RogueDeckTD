@@ -36,7 +36,7 @@ class Tower extends Entity {
   update() {
 
     this.dmg = this.baseDmg;
-    this.attackSpeed = this.baseAS;
+    this.attackSpeed = this.baseAS * Math.min(Math.round((gameScreen.maxTC / gameScreen.currentTC) * 100) / 100, 1);
 
     for (let i = this.buffs.length - 1; i >= 0; i--) {
       let buff = this.buffs[i];
@@ -170,6 +170,11 @@ class Tower extends Entity {
     }
   }
 
+  setTC(tc) {
+    this.baseTC = tc;
+    this.TC = tc;
+  }
+
   setDMG(dmg) {
     this.baseDmg = dmg;
     this.dmg = dmg;
@@ -189,6 +194,10 @@ class Tower extends Entity {
   setMissileSpeed(speed) {
     this.baseMissileSpeed = speed;
     this.missileSpeed = speed;
+  }
+
+  getDPS() {
+    return Math.round(this.dmg * this.attackSpeed * 100) / 100;
   }
 
   addBuff(buff) {
