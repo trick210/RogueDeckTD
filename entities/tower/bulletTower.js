@@ -153,7 +153,7 @@ class Bullet extends Entity {
     this.texture = new PIXI.Graphics();
     this.texture.lineStyle(2, 0x000000, 1);
     this.texture.beginFill(color);
-    this.texture.drawCircle(0, 0, 10);
+    this.texture.drawCircle(0, 0, 5);
     this.texture.endFill();
     this.addChild(this.texture);
 

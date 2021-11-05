@@ -98,6 +98,7 @@ class UI {
     this.hpText.text = `HP: ${this.gs.hp}`;
     this.energyText.text = `Energy: ${this.gs.energy}`;
     this.TCText.text = `TC: ${this.gs.currentTC} / ${this.gs.maxTC}`
+    this.TCText.tint = (this.gs.currentTC > this.gs.maxTC) ? 0xFF0000 : 0xFFFFFF;
 
     if (this.currentTower != null) {
       this.towerInfoName.text = this.currentTower.name;

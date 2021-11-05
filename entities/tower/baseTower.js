@@ -15,7 +15,7 @@ class BaseTower extends BulletTower {
 
     this.setRange(200);
 
-    this.setMissileSpeed(500);
+    this.setMissileSpeed(1000);
 
     /*
     this.texture = new PIXI.Graphics();

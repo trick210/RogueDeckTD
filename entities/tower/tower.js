@@ -36,7 +36,7 @@ class Tower extends Entity {
   update() {
 
     this.dmg = this.baseDmg;
-    this.attackSpeed = this.baseAS * Math.min(Math.round((gameScreen.maxTC / gameScreen.currentTC) * 100) / 100, 1);
+    this.attackSpeed = this.baseAS;
 
     for (let i = this.buffs.length - 1; i >= 0; i--) {
       let buff = this.buffs[i];
@@ -52,21 +52,18 @@ class Tower extends Entity {
         }
       }
 
+
+      buff.effect(this);
+
       buff.updateBuffIcon();
-
-      for (let j = 0; j < buff.stacks; j++) {
-
-        buff.effect(this);
-      }
-
+      
         
     }
 
-    if (this.buffs.length == 0) {
-      this.buffed = false;
-    } else {
-      this.buffed = true;
-    }
+    this.attackSpeed *= Math.min(Math.round((gameScreen.maxTC / gameScreen.currentTC) * 100) / 100, 1);
+
+    
+    this.buffed = this.buffs.length != 0;
     
 
     if (this.entered) {

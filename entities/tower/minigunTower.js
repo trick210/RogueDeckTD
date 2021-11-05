@@ -17,7 +17,7 @@ class MinigunTower extends BulletTower {
 
     this.setRange(200);
 
-    this.setMissileSpeed(600);
+    this.setMissileSpeed(1200);
 
     
     this.texture = new PIXI.Sprite(resources['minigunTower'].texture);

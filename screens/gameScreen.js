@@ -106,7 +106,7 @@ class GameScreen {
 
     if (this.hp <= 0) {
       this.cleanup();
-      setActiveScreen(deathScreen);
+      setActiveScreen(new DeathScreen(this.round));
     }
 
     this.currentTC = this.entityContainer.children.filter(child => child.type == entityType.TOWER && child.placed).map(t => t.TC).reduce((a, b) => a + b, 0);

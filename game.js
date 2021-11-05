@@ -1,6 +1,5 @@
 let menuScreen;
 let gameScreen;
-let deathScreen;
 let activeScreen = null;
 
 let collider = new Bump(PIXI);
@@ -63,7 +62,6 @@ function setup() {
 
   gameScreen = new GameScreen();
   menuScreen = new MenuScreen();
-  deathScreen = new DeathScreen();
 
   setActiveScreen(menuScreen);
 
