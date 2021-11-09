@@ -64,6 +64,8 @@ class BulletTower extends Tower {
     v.vx /= mag;
     v.vy /= mag;
 
+    v.mag = mag;
+
     return v;
   }
 
@@ -157,12 +159,12 @@ class Bullet extends Entity {
     this.texture.endFill();
     this.addChild(this.texture);
 
-    this.rangeCollider = new PIXI.Sprite();
-    this.rangeCollider.circular = true;
-    this.rangeCollider.radius = 5;
-    this.addChild(this.rangeCollider);
+    this.radius = 5;
 
     this.distance = 0;
+
+    this.oldX = this.x;
+    this.oldY = this.y;
   }
 
   update() {
@@ -174,6 +176,9 @@ class Bullet extends Entity {
     let distX = this.vx * this.speed * (deltaTime / 1000);
     let distY = this.vy * this.speed * (deltaTime / 1000);
 
+    this.oldX = this.x;
+    this.oldY = this.y;
+
     this.x += distX;
     this.y += distY;
 
@@ -184,9 +189,26 @@ class Bullet extends Entity {
 
     let monsterHit = null;
 
-    for (let i = 0; i < monster.length; i++) {
-      let collision = collider.hit(this.rangeCollider, monster[i].texture, false, false, true)
-      if (collision) {
+    for (let i = 0; i < monster.length; i++) {      
+
+      let p = {
+        x: monster[i].texture.gx + monster[i].texture.width / 2 - monster[i].texture.xAnchorOffset,
+        y: monster[i].texture.gy + monster[i].texture.width / 2 - monster[i].texture.yAnchorOffset,
+      }
+
+      let v = {
+        x: this.x,
+        y: this.y,
+      }
+
+      let w = {
+        x: this.oldX,
+        y: this.oldY,
+      }
+
+      let dist = distToSegment(p, v, w);
+
+      if (dist < (monster[i].texture.radius + this.radius)) {
         monsterHit = monster[i];
         break;
       }

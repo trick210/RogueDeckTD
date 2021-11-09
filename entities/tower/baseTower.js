@@ -72,7 +72,7 @@ class BaseTower extends BulletTower {
       "Damage: " + this.dmg + "\n" +
       "Range: " + this.range + "\n" +
       "Attack speed: " + this.attackSpeed + "\n" +
-      "DPS: " + this.dps;
+      "DPS: " + this.getDPS();
 
     return text;
   }
