@@ -148,7 +148,7 @@ class GameScreen {
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new SniperNest()));
-    this.deck.push(new Card(new BaseTower()));
+    this.deck.push(new Card(new AmmoRefinery()));
     this.deck.push(new Card(new BaseTower()));
     this.deck.push(new Card(new BaseTower()));
 

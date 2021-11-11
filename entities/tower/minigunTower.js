@@ -20,12 +20,24 @@ class MinigunTower extends BulletTower {
     this.setMissileSpeed(1200);
 
     
-    this.texture = new PIXI.Sprite(resources['minigunTower'].texture);
-    this.texture.width = 64;
-    this.texture.height = 64;
-    this.texture.anchor.set(0.5, 0.2);
+    this.texture = new PIXI.Sprite();
+    this.texture.circular = true;
+    this.texture.radius = 32;
+    //this.texture.anchor.set(0.5, 0.5);
     
     this.addChild(this.texture);
+
+    this.graphic = new PIXI.Graphics();
+    this.graphic.lineStyle(2, 0x000000, 1);
+    this.graphic.beginFill(0x999999);
+    this.graphic.drawCircle(0, 0, 24);
+    this.graphic.endFill();
+    this.graphic.beginFill(0x0000AA);
+    this.graphic.drawRect(-4, -32, 8, 40);
+    this.graphic.endFill();
+    this.texture.addChild(this.graphic);
+
+
 
     this.shootCD = 1000 / this.attackSpeed;
     this.projectileColor = 0x0000FF;
@@ -81,11 +93,20 @@ class MinigunTower extends BulletTower {
         this.oldTarget = targets[0];
 
         let v = this.getVector(targets[0]);
+
+        let rot = Math.PI / 2 + Math.atan2(v.vy, v.vx);
+
+        this.texture.rotation = rot;
         
-        let missile = new Bullet(this.x, this.y, v.vx, v.vy, this.dmg, this.missileSpeed, this.range, this.projectileColor);
+        let bulletX = this.x + this.texture.radius * v.vx;
+        let bulletY = this.y + this.texture.radius * v.vy;
+
+        let bulletRange = this.range - this.texture.radius;
+        
+        let missile = new Bullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
         missile.addToStage();
 
-        this.shootCD -= 1000 / this.attackSpeed;
+        this.shootCD = 0;
       } else {
 
         this.stackClock += deltaTime;
@@ -97,6 +118,7 @@ class MinigunTower extends BulletTower {
       }
     } else {
       this.stacks = 0;
+      this.shootCD = 1000 / this.attackSpeed;
     }
   }
 

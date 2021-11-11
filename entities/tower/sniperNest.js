@@ -57,8 +57,6 @@ class SniperNest extends BulletTower {
 
         let rot = Math.PI / 2 + Math.atan2(v.vy, v.vx);
 
-        console.log(rot);
-
         this.texture.rotation = rot;
 
         let bulletX = this.x + this.texture.radius * v.vx;
@@ -69,8 +67,10 @@ class SniperNest extends BulletTower {
         let missile = new Bullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
         missile.addToStage();
 
-        this.shootCD -= 1000 / this.attackSpeed;
+        this.shootCD = 0;
       }
+    } else {
+      this.shootCD = 1000 / this.attackSpeed;
     }
   }
 

@@ -17,22 +17,22 @@ class BaseTower extends BulletTower {
 
     this.setMissileSpeed(1000);
 
-    /*
-    this.texture = new PIXI.Graphics();
-    this.texture.beginFill(0xFF5050);
-    this.texture.drawCircle(this.x, this.y - 40, 20);
-    this.texture.endFill();
-    this.texture.beginFill(0xAAAAFF);
-    this.texture.drawRoundedRect(this.x - 16, this.y - 32, 32, 64, 10);
-    this.texture.endFill();
-    */
-    
-    this.texture = new PIXI.Sprite(resources['baseTower'].texture);
-    this.texture.width = 48;
-    this.texture.height = 96;
-    this.texture.anchor.set(0.5, 0.2);
+    this.texture = new PIXI.Sprite();
+    this.texture.circular = true;
+    this.texture.radius = 48;
+    //this.texture.anchor.set(0.5, 0.5);
     
     this.addChild(this.texture);
+
+    this.graphic = new PIXI.Graphics();
+    this.graphic.lineStyle(2, 0x000000, 1);
+    this.graphic.beginFill(0x999999);
+    this.graphic.drawCircle(0, 0, 32);
+    this.graphic.endFill();
+    this.graphic.beginFill(0x964B00);
+    this.graphic.drawRect(-8, -48, 16, 50);
+    this.graphic.endFill();
+    this.texture.addChild(this.graphic);
 
     this.shootCD = 1000 / this.attackSpeed;
     this.projectileColor = 0xFF00FF;
@@ -45,7 +45,6 @@ class BaseTower extends BulletTower {
     if (this.placed && gameScreen.levelStarted) {
 
       this.projectileColor = this.buffed ? 0xFFFF00 : 0xFF00FF;
-      this.texture.tint = this.buffed ? 0xFF00FF : 0xFFFFFF;
 
       if (this.shootCD < 1000 / this.attackSpeed) {
         this.shootCD += deltaTime;
@@ -57,12 +56,23 @@ class BaseTower extends BulletTower {
       if (targets.length != 0) {
 
         let v = this.getVector(targets[0]);
+
+        let rot = Math.PI / 2 + Math.atan2(v.vy, v.vx);
+
+        this.texture.rotation = rot;
         
-        let missile = new Bullet(this.x, this.y, v.vx, v.vy, this.dmg, this.missileSpeed, this.range, this.projectileColor);
+        let bulletX = this.x + this.texture.radius * v.vx;
+        let bulletY = this.y + this.texture.radius * v.vy;
+
+        let bulletRange = this.range - this.texture.radius;
+        
+        let missile = new Bullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
         missile.addToStage();
 
-        this.shootCD -= 1000 / this.attackSpeed;
+        this.shootCD = 0;
       }
+    } else {
+      this.shootCD = 1000 / this.attackSpeed;
     }
   }
 

@@ -38,23 +38,6 @@ class Spell extends Entity {
 
   hoverMap(pos) {
 
-    if (this.tags.includes(spellTags.TARGET_TOWER)) {
-      let clickable = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER);
-      let target = null;
-      for (let i = 0; i < clickable.length; i++) {
-        if (collider.hitTestPoint(pos, clickable[i].texture)) {
-          target = clickable[i];
-          break;
-        }
-      }
-
-      if (target != null) {
-        gameScreen.map.container.buttonMode = true;
-      } else {
-        gameScreen.map.container.buttonMode = false;
-      }
-    }
-
     if (this.tags.includes(spellTags.AOE)) {
       if (!this.onMap) {
         return;
@@ -90,7 +73,6 @@ class Spell extends Entity {
         if (result) {
           target.enter();
           target.click();
-          gameScreen.map.container.buttonMode = false;
           return true;
         }
       }

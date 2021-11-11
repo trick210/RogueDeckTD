@@ -45,8 +45,7 @@ class Tower extends Entity {
         if (buff.tags.includes(buffTags.TIMED)) {
           buff.duration -= deltaTime;
           if (buff.duration <= 0) {
-            this.buffs.splice(this.buffs.indexOf(buff), 1);
-            this.buffContainer.removeChild(buff.iconContainer);
+            this.removeBuff(buff);
             continue;
           }
         }
@@ -60,7 +59,9 @@ class Tower extends Entity {
         
     }
 
-    this.attackSpeed *= Math.min(Math.round((gameScreen.maxTC / gameScreen.currentTC) * 100) / 100, 1);
+    this.attackSpeed *= Math.min(gameScreen.maxTC / gameScreen.currentTC, 1);
+
+    this.attackSpeed = Math.round(this.attackSpeed * 100) / 100;
 
     
     this.buffed = this.buffs.length != 0;
@@ -193,6 +194,11 @@ class Tower extends Entity {
     this.missileSpeed = speed;
   }
 
+  setCD(cd) {
+    this.baseCooldown = cd;
+    this.cooldown = cd;
+  }
+
   getDPS() {
     return Math.round(this.dmg * this.attackSpeed * 100) / 100;
   }
@@ -200,6 +206,11 @@ class Tower extends Entity {
   addBuff(buff) {
     this.buffs.push(buff);
     this.buffContainer.addChild(buff.iconContainer);
+  }
+
+  removeBuff(buff) {
+    this.buffs.splice(this.buffs.indexOf(buff), 1);
+    this.buffContainer.removeChild(buff.iconContainer);
   }
 
   sortBuffs() {
