@@ -69,12 +69,11 @@ class Spell extends Entity {
 
       if (target != null) {
         let result = this.clickTarget(target);
-
-        if (result) {
-          target.enter();
-          target.click();
-          return true;
-        }
+        
+        target.enter();
+        target.click();
+        return result;
+        
       }
 
       return false;
@@ -111,4 +110,5 @@ const spellTags = {
   CRIPPLE: "Cripple",
   TARGET_TOWER: "Target tower",
   TARGET_MONSTER: "Target tower",
+  DEPLETE: "Deplete"
 }

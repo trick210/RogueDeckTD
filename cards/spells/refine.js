@@ -9,8 +9,6 @@ class Refine extends Spell {
 
     this.effect = 0.1;
 
-    this.buffedStat = buffTags.DAMAGE;
-
 
     this.tags.push(spellTags.PERMANET);
     this.tags.push(spellTags.BUFF);
@@ -35,7 +33,7 @@ class Refine extends Spell {
 
     let buffEffect = tower => { tower.dmg += tower.baseDmg * this.effect; };
 
-    let statBuff = new Buff(this.name, this.buffedStat, buffEffect);
+    let statBuff = new Buff(this.name, buffEffect);
 
     target.addBuff(statBuff);
 

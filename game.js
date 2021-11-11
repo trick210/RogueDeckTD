@@ -4,6 +4,9 @@ let activeScreen = null;
 
 let collider = new Bump(PIXI);
 
+let showFrames = false;
+let frameText;
+
 
 let width = 1920;
 let height = 1080;
@@ -70,6 +73,15 @@ function setup() {
 
 }
 
+function showFPS() {
+  showFrames = true;
+  frameText = new PIXI.Text('', {fontFamily: 'Arial', fontSize: 32, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 2});
+  frameText.x = width - 10;
+  frameText.y = 10;
+  frameText.anchor.set(1, 0);
+  app.stage.addChild(frameText);
+}
+
 function setActiveScreen(screen) {
   if (activeScreen != null) {
     app.stage.removeChild(activeScreen.container);
@@ -84,6 +96,10 @@ function update(time) {
   lastTime = time;
 
   activeScreen.update();
+
+  if (showFrames) {
+    frameText.text = "FPS: " + Math.floor(1000 / deltaTime);
+  }
 
   requestAnimationFrame(update);
 }

@@ -140,7 +140,7 @@ class Card extends PIXI.Container {
 
   clickMap(pos) {
     if (this.cardObject.clickMap(pos)) {
-      if (this.type == cardType.TOWER) {
+      if (this.type == cardType.TOWER || this.cardObject.tags.includes(spellTags.DEPLETE)) {
         gameScreen.destroyCard(this);
       } else {
         gameScreen.discardCard(this);

@@ -1,4 +1,4 @@
-class BaseTower extends BulletTower {
+class BaseTower extends DamageTower {
 
   constructor() {
     super();
@@ -17,6 +17,8 @@ class BaseTower extends BulletTower {
 
     this.setMissileSpeed(1000);
 
+    this.tags.push(towerTags.BULLET);
+
     this.texture = new PIXI.Sprite();
     this.texture.circular = true;
     this.texture.radius = 48;
@@ -34,7 +36,6 @@ class BaseTower extends BulletTower {
     this.graphic.endFill();
     this.texture.addChild(this.graphic);
 
-    this.shootCD = 1000 / this.attackSpeed;
     this.projectileColor = 0xFF00FF;
     
   }
@@ -42,38 +43,28 @@ class BaseTower extends BulletTower {
   update() {
     super.update();
 
-    if (this.placed && gameScreen.levelStarted) {
+  }
 
-      this.projectileColor = this.buffed ? 0xFFFF00 : 0xFF00FF;
+  attackTargets(targets) {
+    if (targets.length != 0) {
 
-      if (this.shootCD < 1000 / this.attackSpeed) {
-        this.shootCD += deltaTime;
-        return;
-      }
+      let v = this.getVector(targets[0]);
 
-      let targets = this.getMonsterInRange();
+      let rot = Math.PI / 2 + Math.atan2(v.vy, v.vx);
 
-      if (targets.length != 0) {
-
-        let v = this.getVector(targets[0]);
-
-        let rot = Math.PI / 2 + Math.atan2(v.vy, v.vx);
-
-        this.texture.rotation = rot;
+      this.texture.rotation = rot;
         
-        let bulletX = this.x + this.texture.radius * v.vx;
-        let bulletY = this.y + this.texture.radius * v.vy;
+      let bulletX = this.x + this.texture.radius * v.vx;
+      let bulletY = this.y + this.texture.radius * v.vy;
 
-        let bulletRange = this.range - this.texture.radius;
-        
-        let missile = new Bullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
-        missile.addToStage();
+      let bulletRange = this.range - this.texture.radius;
 
-        this.shootCD = 0;
-      }
-    } else {
-      this.shootCD = 1000 / this.attackSpeed;
+      this.createBullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
+
+      return true;
     }
+
+    return false;
   }
 
 

@@ -43,11 +43,6 @@ class UI {
     this.towerInfoName.y = 10;
     this.towerInfoContainer.addChild(this.towerInfoName);
 
-    this.towerInfoText = new PIXI.Text("text", {fontFamily: 'Arial', fontSize: 20, fill: 0x000000});
-    this.towerInfoText.x = 10;
-    this.towerInfoText.y = 50;
-    this.towerInfoContainer.addChild(this.towerInfoText);
-
     this.towerInfoTargets = new PIXI.Text("Targets", {fontFamily: 'Arial', fontSize: 20, fill: 0x000000});
     this.towerInfoTargets.x = 410;
     this.towerInfoTargets.y = 10;
@@ -102,7 +97,7 @@ class UI {
 
     if (this.currentTower != null) {
       this.towerInfoName.text = this.currentTower.name;
-      this.towerInfoText.text = this.currentTower.getStats();
+      this.currentTower.updateStats();
     }
     
 
@@ -127,13 +122,9 @@ class UI {
       cards[i].x = 20 + i * distX;
       cards[i].y = 20;
 
-      if (cards[i] != this.gs.selectedCard) {
-        cards[i].cardFrame.tint = 0x00000;
-      }
-
     }
 
-    this.handContainer.children.sort((a, b) => b.handIndex - a.handIndex);
+    this.bringCardToFront(this.gs.selectedCard);
   }
 
   bringCardToFront(card) {
@@ -167,6 +158,7 @@ class UI {
       }
 
       this.towerInfoContainer.removeChild(this.currentTower.buffContainer);
+      this.towerInfoContainer.removeChild(this.currentTower.infoContainer);
     }
 
     if (tower == null) {
@@ -176,6 +168,7 @@ class UI {
     }
 
     this.currentTower = tower;
+    this.currentTower.updateStats();
     this.towerInfoContainer.visible = true;
 
     if (this.currentTower.buttonContainer != null) {
@@ -188,6 +181,10 @@ class UI {
     this.currentTower.buffContainer.x = 240;
     this.currentTower.buffContainer.y = 10;
     this.towerInfoContainer.addChild(this.currentTower.buffContainer);
+
+    this.currentTower.infoContainer.x = 10;
+    this.currentTower.infoContainer.y = 50;
+    this.towerInfoContainer.addChild(this.currentTower.infoContainer);
 
 
   }

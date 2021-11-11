@@ -1,4 +1,4 @@
-class SniperNest extends BulletTower {
+class SniperNest extends DamageTower {
 
   constructor() {
     super();
@@ -19,7 +19,10 @@ class SniperNest extends BulletTower {
 
     this.dmgBuff = 0.5;
 
+    this.towerEffects.push(() => this.dmg += this.dmg * this.dmgBuff);
+
     this.tags.push(towerTags.STAT_SUPPORT);
+    this.tags.push(towerTags.BULLET);
 
     
     this.texture = new PIXI.Sprite(resources['sniperNest'].texture);
@@ -31,7 +34,6 @@ class SniperNest extends BulletTower {
     
     this.addChild(this.texture);
 
-    this.shootCD = 1000 / this.attackSpeed;
     this.projectileColor = 0x808080;
     
   }
@@ -39,39 +41,28 @@ class SniperNest extends BulletTower {
   update() {
     super.update();
 
-    this.dmg += this.dmg * this.dmgBuff;
+  }
 
-    if (this.placed && gameScreen.levelStarted) {
+  attackTargets(targets) {
+    if (targets.length != 0) {
 
+      let v = this.getVector(targets[0]);
 
-      if (this.shootCD < 1000 / this.attackSpeed) {
-        this.shootCD += deltaTime;
-        return;
-      }
+      let rot = Math.PI / 2 + Math.atan2(v.vy, v.vx);
 
-      let targets = this.getMonsterInRange();
-
-      if (targets.length != 0) {
-
-        let v = this.getVector(targets[0]);
-
-        let rot = Math.PI / 2 + Math.atan2(v.vy, v.vx);
-
-        this.texture.rotation = rot;
-
-        let bulletX = this.x + this.texture.radius * v.vx;
-        let bulletY = this.y + this.texture.radius * v.vy;
-
-        let bulletRange = this.range - this.texture.radius;
+      this.texture.rotation = rot;
         
-        let missile = new Bullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
-        missile.addToStage();
+      let bulletX = this.x + this.texture.radius * v.vx;
+      let bulletY = this.y + this.texture.radius * v.vy;
 
-        this.shootCD = 0;
-      }
-    } else {
-      this.shootCD = 1000 / this.attackSpeed;
+      let bulletRange = this.range - this.texture.radius;
+        
+      this.createBullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
+
+      return true;
     }
+
+    return false;
   }
 
 
@@ -88,7 +79,7 @@ class SniperNest extends BulletTower {
     return text;
   }
 
-  getStats() {
+  updateStats() {
     let text = 
       "TC: " + this.TC +
       "\nDamage: " + this.dmg +
@@ -98,7 +89,7 @@ class SniperNest extends BulletTower {
       "\n\nThis tower has " + this.dmgBuff * 100 + "%" +
       "\nincreased damage";
 
-      return text;
+      this.infoText.text = text;
   }
 
 }

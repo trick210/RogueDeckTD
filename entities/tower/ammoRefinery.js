@@ -17,6 +17,8 @@ class AmmoRefinery extends Tower {
 
     this.buffAmount = 3;
 
+    this.cdClock = 0;
+
     this.buffedTurrets = [];
     this.appliedBuffs = [];
 
@@ -43,7 +45,10 @@ class AmmoRefinery extends Tower {
     this.graphic.endFill();
     this.texture.addChild(this.graphic);
 
-    
+    this.cdArc = new PIXI.Graphics();
+    this.cdArc.x = 10;
+    this.cdArc.y = 50;
+    this.infoContainer.addChild(this.cdArc);
     
   }
 
@@ -51,15 +56,6 @@ class AmmoRefinery extends Tower {
     super.update();
 
     if (this.placed) {
-
-      /*
-      for (let i = 0; i < this.buffedTurrets.length; i++) {
-        this.buffedTurrets[i].removeBuff(this.appliedBuffs[i]);
-      }
-
-      this.buffedTurrets = [];
-      this.appliedBuffs = [];
-      */
 
       let towersInRange = this.getTowersInRange();
 
@@ -71,7 +67,7 @@ class AmmoRefinery extends Tower {
           }
 
           let buffEffect = tower => { tower.dmg += tower.baseDmg * this.effect; };
-          let buff = new Buff("Better Ammo", buffTags.DAMAGE, buffEffect);
+          let buff = new Buff("Better Ammo", buffEffect);
 
           towersInRange[i].addBuff(buff);
           this.buffedTurrets[i] = towersInRange[i];
@@ -79,8 +75,22 @@ class AmmoRefinery extends Tower {
         }
       }
 
+      this.texture.rotation += Math.PI * (deltaTime / 1000);
 
-      this.texture.rotation += 0.03;
+
+      if (gameScreen.levelStarted) {
+        if (this.cdClock < this.cooldown) {
+          this.cdClock += deltaTime;
+          return;
+        }
+
+        gameScreen.cardToHand(new Card(new ExplosiveRounds()));
+
+        this.cdClock = 0;
+
+      } else {
+        this.cdClock = 0;
+      }
 
     }
 
@@ -97,7 +107,7 @@ class AmmoRefinery extends Tower {
 
 
   getTowersInRange() {
-    let towers = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER && e != this && e.placed);
+    let towers = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER && e.tags.includes(towerTags.BULLET) && e.placed);
 
     let towersHit = [];
 
@@ -136,13 +146,25 @@ class AmmoRefinery extends Tower {
     return text;
   }
 
-  getStats() {
+  updateStats() {
     let text = 
       "TC: " + this.TC +
-      "\nRange: " + this.range;
+      "\nRange: " + this.range +
+      "\n\nGet one copy of" +
+      "\nExplosive Rounds" +
+      "\nevery " + (this.cooldown / 1000) + "s" +
+      "\n\nNext card: ";
       
+      this.infoText.text = text;
 
-      return text;
+      let arcPosX = 110;
+      let arcPosY = 125;
+
+      this.cdArc.clear();
+      this.cdArc.beginFill(0x000000, 1);
+      this.cdArc.arc(arcPosX, arcPosY, 16, - Math.PI / 2, - Math.PI / 2 + (2 * Math.PI * this.cdClock / this.cooldown) + 0.01, true);
+      this.cdArc.lineTo(arcPosX, arcPosY);
+      this.cdArc.endFill();
   }
 
 }

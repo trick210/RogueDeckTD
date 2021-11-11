@@ -22,11 +22,19 @@ class Tower extends Entity {
     this.buffContainer.on('childAdded', this.sortBuffs.bind(this));
     this.buffContainer.on('childRemoved', this.sortBuffs.bind(this));
 
+    this.infoContainer = new PIXI.Container();
+    this.infoText = new PIXI.Text("text", {fontFamily: 'Arial', fontSize: 20, fill: 0x000000});
+    this.infoContainer.addChild(this.infoText);
+
     this.layerOffset = 100;
     this.layer += this.layerOffset;
 
     this.buffs = [];
     this.buffed = false;
+
+    this.bulletBuffs = [];
+
+    this.towerEffects = [];
 
     this.clicked = false;
     this.entered = false;
@@ -37,6 +45,9 @@ class Tower extends Entity {
 
     this.dmg = this.baseDmg;
     this.attackSpeed = this.baseAS;
+    this.cooldown = this.baseCooldown;
+
+    this.bulletBuffs = [];
 
     for (let i = this.buffs.length - 1; i >= 0; i--) {
       let buff = this.buffs[i];
@@ -60,11 +71,15 @@ class Tower extends Entity {
     }
 
     this.attackSpeed *= Math.min(gameScreen.maxTC / gameScreen.currentTC, 1);
+    this.cooldown  /= Math.min(gameScreen.maxTC / gameScreen.currentTC, 1);
 
     this.attackSpeed = Math.round(this.attackSpeed * 100) / 100;
+    this.cooldown = Math.round(this.cooldown);
 
     
     this.buffed = this.buffs.length != 0;
+
+    this.towerEffects.forEach(effect => effect());
     
 
     if (this.entered) {
@@ -204,11 +219,30 @@ class Tower extends Entity {
   }
 
   addBuff(buff) {
+    if (buff.tags.includes(buffTags.UNIQUE)) {
+      let oldBuff = this.buffs.find(b => b.uniqueTag == buff.uniqueTag);
+      if (oldBuff != null) {
+        if (oldBuff.tags.includes(buffTags.CONCAT_DURATION)) {
+          oldBuff.duration += buff.duration;
+          oldBuff.baseDuration += buff.baseDuration;
+          return true;
+        } else if (oldBuff.tags.includes(buffTags.REFRESH_DURATION)) {
+          oldBuff.duration = buff.duration;
+          oldBuff.baseDuration = buff.baseDuration;
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    buff.onApply(this);
     this.buffs.push(buff);
     this.buffContainer.addChild(buff.iconContainer);
+    return true;
   }
 
   removeBuff(buff) {
+    buff.onRemove(this);
     this.buffs.splice(this.buffs.indexOf(buff), 1);
     this.buffContainer.removeChild(buff.iconContainer);
   }
@@ -239,21 +273,24 @@ const towerTags = {
   ON_KILL: "Tower activates an effect upon killing an enemy",
   ON_COOLDOWN: "Tower has an effect that activates every X seconds",
   MULTI_SHOT: "Tower can attack multiple targets simultaneously",
+
 }
 
 const buffTags = {
 
-  DAMAGE: "Damage",
-  ATTACKSPEED: "Attack speed",
   TIMED: "Timed",
   STACKS: "Stacks",
+  UNIQUE: "Unique",
+  CONCAT_DURATION: "Concat duration",
+  REFRESH_DURATION: "Refresh duration",
 }
 
 class Buff {
-  constructor(name, buffedStat, effect) {
+  constructor(name, effect, onApply = (tower => { }), onRemove = (tower => { })) {
     this.name = name;
-    this.buffedStat = buffedStat;
     this.effect = effect;
+    this.onApply = onApply;
+    this.onRemove = onRemove;
 
     this.stacks = 1;
 
@@ -305,6 +342,11 @@ class Buff {
     this.duration = duration;
     this.baseDuration = duration;
     this.tags.push(buffTags.TIMED);
+  }
+
+  makeUnique(uniqueTag) {
+    this.uniqueTag = uniqueTag;
+    this.tags.push(buffTags.UNIQUE);
   }
 
   setStacks(stacks, maxStacks) {

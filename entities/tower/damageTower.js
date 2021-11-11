@@ -1,9 +1,8 @@
-class BulletTower extends Tower {
+class DamageTower extends Tower {
 
   constructor() {
     super();
 
-    this.tags.push(towerTags.BULLET);
     this.tags.push(towerTags.DAMAGE);
 
     this.buttonContainer = new PIXI.Container();
@@ -19,11 +18,35 @@ class BulletTower extends Tower {
     this.buttonContainer.addChild(this.targetWeak);
 
     this.clickFirst();
+
+    this.shootCD = 1000 / this.attackSpeed;
   }
 
   update() {
     super.update();
+
+    if (this.placed && gameScreen.levelStarted) {
+
+      if (this.shootCD < 1000 / this.attackSpeed) {
+        this.shootCD += deltaTime;
+        return;
+      }
+
+      let targets = this.getMonsterInRange();
+
+      if (this.attackTargets(targets)) {
+        this.shootCD = 0;
+      }
+    } else {
+      this.shootCD = 1000 / this.attackSpeed;
+    }
   }
+
+  attackTargets(targets) {
+    return false;
+  }
+
+
 
   getMonsterInRange() {
     let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
@@ -69,13 +92,10 @@ class BulletTower extends Tower {
     return v;
   }
 
-
-
-  canPlace(pos) {
-    let obstacles = gameScreen.map.tileContainer.children.concat(
-      gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER && e != this).map(e => e.texture));
-
-    return !collider.hit(this.texture, obstacles, false, false, true);
+  createBullet(x, y, vx, vy, dmg, missileSpeed, bulletRange, projectileColor) {
+    let bullet = new Bullet(x, y, vx, vy, dmg, missileSpeed, bulletRange, projectileColor);
+    this.bulletBuffs.forEach(buff => buff(bullet));
+    bullet.addToStage();
   }
 
   clickFirst() {
@@ -114,7 +134,7 @@ class BulletTower extends Tower {
     this.targetWeak.disable();
   }
 
-  getStats() {
+  updateStats() {
     let text = 
       "TC: " + this.TC +
       "\nDamage: " + this.dmg +
@@ -122,7 +142,7 @@ class BulletTower extends Tower {
       "\nRange: " + this.range +
       "\nDPS: " + this.getDPS();
 
-      return text;
+      this.infoText.text = text;
   }
 
 
@@ -134,91 +154,4 @@ const targetOptions = {
   LAST: 'last',
   STRONG: 'strong',
   WEAK: 'weak',
-}
-
-
-
-class Bullet extends Entity {
-
-  constructor(posX, posY, vx, vy, dmg, speed, range, color) {
-    super(posX, posY);
-
-    this.type = entityType.PROJECTILE;
-
-    this.layer = 10;
-    this.vx = vx;
-    this.vy = vy;
-    this.dmg = dmg;
-    this.range = range;
-    this.speed = speed;
-
-    this.texture = new PIXI.Graphics();
-    this.texture.lineStyle(2, 0x000000, 1);
-    this.texture.beginFill(color);
-    this.texture.drawCircle(0, 0, 5);
-    this.texture.endFill();
-    this.addChild(this.texture);
-
-    this.radius = 5;
-
-    this.distance = 0;
-
-    this.oldX = this.x;
-    this.oldY = this.y;
-  }
-
-  update() {
-
-    if (this.distance >= this.range) {
-      this.remove();
-    }
-
-    let distX = this.vx * this.speed * (deltaTime / 1000);
-    let distY = this.vy * this.speed * (deltaTime / 1000);
-
-    this.oldX = this.x;
-    this.oldY = this.y;
-
-    this.x += distX;
-    this.y += distY;
-
-    this.distance += Math.sqrt(distX * distX + distY * distY);
-
-    
-    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
-
-    let monsterHit = null;
-
-    for (let i = 0; i < monster.length; i++) {      
-
-      let p = {
-        x: monster[i].texture.gx + monster[i].texture.width / 2 - monster[i].texture.xAnchorOffset,
-        y: monster[i].texture.gy + monster[i].texture.width / 2 - monster[i].texture.yAnchorOffset,
-      }
-
-      let v = {
-        x: this.x,
-        y: this.y,
-      }
-
-      let w = {
-        x: this.oldX,
-        y: this.oldY,
-      }
-
-      let dist = distToSegment(p, v, w);
-
-      if (dist < (monster[i].texture.radius + this.radius)) {
-        monsterHit = monster[i];
-        break;
-      }
-    }
-
-    if (monsterHit != null) {
-      monsterHit.recieveDamage(this.dmg);
-      this.remove();
-    }
-    
-  }
-
 }

@@ -121,6 +121,7 @@ class GameScreen {
   checkEnd() {
     if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0) {
         this.levelStarted = false;
+        this.removeBuffs();
         this.ui.startButton.enable();
         this.round++;
         this.drawPhase();
@@ -162,12 +163,7 @@ class GameScreen {
 
     let card = this.deck.shift();
 
-    if (this.hand.length < 10) {
-      this.hand.push(card);
-      this.ui.cardToHand(card);
-    } else {
-      this.discardPile.push(card);
-    }
+    this.cardToHand(card);
     
   }
 
@@ -177,22 +173,28 @@ class GameScreen {
     }
 
     for (let i = 0; i < this.deck.length; i++) {
-      if (this.deck[i].type == cardType.TOWER) {
+      if (this.deck[i].type == cardType.TOWER && this.deck[i].cardObject.tags.includes(towerTags.DAMAGE)) {
         let card = this.deck[i];
         this.deck.splice(i, 1);
         
-        if (this.hand.length < 10) {
-          this.hand.push(card);
-          this.ui.cardToHand(card);
-        } else {
-          this.discardPile.push(card);
-        }
+        this.cardToHand(card);
 
         return true;
       }
     }
 
     return false;
+  }
+
+  cardToHand(card) {
+    if (this.hand.length < 10) {
+      this.hand.push(card);
+      this.ui.cardToHand(card);
+    } else {
+      if (!card.cardObject.tags.includes(spellTags.DEPLETE)) {
+        this.discardPile.push(card);
+      }
+    }
   }
 
   drawPhase() {
@@ -219,7 +221,11 @@ class GameScreen {
   discardHand() {
     while (this.hand.length != 0) {
       let card = this.hand[0];
-      this.discardCard(card);
+      if (!card.cardObject.tags.includes(spellTags.DEPLETE)) {
+        this.discardCard(card);
+      } else {
+        this.destroyCard(card);
+      }
     }
   }
 
@@ -333,6 +339,14 @@ class GameScreen {
 
   sortEntities() {
     this.entityContainer.children.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
+  }
+
+  removeBuffs() {
+    let towers = this.entityContainer.children.filter(e => e.type == entityType.TOWER);
+    towers.forEach(tower => {
+      let buffs = tower.buffs.filter(buff => buff.tags.includes(buffTags.TIMED));
+      buffs.forEach(b => tower.removeBuff(b));
+    });
   }
 
   cleanup() {
