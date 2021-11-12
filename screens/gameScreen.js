@@ -12,7 +12,17 @@ class GameScreen {
     this.entityContainer.on('childAdded', this.sortEntities.bind(this));
     this.entityContainer.on('childRemoved', this.checkEnd.bind(this));
 
+    this.pc = new PIXI.ParticleContainer();
+    this.pc.setProperties({
+      scale: true,
+      position: true,
+      rotation: true,
+      uvs: true,
+      alpha: true,
+    });
+
     this.container.addChild(this.map.container);
+    this.container.addChild(this.pc);
     this.container.addChild(this.entityContainer);
     this.container.addChild(this.ui.container);
 
@@ -80,10 +90,15 @@ class GameScreen {
 
     this.drawPhase();
 
+    this.explosiveRoundsEmitter = new PIXI.particles.Emitter(this.pc, explosiveRoundsParticles);
+    this.explosiveRoundsEmitter.emit = false;
+
+    this.cannonBlastEmitter = new PIXI.particles.Emitter(this.pc, cannonBlastParticles);
+    this.cannonBlastEmitter.emit = false;
   }
 
   update() {
-
+    
     if (this.levelStarted) {
       this.spawnClock += deltaTime;
 
@@ -115,6 +130,8 @@ class GameScreen {
 
     this.ui.update();
 
+    this.explosiveRoundsEmitter.update(deltaTime / 1000);
+    this.cannonBlastEmitter.update(deltaTime / 1000);
     
   }
 
@@ -329,6 +346,7 @@ class GameScreen {
     if (this.selectedCard != null) {
       this.selectedCard.clickMap(pos);
     }
+
   }
 
   rightClickMap(e) {
@@ -362,6 +380,9 @@ class GameScreen {
     this.key0.unsubscribe();
 
     this.keySpace.unsubscribe();
+
+    this.cannonBlastEmitter.destroy();
+    this.explosiveRoundsEmitter.destroy();
   }
 
 

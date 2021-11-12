@@ -25,24 +25,13 @@ class Bullet extends Entity {
 
     this.distance = 0;
 
-    this.removeDelay = 0;
-
     this.oldX = this.x;
     this.oldY = this.y;
 
-    this.hit = false;
   }
 
   update() {
 
-    if (this.hit) {
-      if (this.removeDelay <= 0) {
-        this.remove();
-      }
-      this.removeDelay -= deltaTime;
-
-      return;
-    }
 
     if (this.distance >= this.range) {
       this.remove();
@@ -92,11 +81,9 @@ class Bullet extends Entity {
     if (monsterHit != null) {
       monsterHit.recieveDamage(this.dmg);
       if (this.tags.includes(bulletTags.AOE)) {
-        this.removeChild(this.texture);
         this.aoeExplosion(monsterHit);
-        this.removeDelay = 50;
       }
-      this.hit = true;
+      this.remove();
     }
     
   }
@@ -125,6 +112,7 @@ class Bullet extends Entity {
       }
     });
 
+    /*
     let aoeCircle = new PIXI.Graphics();
     aoeCircle.lineStyle(2, 0xFF5050, 0.5);
     aoeCircle.beginFill(0xAAAAAA, 0.3);
@@ -132,6 +120,11 @@ class Bullet extends Entity {
     aoeCircle.endFill();
 
     this.addChild(aoeCircle);
+    */
+
+    gameScreen.explosiveRoundsEmitter.resetPositionTracking();
+    gameScreen.explosiveRoundsEmitter.updateOwnerPos(p.x, p.y);
+    gameScreen.explosiveRoundsEmitter.emit = true;
 
   }
 

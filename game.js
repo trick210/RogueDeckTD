@@ -23,7 +23,6 @@ let app = new PIXI.Application({
     width: width, 
     height: height,                       
     antialias: true, 
-    transparent: false, 
     resolution: 1,
     backgroundColor: 0x2C3539
   }
@@ -47,7 +46,8 @@ loader
   .add('walker', 'assets/monster/walker.png')
   .add('baseTower', 'assets/tower/baseTower.png')
   .add('minigunTower', 'assets/tower/minigunTower.png')
-  .add('sniperNest', 'assets/tower/sniperNest.png');
+  .add('sniperNest', 'assets/tower/sniperNest.png')
+  .add('particle', 'assets/particles/particle.png');
 
 
 

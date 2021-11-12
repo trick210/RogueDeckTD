@@ -38,6 +38,10 @@ class CannonBlast extends Spell {
       });
       this.targets = null;
       this.remove();
+
+      gameScreen.cannonBlastEmitter.resetPositionTracking();
+      gameScreen.cannonBlastEmitter.updateOwnerPos(this.x, this.y);
+      gameScreen.cannonBlastEmitter.emit = true;
     }
   }
 
