@@ -45,7 +45,9 @@ class Tower extends Entity {
 
     this.dmg = this.baseDmg;
     this.attackSpeed = this.baseAS;
+    this.range = this.baseRange;
     this.cooldown = this.baseCooldown;
+    this.TC = this.baseTC;
 
     this.bulletBuffs = [];
 
@@ -75,6 +77,8 @@ class Tower extends Entity {
 
     this.attackSpeed = Math.round(this.attackSpeed * 100) / 100;
     this.cooldown = Math.round(this.cooldown);
+
+    this.rangeCollider.radius = this.range;
 
     
     this.buffed = this.buffs.length != 0;
@@ -230,6 +234,9 @@ class Tower extends Entity {
           oldBuff.duration = buff.duration;
           oldBuff.baseDuration = buff.baseDuration;
           return true;
+        } else if (oldBuff.tags.includes(buffTags.STACKS)) {
+          oldBuff.stacks++;
+          return true;
         } else {
           return false;
         }
@@ -349,14 +356,15 @@ class Buff {
     this.tags.push(buffTags.UNIQUE);
   }
 
-  setStacks(stacks, maxStacks) {
+  setStacks(stacks) {
     this.stacks = stacks;
-    this.maxStacks = maxStacks;
     this.tags.push(buffTags.STACKS);
+    let oldEffect = this.effect;
+    this.effect = tower => { oldEffect(tower, this.stacks) };
   }
 
   updateBuffIcon() {
-    if (this.stacks > 1 || this.tags.includes(buffTags.STACKS)) {
+    if (this.tags.includes(buffTags.STACKS) && this.stacks > 1) {
       this.stackText.text = this.stacks;
     }
 

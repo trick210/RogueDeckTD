@@ -119,11 +119,6 @@ class GameScreen {
       this.entityContainer.children[i].update();
     }
 
-    if (this.hp <= 0) {
-      this.cleanup();
-      setActiveScreen(new DeathScreen(this.round));
-    }
-
     this.currentTC = this.entityContainer.children.filter(child => child.type == entityType.TOWER && child.placed).map(t => t.TC).reduce((a, b) => a + b, 0);
 
     this.sortEntities();
@@ -133,6 +128,14 @@ class GameScreen {
     this.explosiveRoundsEmitter.update(deltaTime / 1000);
     this.cannonBlastEmitter.update(deltaTime / 1000);
     
+  }
+
+  recieveDamage(amount) {
+    this.hp -= amount;
+    if (this.hp <= 0) {
+      this.cleanup();
+      setActiveScreen(new DeathScreen(this.round));
+    }
   }
 
   checkEnd() {
@@ -158,11 +161,14 @@ class GameScreen {
   }
 
   setupDeck() {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       this.deck.push(new Card(new CannonBlast()));
       this.deck.push(new Card(new Overcharge()));
       this.deck.push(new Card(new Refine()));
+
     }
+    this.deck.push(new Card(new Adjust()));
+    this.deck.push(new Card(new DoubleBarrel()));
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new SniperNest()));

@@ -1,11 +1,11 @@
-class Refine extends Spell {
+class Adjust extends Spell {
 
   constructor() {
     super();
 
-    this.name = "Refine";
+    this.name = "Adjust";
 
-    this.cost = 1;
+    this.cost = 0;
 
     this.effect = 0.1;
 
@@ -20,18 +20,14 @@ class Refine extends Spell {
   getCardText() {
     let text = 
       "Gives a tower\n" +
-      (this.effect * 100) + "% bonus\nattack damage";
+      (this.effect * 100) + "% bonus\nrange";
 
     return text;
   }
 
   clickTarget(target) {
 
-    if (!target.tags.includes(towerTags.DAMAGE)) {
-      return false;
-    }
-
-    let buffEffect = (tower, stacks) => { tower.dmg += stacks * (tower.baseDmg * this.effect); };
+    let buffEffect = (tower, stacks) => { tower.range += stacks * (tower.baseRange * this.effect); };
 
     let statBuff = new Buff(this.name, buffEffect);
 

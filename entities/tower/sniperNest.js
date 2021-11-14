@@ -11,7 +11,7 @@ class SniperNest extends DamageTower {
 
     this.setDMG(400);
 
-    this.setAS(0.5);
+    this.setAS(0.4);
 
     this.setRange(600);
 

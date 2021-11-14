@@ -11,7 +11,7 @@ class AmmoRefinery extends Tower {
 
     this.setRange(350);
 
-    this.setCD(5000);
+    this.setCD(7000);
 
     this.effect = 0.25;
 

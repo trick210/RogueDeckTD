@@ -51,7 +51,7 @@ class Monster extends Entity {
 
     } else {
 
-      gameScreen.hp -= Math.ceil(this.hp / 100)
+      gameScreen.recieveDamage(Math.ceil(this.hp / 100));
       this.remove();
     }
 
