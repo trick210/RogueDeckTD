@@ -33,7 +33,7 @@ class Overcharge extends Spell {
       return false;
     }
 
-    let buffEffect = tower => { tower.dmg += tower.baseDmg * this.effect; };
+    let buffEffect = (b, tower) => { tower.dmg += tower.baseDmg * this.effect; };
 
     let statBuff = new Buff("Overcharge", buffEffect);
     statBuff.setDuration(this.duration);

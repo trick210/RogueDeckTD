@@ -44,7 +44,7 @@ class ExplosiveRounds extends Spell {
       bullet.dmg *= (1 - this.effect);
     }); 
 
-    let buffEffect = (tower => { 
+    let buffEffect = ((b, tower) => { 
       tower.bulletBuffs.push(aoeBullet);
     });
 

@@ -33,9 +33,9 @@ class DoubleBarrel extends Spell {
       return false;
     }
 
-    let buffEffect = (tower, stacks) => { 
-      tower.attackSpeed += stacks * (tower.baseAS * this.effect);
-      tower.TC += stacks * (tower.baseTC * this.cripple); 
+    let buffEffect = (buff, tower) => { 
+      tower.attackSpeed += buff.stacks * (tower.baseAS * this.effect);
+      tower.TC += buff.stacks * (tower.baseTC * this.cripple); 
     };
 
     let statBuff = new Buff(this.name, buffEffect);

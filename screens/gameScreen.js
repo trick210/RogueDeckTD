@@ -73,6 +73,8 @@ class GameScreen {
     this.currentTC = 0;
     this.maxTC = 12;
 
+    this.globalBuffs = [];
+
     this.currentMonsterList = [];
     this.monsterInWave = this.currentMonsterList.length;
 
@@ -115,6 +117,8 @@ class GameScreen {
 
     }
 
+    this.updateBuffs();
+
     for (let i = 0; i < this.entityContainer.children.length; i++) {
       this.entityContainer.children[i].update();
     }
@@ -136,6 +140,58 @@ class GameScreen {
       this.cleanup();
       setActiveScreen(new DeathScreen(this.round));
     }
+  }
+
+  updateBuffs() {
+    for (let i = this.globalBuffs.length - 1; i >= 0; i--) {
+      let buff = this.globalBuffs[i];
+
+      if (gameScreen.levelStarted) {
+        if (buff.tags.includes(buffTags.TIMED)) {
+          buff.duration -= deltaTime;
+          if (buff.duration <= 0) {
+            this.removeBuff(buff);
+            continue;
+          }
+        }
+      }
+
+
+      buff.effect(this);
+
+      buff.updateBuffIcon();
+        
+    }
+  }
+
+  addBuff(buff) {
+    if (buff.tags.includes(buffTags.UNIQUE)) {
+      let oldBuff = this.globalBuffs.find(b => b.uniqueTag == buff.uniqueTag);
+      if (oldBuff != null) {
+        if (oldBuff.tags.includes(buffTags.CONCAT_DURATION)) {
+          oldBuff.duration += buff.duration;
+          oldBuff.baseDuration += buff.baseDuration;
+          
+        } else if (oldBuff.tags.includes(buffTags.REFRESH_DURATION)) {
+          oldBuff.duration = buff.duration;
+          oldBuff.baseDuration = buff.baseDuration;
+          
+        } else if (oldBuff.tags.includes(buffTags.STACKS)) {
+          oldBuff.stacks++;
+          
+        }
+        return;
+      }
+    }
+    buff.onApply(this);
+    this.globalBuffs.push(buff);
+    //this.buffContainer.addChild(buff.iconContainer);
+  }
+
+  removeBuff(buff) {
+    buff.onRemove(this);
+    this.globalBuffs.splice(this.globalBuffs.indexOf(buff), 1);
+    //this.buffContainer.removeChild(buff.iconContainer);
   }
 
   checkEnd() {
@@ -168,7 +224,7 @@ class GameScreen {
 
     }
     this.deck.push(new Card(new Adjust()));
-    this.deck.push(new Card(new DoubleBarrel()));
+    this.deck.push(new Card(new LeadStorm()));
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new SniperNest()));
@@ -370,6 +426,10 @@ class GameScreen {
     towers.forEach(tower => {
       let buffs = tower.buffs.filter(buff => buff.tags.includes(buffTags.TIMED));
       buffs.forEach(b => tower.removeBuff(b));
+    });
+
+    this.globalBuffs.filter(buff => buff.tags.includes(buffTags.TIMED)).forEach(buff => {
+      this.removeBuff(buff);
     });
   }
 

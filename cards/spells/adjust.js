@@ -27,7 +27,7 @@ class Adjust extends Spell {
 
   clickTarget(target) {
 
-    let buffEffect = (tower, stacks) => { tower.range += stacks * (tower.baseRange * this.effect); };
+    let buffEffect = (buff, tower) => { tower.range += buff.stacks * (tower.baseRange * this.effect); };
 
     let statBuff = new Buff(this.name, buffEffect);
 

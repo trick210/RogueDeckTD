@@ -66,7 +66,7 @@ class AmmoRefinery extends Tower {
             this.buffedTurrets[i].removeBuff(this.appliedBuffs[i]);
           }
 
-          let buffEffect = tower => { tower.dmg += tower.baseDmg * this.effect; };
+          let buffEffect = (b, tower) => { tower.dmg += tower.baseDmg * this.effect; };
           let buff = new Buff("Better Ammo", buffEffect);
 
           towersInRange[i].addBuff(buff);

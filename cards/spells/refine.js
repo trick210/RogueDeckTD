@@ -31,7 +31,7 @@ class Refine extends Spell {
       return false;
     }
 
-    let buffEffect = (tower, stacks) => { tower.dmg += stacks * (tower.baseDmg * this.effect); };
+    let buffEffect = (buff, tower) => { tower.dmg += buff.stacks * (tower.baseDmg * this.effect); };
 
     let statBuff = new Buff(this.name, buffEffect);
 

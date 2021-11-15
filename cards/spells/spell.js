@@ -90,6 +90,11 @@ class Spell extends Entity {
 
     }
 
+    if (this.tags.includes(spellTags.GLOBAL)) {
+      this.useSpell();
+      return true;
+    }
+
     return false;;
   }
 
