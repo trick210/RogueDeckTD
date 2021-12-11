@@ -9,6 +9,8 @@ class Walker extends Monster {
     this.texture.circular = true;
     this.texture.radius = 32;
 
+    this.texture.anchor.set(0.5);
+
     this.addChild(this.texture);
 
     this.speed = 150;

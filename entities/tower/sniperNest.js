@@ -59,10 +59,10 @@ class SniperNest extends DamageTower {
         
       this.createBullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
 
-      return true;
+      return [ targets[0] ];
     }
 
-    return false;
+    return [];
   }
 
 

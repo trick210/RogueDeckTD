@@ -6,23 +6,29 @@ class GrassMap {
     this.mapWidth = 30;
     this.mapHeight = 12;
 
-    this.startPos = [-1, 5];
-
     this.bg = new Sprite(PIXI.Texture.WHITE);
     this.bg.width = width;
     this.bg.height = height - 300;
     this.bg.tint = 0x00AA00;
 
-    this.tileContainer = new PIXI.Container();
+    this.path = new PIXI.Graphics();
+
+    let pathGenerator = new PathGenerator();
+
+    let config = JSON.parse(mapConfig1);
+    config.width = this.bg.width;
+    config.height = this.bg.height;
+
+    this.generatedPath = pathGenerator.createMap(config);
 
     this.setupMap();
 
-
+    this.startPos = this.generatedPath.path[0];
 
 
     this.container = new PIXI.Container();
     this.container.addChild(this.bg);
-    this.container.addChild(this.tileContainer);
+    this.container.addChild(this.path);
   }
 
 
@@ -69,7 +75,7 @@ class GrassMap {
     let monster = [];
 
     for (let i = 0; i < totalMonster; i++) {
-      let walker = new Walker(this.startPos[0] * this.gridSize, this.startPos[1] * this.gridSize, Math.floor(totalHP / totalMonster));
+      let walker = new Walker(this.startPos.x, this.startPos.y, Math.floor(totalHP / totalMonster));
       walker.spawnIndex = i;
       monster.push(walker);
     }
@@ -80,91 +86,69 @@ class GrassMap {
 
   setupMap() {
 
-    this.tileLocations = [];
-
-    this.tileLocations.push( 
-      [-1, 5],
-      [0, 5],
-      [1, 5],
-      [2, 5],
-      [3, 5],
-      [3, 4],
-      [3, 3],
-      [4, 3],
-      [5, 3],
-      [6, 3],
-      [6, 2],
-      [6, 1],
-      [7, 1],
-      [8, 1],
-      [9, 1],
-      [10, 1],
-      [11, 1],
-      [11, 2],
-      [11, 3],
-      [11, 4],
-      [10, 4],
-      [9, 4],
-      [9, 5],
-      [9, 6],
-      [9, 7],
-      [9, 8],
-      [9, 9],
-      [10, 9],
-      [11, 9],
-      [12, 9],
-      [13, 9],
-      [14, 9],
-      [15, 9],
-      [16, 9],
-      [17, 9],
-      [18, 9],
-      [18, 8],
-      [18, 7],
-      [18, 6],
-      [18, 5],
-      [18, 4],
-      [17, 4],
-      [16, 4],
-      [16, 3],
-      [16, 2],
-      [16, 1],
-      [17, 1],
-      [18, 1],
-      [19, 1],
-      [20, 1],
-      [21, 1],
-      [22, 1],
-      [23, 1],
-      [24, 1],
-      [24, 2],
-      [24, 3],
-      [24, 4],
-      [24, 5],
-      [24, 6],
-      [24, 7],
-      [25, 7],
-      [26, 7],
-      [27, 7],
-      [28, 7],
-      [29, 7],
-      [30, 7] );
-
-    for (let i = 0; i < this.tileLocations.length; i++) {
-
-      let pos = this.tileLocations[i];
-
-      let tile = new Sprite(PIXI.Texture.WHITE);
-
-      tile.width = 64;
-      tile.height = 64;
-      tile.x = pos[0] * this.gridSize;
-      tile.y = pos[1] * this.gridSize;
-      tile.tint = 0xC2B280;
-
-      this.tileContainer.addChild(tile);
+    this.polygon = this.generatedPath.outlineBot.concat(this.generatedPath.outlineTop.reverse());
 
 
+    this.path.clear();
+    this.path.lineStyle(3, 0x000000);
+    this.path.beginFill(0xC2B280);
+    this.path.moveTo(this.polygon[this.polygon.length - 1].x, this.polygon[this.polygon.length - 1].y);
+
+
+    for (let i = 0; i < this.polygon.length; i++) {
+      this.path.lineTo(this.polygon[i].x, this.polygon[i].y);
+    }
+
+    this.path.endFill();
+
+    this.pathHitbox = new PIXI.Polygon(this.polygon);
+
+  }
+
+  collide(texture) {
+    if (!texture.circular) return false;
+
+    let p = texture.getGlobalPosition();
+
+    if (this.pathHitbox.contains(p.x, p.y)) {
+      return true;
+    }
+
+    for (let i = 0; i < this.polygon.length - 1; i++) {
+      if (distToSegment(p, this.polygon[i], this.polygon[(i + 1)]) < texture.radius) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  getPosition(dist) {
+    let remainingDist = dist;
+    if (this.generatedPath.beziers != null) {
+
+      for (let i = 0; i < this.generatedPath.beziers.length; i++) {
+        let len = this.generatedPath.beziers[i].length();
+        if (remainingDist < len) {
+          let t = remainingDist / len;
+          return this.generatedPath.beziers[i].get(t);
+        } else {
+          remainingDist -= len;
+        }
+      }
+    } else {
+      for (let i = 1; i < this.generatedPath.path.length; i++) {
+        let len = this.generatedPath.path[i].segLength;
+        if (remainingDist < len) {
+          let t = remainingDist / len;
+          return {
+            x: this.generatedPath.path[i - 1].x + t * (this.generatedPath.path[i].x - this.generatedPath.path[i - 1].x),
+            y: this.generatedPath.path[i - 1].y + t * (this.generatedPath.path[i].y - this.generatedPath.path[i - 1].y)
+          };
+        } else {
+          remainingDist -= len;
+        }
+      }
     }
   }
 

@@ -84,6 +84,10 @@ class Tower extends Entity {
     this.buffed = this.buffs.length != 0;
 
     this.towerEffects.forEach(effect => effect());
+
+    if (this.tags.includes(towerTags.ON_COOLDOWN)) {
+      this.updateCD();
+    }
     
 
     if (this.entered) {
@@ -93,6 +97,38 @@ class Tower extends Entity {
       this.rangeCircle.drawCircle(0, 0, this.range);
       this.rangeCircle.endFill();
     }
+  }
+
+  updateCD() {
+    if (this.placed && gameScreen.levelStarted) {
+      if (this.cdClock < this.cooldown) {
+        this.cdClock += deltaTime;
+        return;
+      }
+
+      this.onCooldown();
+
+      this.cdClock = 0;
+
+    } else {
+      this.cdClock = 0;
+    }
+  }
+
+  onCooldown() {
+
+  }
+
+  onAttack(target) {
+
+  }
+
+  onHit(target) {
+
+  }
+
+  onKill(target) {
+
   }
 
   enterMap(pos) {
@@ -158,10 +194,10 @@ class Tower extends Entity {
   }
 
   canPlace(pos) {
-    let obstacles = gameScreen.map.tileContainer.children.concat(
-      gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER && e != this).map(e => e.texture));
+    let obstacles = gameScreen.entityContainer.children.filter(e => e.type == entityType.TOWER && e != this).map(e => e.texture);
 
-    return !collider.hit(this.texture, obstacles, false, false, true);
+
+    return !collider.hit(this.texture, obstacles, false, false, true) && !gameScreen.map.collide(this.texture);
   }
 
   enter() {

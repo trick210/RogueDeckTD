@@ -5,11 +5,11 @@ class Monster extends Entity {
 
     this.type = entityType.MONSTER;
 
-    this.tileIndex = 0;
+    this.distTraveled = 0;
 
     this.oldvx = 0;
     this.oldvy = 0;
-    this.oldhp = 0;;
+    this.oldhp = 0;
 
     this.hpBar = new PIXI.Graphics();
     this.addChild(this.hpBar);
@@ -17,7 +17,7 @@ class Monster extends Entity {
     let hpFrame = new PIXI.Graphics();
     hpFrame.lineStyle(1, 0x000000, 1);
     hpFrame.beginFill(0xFFFFFF, 0);
-    hpFrame.drawRect(8, -15, 48, 5);
+    hpFrame.drawRect(-24, -45, 48, 5);
     hpFrame.endFill();
 
     this.addChild(hpFrame);
@@ -27,39 +27,26 @@ class Monster extends Entity {
 
   update() {
 
-    let tiles = gameScreen.map.tileLocations;
-    let gridSize = gameScreen.map.gridSize;
 
-    if (this.tileIndex + 1 < tiles.length) {
-      let vx = tiles[this.tileIndex + 1][0] - tiles[this.tileIndex][0];
-      let vy = tiles[this.tileIndex + 1][1] - tiles[this.tileIndex][1];
+    this.distTraveled += this.speed * deltaTime / 1000;
 
-      if (vx != this.oldvx || vy != this.oldvy) {
-        this.x = tiles[this.tileIndex][0] * gridSize;
-        this.y = tiles[this.tileIndex][1] * gridSize;
-      }
+    let newPos = gameScreen.map.getPosition(this.distTraveled);
 
-      this.oldvx = vx;
-      this.oldvy = vy;
-
-      this.x += vx * this.speed * (deltaTime / 1000);
-      this.y += vy * this.speed * (deltaTime / 1000);
-
-      if (-vx * (this.x - tiles[this.tileIndex + 1][0] * gridSize) <= 0 && -vy * (this.y - tiles[this.tileIndex + 1][1] * gridSize) <= 0) {
-        this.tileIndex++;
-      }
-
-    } else {
-
+    if (newPos == null) {
       gameScreen.recieveDamage(Math.ceil(this.hp / 100));
       this.remove();
+    } else {
+
+      this.x = newPos.x;
+      this.y = newPos.y;
     }
+
 
 
     if (this.oldhp != this.hp) {
       this.hpBar.clear();
       this.hpBar.beginFill(0xFF3030);
-      this.hpBar.drawRect(8, -15, 48 * (this.hp / this.maxHP), 5);
+      this.hpBar.drawRect(-24, -45, 48 * (this.hp / this.maxHP), 5);
       this.hpBar.endFill();
 
       this.oldhp = this.hp;

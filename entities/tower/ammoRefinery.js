@@ -77,24 +77,13 @@ class AmmoRefinery extends Tower {
 
       this.texture.rotation += Math.PI * (deltaTime / 1000);
 
-
-      if (gameScreen.levelStarted) {
-        if (this.cdClock < this.cooldown) {
-          this.cdClock += deltaTime;
-          return;
-        }
-
-        gameScreen.cardToHand(new Card(new ExplosiveRounds()));
-
-        this.cdClock = 0;
-
-      } else {
-        this.cdClock = 0;
-      }
-
     }
 
     
+  }
+
+  onCooldown() {
+    gameScreen.cardToHand(new Card(new ExplosiveRounds()));
   }
 
   remove() {

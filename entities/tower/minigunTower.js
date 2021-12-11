@@ -89,7 +89,7 @@ class MinigunTower extends DamageTower {
         
       this.createBullet(bulletX, bulletY, v.vx, v.vy, this.dmg, this.missileSpeed, bulletRange, this.projectileColor);
 
-      return true;
+      return [ targets[0] ];
     } else {
 
       this.stackClock += deltaTime;
@@ -99,7 +99,7 @@ class MinigunTower extends DamageTower {
         this.stackClock -= this.stackCD;
       }
 
-      return false;
+      return [];
     }
   }
 

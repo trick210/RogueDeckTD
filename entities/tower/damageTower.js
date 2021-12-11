@@ -33,9 +33,10 @@ class DamageTower extends Tower {
       }
 
       let targets = this.getMonsterInRange();
-
-      if (this.attackTargets(targets)) {
+      let attackedTargets = this.attackTargets(targets);
+      if (attackedTargets.length > 0) {
         this.shootCD = 0;
+        attackedTargets.forEach(target => this.onAttack(target));
       }
     } else {
       this.shootCD = 1000 / this.attackSpeed;
@@ -43,7 +44,7 @@ class DamageTower extends Tower {
   }
 
   attackTargets(targets) {
-    return false;
+    return [];
   }
 
 
