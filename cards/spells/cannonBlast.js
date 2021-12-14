@@ -33,7 +33,11 @@ class CannonBlast extends Spell {
     if (this.targets != null) {
       this.targets.forEach(target => {
         if (target.type == entityType.MONSTER) {
-          target.recieveDamage(this.dmg)
+          let dmgObj = {
+            amount: this.dmg,
+            damageType: "NORMAL"
+          }
+          target.recieveDamage(dmgObj)
         }
       });
       this.targets = null;

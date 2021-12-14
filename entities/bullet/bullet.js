@@ -1,6 +1,6 @@
 class Bullet extends Entity {
 
-  constructor(posX, posY, vx, vy, dmg, speed, range, color) {
+  constructor(posX, posY, vx, vy, dmg, speed, range, color, srcTower) {
     super(posX, posY);
 
     this.type = entityType.PROJECTILE;
@@ -11,6 +11,9 @@ class Bullet extends Entity {
     this.dmg = dmg;
     this.range = range;
     this.speed = speed;
+
+    this.percentagePen = srcTower.percentagePen;
+    this.flatPen = srcTower.flatPen;
 
     this.tags = [];
 
@@ -79,7 +82,13 @@ class Bullet extends Entity {
     }
 
     if (monsterHit != null) {
-      monsterHit.recieveDamage(this.dmg);
+      let dmgObj = {
+        amount: this.dmg,
+        damageType: "NORMAL",
+        percentagePen: this.percentagePen,
+        flatPen: this.flatPen
+      }
+      monsterHit.recieveDamage(dmgObj);
       if (this.tags.includes(bulletTags.AOE)) {
         this.aoeExplosion(monsterHit);
       }
@@ -108,7 +117,11 @@ class Bullet extends Entity {
 
     possibleTargets.forEach(target => {
       if (collider.hit(rangeCollider, target.texture, false, false, true)) {
-        target.recieveDamage(this.aoeDamage);
+        let dmgObj = {
+          amount: this.dmg,
+          damageType: "NORMAL"
+        }
+        target.recieveDamage(dmgObj);
       }
     });
 

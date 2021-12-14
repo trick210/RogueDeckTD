@@ -94,7 +94,7 @@ class DamageTower extends Tower {
   }
 
   createBullet(x, y, vx, vy, dmg, missileSpeed, bulletRange, projectileColor) {
-    let bullet = new Bullet(x, y, vx, vy, dmg, missileSpeed, bulletRange, projectileColor);
+    let bullet = new Bullet(x, y, vx, vy, dmg, missileSpeed, bulletRange, projectileColor, this);
     this.bulletBuffs.forEach(buff => buff(bullet));
     bullet.addToStage();
   }

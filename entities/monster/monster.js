@@ -11,6 +11,8 @@ class Monster extends Entity {
     this.oldvy = 0;
     this.oldhp = 0;
 
+
+
     this.hpBar = new PIXI.Graphics();
     this.addChild(this.hpBar);
 
@@ -59,8 +61,29 @@ class Monster extends Entity {
     this.maxHP = hp;
   }
 
-  recieveDamage(amount) {
-    this.hp -= amount;
+  setArmor(armor) {
+    this.armor = armor;
+    this.baseArmor = armor;
+  }
+
+  recieveDamage(damageObj) {
+    if (damageObj.percentagePen == null) damageObj.percentagePen = 0;
+    if (damageObj.flatPen == null) damageObj.flatPen = 0;
+    
+    let amount = damageObj.amount;
+
+    let effectiveArmor = this.armor * (1 - damageObj.percentagePen);
+
+    effectiveArmor -= damageObj.flatPen;
+
+    if (damageObj.damageType == "NORMAL") {
+      this.hp -= 100 / (100 + effectiveArmor) * amount;
+    } else {
+      this.hp -= amount;
+    }
+
+
+    
     if (this.hp <= 0) {
       this.remove();
     }
