@@ -34,7 +34,11 @@ class BoxOfHollowPoints extends Spell {
     }
 
     let onHitBuff = (target, buff, tower) => {
-      target.recieveDamage(this.effect);
+      let dmgObj = {
+        amount: this.effect,
+        damageType: "NORMAL"
+      }
+      target.recieveDamage(dmgObj);
       buff.charges--;
       if (buff.charges <= 0) {
         tower.removeBuff(buff);
