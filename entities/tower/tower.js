@@ -50,6 +50,8 @@ class Tower extends Entity {
     this.range = this.baseRange;
     this.cooldown = this.baseCooldown;
     this.TC = this.baseTC;
+    this.flatPen = 0;
+    this.percentagePen = 0;
 
     this.bulletBuffs = [];
     this.onHitBuffs = [];

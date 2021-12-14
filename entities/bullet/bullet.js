@@ -13,6 +13,8 @@ class Bullet extends Entity {
     this.speed = speed;
 
     this.srcTower = srcTower;
+    this.percentagePen = srcTower.percentagePen;
+    this.flatPen = srcTower.flatPen;
 
     this.tags = [];
 
@@ -81,8 +83,18 @@ class Bullet extends Entity {
     }
 
     if (monsterHit != null) {
-      monsterHit.recieveDamage(this.dmg);
+      
+      let dmgObj = {
+        amount: this.dmg,
+        damageType: "NORMAL",
+        percentagePen: this.percentagePen,
+        flatPen: this.flatPen
+      }
+      
+      monsterHit.recieveDamage(dmgObj);
+
       this.srcTower.onHit(monsterHit);
+
       if (this.tags.includes(bulletTags.AOE)) {
         this.aoeExplosion(monsterHit);
       }
@@ -111,7 +123,11 @@ class Bullet extends Entity {
 
     possibleTargets.forEach(target => {
       if (collider.hit(rangeCollider, target.texture, false, false, true)) {
-        target.recieveDamage(this.aoeDamage);
+        let dmgObj = {
+          amount: this.dmg,
+          damageType: "NORMAL"
+        }
+        target.recieveDamage(dmgObj);
       }
     });
 

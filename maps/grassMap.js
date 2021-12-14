@@ -39,6 +39,8 @@ class GrassMap {
     let totalHP = 2000;
     let totalMonster = 10;
 
+    let armor = Math.round(Math.random() * 100);
+
     if (round != 1) {
       totalMonster = 2 + Math.floor(Math.random() * 14);
     }
@@ -75,7 +77,7 @@ class GrassMap {
     let monster = [];
 
     for (let i = 0; i < totalMonster; i++) {
-      let walker = new Walker(this.startPos.x, this.startPos.y, Math.floor(totalHP / totalMonster));
+      let walker = new Walker(this.startPos.x, this.startPos.y, Math.floor((totalHP / totalMonster) / ((armor + 100) / 100)), armor);
       walker.spawnIndex = i;
       monster.push(walker);
     }

@@ -17,9 +17,13 @@ class SniperNest extends DamageTower {
 
     this.setMissileSpeed(3000);
 
-    this.dmgBuff = 0.5;
+    this.penetrationBuff = 0.5;
 
-    this.towerEffects.push(() => this.dmg += this.dmg * this.dmgBuff);
+    let buffEffect = (b, tower) => {
+      tower.percentagePen += this.penetrationBuff;
+    };
+
+    this.addBuff(new Buff("True shot", buffEffect));
 
     this.tags.push(towerTags.STAT_SUPPORT);
     this.tags.push(towerTags.BULLET);
@@ -72,9 +76,8 @@ class SniperNest extends DamageTower {
       "Range: " + this.range + "\n" +
       "Attack speed: " + this.attackSpeed + "\n" +
       "DPS: " + this.getDPS() + "\n\n" +
-      "All damage dealt\n" +
-      "by this tower\n" +
-      "increases by " + this.dmgBuff * 100 + "%";
+      "This tower has " + (this.penetrationBuff * 100) + " %\n" +
+      "armor penetration";
 
     return text;
   }
@@ -86,8 +89,8 @@ class SniperNest extends DamageTower {
       "\nAttack speed: " + this.attackSpeed +
       "\nRange: " + this.range +
       "\nDPS: " + this.getDPS() +
-      "\n\nThis tower has " + this.dmgBuff * 100 + "%" +
-      "\nincreased damage";
+      "\n\nThis tower has " + this.penetrationBuff * 100 + "%" +
+      "\narmor penetration";
 
       this.infoText.text = text;
   }
