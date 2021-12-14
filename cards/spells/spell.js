@@ -115,5 +115,6 @@ const spellTags = {
   CRIPPLE: "Cripple",
   TARGET_TOWER: "Target tower",
   TARGET_MONSTER: "Target tower",
-  DEPLETE: "Deplete"
+  DEPLETE: "Deplete",
+  CHARGES: "Charges"
 }

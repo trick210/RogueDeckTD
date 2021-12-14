@@ -221,10 +221,10 @@ class GameScreen {
       this.deck.push(new Card(new CannonBlast()));
       this.deck.push(new Card(new Overcharge()));
       this.deck.push(new Card(new Refine()));
+      this.deck.push(new Card(new BoxOfHollowPoints()));
 
     }
     this.deck.push(new Card(new Adjust()));
-    this.deck.push(new Card(new LeadStorm()));
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new MinigunTower()));
     this.deck.push(new Card(new SniperNest()));

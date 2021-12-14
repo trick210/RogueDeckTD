@@ -5,6 +5,7 @@ const buffTags = {
   TIMED: "Timed",
   STACKS: "Stacks",
   UNIQUE: "Unique",
+  CHARGES: "Charges",
   CONCAT_DURATION: "Concat duration",
   REFRESH_DURATION: "Refresh duration",
 }
@@ -80,9 +81,18 @@ class Buff {
     //this.effect = tower => { oldEffect(tower, this.stacks) };
   }
 
+  setCharges(charges) {
+    this.charges = charges;
+    this.tags.push(buffTags.CHARGES);
+  }
+
   updateBuffIcon() {
     if (this.tags.includes(buffTags.STACKS) && this.stacks > 1) {
       this.stackText.text = this.stacks;
+    }
+
+    if (this.tags.includes(buffTags.CHARGES)) {
+      this.stackText.text = this.charges;
     }
 
     if (this.tags.includes(buffTags.TIMED)) {

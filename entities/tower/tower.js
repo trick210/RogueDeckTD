@@ -34,6 +34,8 @@ class Tower extends Entity {
 
     this.bulletBuffs = [];
 
+    this.onHitBuffs = [];
+
     this.towerEffects = [];
 
     this.clicked = false;
@@ -50,6 +52,7 @@ class Tower extends Entity {
     this.TC = this.baseTC;
 
     this.bulletBuffs = [];
+    this.onHitBuffs = [];
 
     for (let i = this.buffs.length - 1; i >= 0; i--) {
       let buff = this.buffs[i];
@@ -124,7 +127,9 @@ class Tower extends Entity {
   }
 
   onHit(target) {
-
+    this.onHitBuffs.forEach(buff => {
+      buff(target);
+    });
   }
 
   onKill(target) {
@@ -272,6 +277,8 @@ class Tower extends Entity {
 
         } else if (oldBuff.tags.includes(buffTags.STACKS)) {
           oldBuff.stacks++;
+        } else if (oldBuff.tags.includes(buffTags.CHARGES)) {
+          oldBuff.charges += buff.charges;
         }
         return
       }

@@ -1,6 +1,6 @@
 class Bullet extends Entity {
 
-  constructor(posX, posY, vx, vy, dmg, speed, range, color) {
+  constructor(posX, posY, vx, vy, dmg, speed, range, color, srcTower) {
     super(posX, posY);
 
     this.type = entityType.PROJECTILE;
@@ -11,6 +11,8 @@ class Bullet extends Entity {
     this.dmg = dmg;
     this.range = range;
     this.speed = speed;
+
+    this.srcTower = srcTower;
 
     this.tags = [];
 
@@ -80,6 +82,7 @@ class Bullet extends Entity {
 
     if (monsterHit != null) {
       monsterHit.recieveDamage(this.dmg);
+      this.srcTower.onHit(monsterHit);
       if (this.tags.includes(bulletTags.AOE)) {
         this.aoeExplosion(monsterHit);
       }
