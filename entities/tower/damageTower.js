@@ -70,6 +70,8 @@ class DamageTower extends Tower {
         return monsterHit.sort((a, b) => b.hp - a.hp);
       case targetOptions.WEAK:
         return monsterHit.sort((a, b) => a.hp - b.hp);
+      case targetOptions.RANDOM:
+        return shuffle(monsterHit);
     }
     
   }
@@ -97,6 +99,11 @@ class DamageTower extends Tower {
     let bullet = new Bullet(x, y, vx, vy, dmg, missileSpeed, bulletRange, projectileColor, this);
     this.bulletBuffs.forEach(buff => buff(bullet));
     bullet.addToStage();
+  }
+
+  createLightningStrike(x, y, target, dmg, color) {
+    let lightning = new LightningStrike(x, y, target, dmg, color, this);
+    lightning.addToStage();
   }
 
   clickFirst() {
@@ -155,4 +162,5 @@ const targetOptions = {
   LAST: 'last',
   STRONG: 'strong',
   WEAK: 'weak',
+  RANDOM: 'random'
 }

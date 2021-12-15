@@ -310,6 +310,7 @@ class Tower extends Entity {
 const towerTags = {
   BULLET: "Tower shots spawn bullets",
   DAMAGE: "Tower deals damage to enemies",
+  LIGHTNING: "This tower deals lightning damage",
   DEPLOYMENT: "Tower activates an effect upon deployment",
   CRIPPLE: "Tower reduces at least one stat",
   STAT_SUPPORT: "Tower increases at least one stat",

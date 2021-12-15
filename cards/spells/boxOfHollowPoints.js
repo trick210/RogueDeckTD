@@ -22,7 +22,8 @@ class BoxOfHollowPoints extends Spell {
   getCardText() {
     let text =
       "Gives a tower\n" +
-      (this.effect) + "on-hit damage \n damage for " + (this.charges) + "shots.";
+      (this.effect) + " on-hit damage\n" +
+      "for " + (this.charges) + " shots.";
 
     return text;
   }
