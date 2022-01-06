@@ -66,6 +66,7 @@ class GameScreen {
 
     this.mouseOnMap = false;
 
+    this.maxRounds = 1;
     this.round = 1;
     this.hp = 100;
     this.energy = 5;
@@ -100,12 +101,12 @@ class GameScreen {
   }
 
   update() {
-    
+
     if (this.levelStarted) {
       this.spawnClock += deltaTime;
 
       if (this.spawnClock > 10000 / (this.monsterInWave - 1)) {
-        
+
         let monster = this.currentMonsterList.shift();
 
         if (monster != null) {
@@ -131,7 +132,7 @@ class GameScreen {
 
     this.explosiveRoundsEmitter.update(deltaTime / 1000);
     this.cannonBlastEmitter.update(deltaTime / 1000);
-    
+
   }
 
   recieveDamage(amount) {
@@ -160,7 +161,7 @@ class GameScreen {
       buff.effect(this);
 
       buff.updateBuffIcon();
-        
+
     }
   }
 
@@ -171,14 +172,14 @@ class GameScreen {
         if (oldBuff.tags.includes(buffTags.CONCAT_DURATION)) {
           oldBuff.duration += buff.duration;
           oldBuff.baseDuration += buff.baseDuration;
-          
+
         } else if (oldBuff.tags.includes(buffTags.REFRESH_DURATION)) {
           oldBuff.duration = buff.duration;
           oldBuff.baseDuration = buff.baseDuration;
-          
+
         } else if (oldBuff.tags.includes(buffTags.STACKS)) {
           oldBuff.stacks++;
-          
+
         }
         return;
       }
@@ -196,12 +197,17 @@ class GameScreen {
 
   checkEnd() {
     if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0) {
+      if (this.round < this.maxRounds) {
         this.levelStarted = false;
         this.removeBuffs();
         this.ui.startButton.enable();
         this.round++;
         this.drawPhase();
+      } else {
+        this.cleanup();
+        setActiveScreen(spaceScreen);
       }
+    }
   }
 
   startLevel() {
@@ -243,7 +249,7 @@ class GameScreen {
     let card = this.deck.shift();
 
     this.cardToHand(card);
-    
+
   }
 
   drawTurret() {
@@ -255,7 +261,7 @@ class GameScreen {
       if (this.deck[i].type == cardType.TOWER && this.deck[i].cardObject.tags.includes(towerTags.DAMAGE)) {
         let card = this.deck[i];
         this.deck.splice(i, 1);
-        
+
         this.cardToHand(card);
 
         return true;
@@ -286,9 +292,9 @@ class GameScreen {
 
     for (let i = 0; i < remainingCards; i++) {
       let card = this.drawCard();
-      
+
     }
-    
+
   }
 
   reshuffle() {
@@ -309,7 +315,7 @@ class GameScreen {
   }
 
   discardCard(card) {
-    
+
     this.hand.splice(this.hand.indexOf(card), 1);
     this.ui.removeFromHand(card);
     this.discardPile.push(card);
@@ -317,18 +323,18 @@ class GameScreen {
     if (this.selectedCard == card) {
       card.deselect();
       this.selectedCard = null;
-    } 
+    }
   }
 
   destroyCard(card) {
-    
+
     this.hand.splice(this.hand.indexOf(card), 1);
     this.ui.removeFromHand(card);
 
     if (this.selectedCard == card) {
       card.deselect();
       this.selectedCard = null;
-    } 
+    }
   }
 
   selectCard(card) {
@@ -339,7 +345,7 @@ class GameScreen {
     }
 
     this.ui.bringCardToFront(card);
-    
+
   }
 
   deselectCard() {

@@ -45,7 +45,8 @@ class MenuScreen {
   }
 
   click() {
-    setActiveScreen(gameScreen);
+    //setActiveScreen(gameScreen);
+    setActiveScreen(spaceScreen);
   }
 
 }

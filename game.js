@@ -1,5 +1,6 @@
 let menuScreen;
 let gameScreen;
+let spaceScreen;
 let activeScreen = null;
 
 let collider = new Bump(PIXI);
@@ -64,7 +65,7 @@ esc.press = () => {
 
 function setup() {
 
-  gameScreen = new GameScreen();
+  spaceScreen = new SpaceScreen();
   menuScreen = new MenuScreen();
 
   setActiveScreen(menuScreen);
