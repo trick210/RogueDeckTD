@@ -77,8 +77,8 @@ class Tower extends Entity {
         
     }
 
-    this.attackSpeed *= Math.min(gameScreen.maxTC / gameScreen.currentTC, 1);
-    this.cooldown  /= Math.min(gameScreen.maxTC / gameScreen.currentTC, 1);
+    this.attackSpeed *= Math.min(player.maxTC / gameScreen.currentTC, 1);
+    this.cooldown  /= Math.min(player.maxTC / gameScreen.currentTC, 1);
 
     this.attackSpeed = Math.round(this.attackSpeed * 100) / 100;
     this.cooldown = Math.round(this.cooldown);

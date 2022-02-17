@@ -1,7 +1,12 @@
 class PathGenerator {
 
+  constructor(mapSeed) {
+    this.rand = mulberry32(mapSeed);
+  }
+
 
   createMap(config) {
+
 
     let validPath = false
     let iterationCount = 0;
@@ -28,7 +33,7 @@ class PathGenerator {
       while (totalLength < config.length.min) {
 
         
-        let length = this.map(Math.random(), 0, 1, config.segmentLength.min, config.segmentLength.max);
+        let length = this.map(this.rand(), 0, 1, config.segmentLength.min, config.segmentLength.max);
         
         let angles = this.getValidAngles(config, length, lastPos, totalLength);
 
@@ -37,7 +42,7 @@ class PathGenerator {
           break;
         }
 
-        let angle = angles[Math.floor(Math.random() * angles.length)];
+        let angle = angles[Math.floor(this.rand() * angles.length)];
 
         let rad = angle * (Math.PI / 180);
 
@@ -233,12 +238,12 @@ class PathGenerator {
 
 
   getStartPosition(config) {
-    let pos = config.start[Math.floor(Math.random() * config.start.length)];
+    let pos = config.start[Math.floor(this.rand() * config.start.length)];
     let rnd = 0;
     let start = {};
     switch(pos) {
       case "LEFT":
-        rnd = this.map(Math.random(), 0, 1, config.edgeDistance, config.height - config.edgeDistance);
+        rnd = this.map(this.rand(), 0, 1, config.edgeDistance, config.height - config.edgeDistance);
         start = {
           x: -64,
           y: rnd,
@@ -261,7 +266,7 @@ class PathGenerator {
         };
 
       case "RIGHT":
-        rnd = this.map(Math.random(), 0, 1, config.edgeDistance, config.height - config.edgeDistance);
+        rnd = this.map(this.rand(), 0, 1, config.edgeDistance, config.height - config.edgeDistance);
         start = {
           x: config.width + 64,
           y: rnd,
@@ -285,7 +290,7 @@ class PathGenerator {
  
 
       case "TOP": 
-        rnd = this.map(Math.random(), 0, 1, config.edgeDistance, config.width - config.edgeDistance);
+        rnd = this.map(this.rand(), 0, 1, config.edgeDistance, config.width - config.edgeDistance);
         start = {
           x: rnd,
           y: -64,
@@ -309,7 +314,7 @@ class PathGenerator {
 
 
       case "BOT": 
-        rnd = this.map(Math.random(), 0, 1, config.edgeDistance, config.width - config.edgeDistance);
+        rnd = this.map(this.rand(), 0, 1, config.edgeDistance, config.width - config.edgeDistance);
         start = {
           x: rnd,
           y: config.height + 64,

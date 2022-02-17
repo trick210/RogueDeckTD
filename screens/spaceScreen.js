@@ -19,6 +19,12 @@ class SpaceScreen {
     this.startPoint = [0, Math.floor(this.pathCount / 2)];
     this.endPoint = [this.layers + 1, Math.floor(this.pathCount / 2)];
 
+    this.spaceMapSeed = player.getNextMapSeed();
+    this.planetMapSeed = player.getNextMapSeed();
+    this.starBackgroundSeed = player.getNextMapSeed();
+
+    this.planetSeedRand = mulberry32(this.planetMapSeed);
+
     this.setupSpaceMap();
 
 
@@ -49,7 +55,7 @@ class SpaceScreen {
 
     this.lastPlanet = planet;
 
-    gameScreen = new GameScreen();
+    gameScreen = new GameScreen(planet.planetSeed);
     setActiveScreen(gameScreen);
   }
 
@@ -57,17 +63,20 @@ class SpaceScreen {
 
     this.graph = createGraph();
 
+    let starBackgroundRand = mulberry32(this.starBackgroundSeed);
+    let spaceMapRand = mulberry32(this.spaceMapSeed);
+
     this.pdsObj = new PoissonDiskSampling({
       shape: [width, height],
       minDistance: 100,
       maxDistance: 200,
       tries: 20
-    }, Math.random);
+    }, starBackgroundRand);
 
     let g = new PIXI.Graphics();
     g.beginFill(0xFFFFFF);
     for (let p of this.pdsObj.fill()) {
-      g.drawCircle(p[0], p[1], Math.random() * 2 + 1);
+      g.drawCircle(p[0], p[1], starBackgroundRand() * 2 + 1);
     }
     g.endFill();
 
@@ -85,7 +94,7 @@ class SpaceScreen {
     for (let i = 0; i < this.layers; i++) {
       let tempGrid = [];
       for (let j = 0; j < this.pathCount; j++) {
-        tempGrid.push([(i + 1) + ((Math.random() * 0.4) - 0.2), j + ((Math.random() * 0.4) - 0.2)]);
+        tempGrid.push([(i + 1) + ((spaceMapRand() * 0.4) - 0.2), j + ((spaceMapRand() * 0.4) - 0.2)]);
       }
       grid.push(tempGrid);
     }
@@ -171,7 +180,7 @@ class SpaceScreen {
         pathPositions = Array(this.layers).fill().map((v, i) => i);
       }
 
-      const idx = Math.floor(Math.random() * pathPositions.length);
+      const idx = Math.floor(spaceMapRand() * pathPositions.length);
       const posID = pathPositions.splice(idx, 1)[0] + 1;
       this.graph.removeNode(foundPath[posID].id);
 
@@ -180,7 +189,7 @@ class SpaceScreen {
     for (let p of [...new Set(activePoints)]) {
       let posX = (p[0] / (this.layers + 1)) * (width - 200) + 100;
       let posY = (p[1] / (this.pathCount - 1)) * (height - 400) + 200;
-      let planet = new Planet(posX, posY, p);
+      let planet = new Planet(posX, posY, p, this.cretePlanetSeed());
       if (p === this.startPoint) {
         planet.setActive(true);
       }
@@ -197,6 +206,10 @@ class SpaceScreen {
       }
     }
 
+  }
+
+  cretePlanetSeed() {
+    return Math.round(this.planetSeedRand() * 0xFFFFFFFF);
   }
 
 

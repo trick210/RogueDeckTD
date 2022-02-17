@@ -1,9 +1,9 @@
 class GameScreen {
 
-  constructor() {
+  constructor(mapSeed) {
 
 
-    this.map = new GrassMap();
+    this.map = new GrassMap(mapSeed);
     this.ui = new UI(this);
 
     this.container = new PIXI.Container();
@@ -66,13 +66,12 @@ class GameScreen {
 
     this.mouseOnMap = false;
 
-    this.maxRounds = 1;
+    this.maxRounds = 10;
     this.round = 1;
-    this.hp = 100;
-    this.energy = 5;
+  
+    this.energy = player.maxEnergy;
 
     this.currentTC = 0;
-    this.maxTC = 12;
 
     this.globalBuffs = [];
 
@@ -136,8 +135,8 @@ class GameScreen {
   }
 
   recieveDamage(amount) {
-    this.hp -= amount;
-    if (this.hp <= 0) {
+    player.hp -= amount;
+    if (player.hp <= 0) {
       this.cleanup();
       setActiveScreen(new DeathScreen(this.round));
     }
@@ -196,7 +195,7 @@ class GameScreen {
   }
 
   checkEnd() {
-    if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0) {
+    if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0 && player.hp > 0) {
       if (this.round < this.maxRounds) {
         this.levelStarted = false;
         this.removeBuffs();
@@ -223,22 +222,12 @@ class GameScreen {
   }
 
   setupDeck() {
-    for (let i = 0; i < 2; i++) {
-      this.deck.push(new Card(new CannonBlast()));
-      this.deck.push(new Card(new Overcharge()));
-      this.deck.push(new Card(new Refine()));
-      this.deck.push(new Card(new BoxOfHollowPoints()));
-
+    
+    for (let card of player.deck) {
+      this.deck.push(new Card((Function('return new ' + card))()));
     }
-    this.deck.push(new Card(new Adjust()));
-    this.deck.push(new Card(new MinigunTower()));
-    this.deck.push(new Card(new MinigunTower()));
-    this.deck.push(new Card(new SniperNest()));
-    this.deck.push(new Card(new AmmoRefinery()));
-    this.deck.push(new Card(new BaseTower()));
-    this.deck.push(new Card(new TempestTower()));
 
-    shuffle(this.deck);
+    shuffle(this.deck, player.deckRand);
   }
 
   drawCard() {
@@ -286,12 +275,12 @@ class GameScreen {
 
     this.deselectCard();
     this.discardHand();
-    this.energy = 5;
+    this.energy = player.maxEnergy;
 
     let remainingCards = this.drawTurret() ? 4 : 5;
 
     for (let i = 0; i < remainingCards; i++) {
-      let card = this.drawCard();
+      this.drawCard();
 
     }
 
@@ -300,7 +289,7 @@ class GameScreen {
   reshuffle() {
     this.deck = this.discardPile;
     this.discardPile = [];
-    shuffle(this.deck);
+    shuffle(this.deck, player.deckRand);
   }
 
   discardHand() {

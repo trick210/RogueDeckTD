@@ -1,10 +1,6 @@
 class GrassMap {
 
-  constructor() {
-
-    this.gridSize = 64;
-    this.mapWidth = 30;
-    this.mapHeight = 12;
+  constructor(mapSeed) {
 
     this.bg = new Sprite(PIXI.Texture.WHITE);
     this.bg.width = width;
@@ -13,7 +9,7 @@ class GrassMap {
 
     this.path = new PIXI.Graphics();
 
-    let pathGenerator = new PathGenerator();
+    let pathGenerator = new PathGenerator(mapSeed);
 
     let config = JSON.parse(mapConfig1);
     config.width = this.bg.width;

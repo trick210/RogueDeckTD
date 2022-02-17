@@ -90,10 +90,10 @@ class UI {
     this.deckText.text = `Deck: ${this.gs.deck.length}`
     this.discardText.text = `Discard Pile: ${this.gs.discardPile.length}`
     this.roundText.text = `Round: ${this.gs.round}`;
-    this.hpText.text = `HP: ${this.gs.hp}`;
+    this.hpText.text = `HP: ${player.hp}`;
     this.energyText.text = `Energy: ${this.gs.energy}`;
-    this.TCText.text = `TC: ${this.gs.currentTC} / ${this.gs.maxTC}`
-    this.TCText.tint = (this.gs.currentTC > this.gs.maxTC) ? 0xFF0000 : 0xFFFFFF;
+    this.TCText.text = `TC: ${this.gs.currentTC} / ${player.maxTC}`
+    this.TCText.tint = (this.gs.currentTC > player.maxTC) ? 0xFF0000 : 0xFFFFFF;
 
     if (this.currentTower != null) {
       this.towerInfoName.text = this.currentTower.name;

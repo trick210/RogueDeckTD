@@ -1,12 +1,14 @@
 class Planet extends PIXI.Container {
 
-  constructor(x, y, id) {
+  constructor(x, y, id, planetSeed) {
     super();
 
     this.x = x;
     this.y = y;
 
     this.planetID = id;
+
+    this.planetSeed = planetSeed;
 
     this.defaultBorder = 0xFF0000;
     this.defaultFill = 0xAA6060;
