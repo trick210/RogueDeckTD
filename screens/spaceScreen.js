@@ -102,18 +102,18 @@ class SpaceScreen {
     for (let i = 0; i < this.layers - 1; i++) {
       for (let j = 0; j < this.pathCount; j++) {
         this.graph.addLink(grid[i][j], grid[i + 1][j], {
-          weight: 1
+          weight: 1 + Math.abs(j - Math.floor(this.pathCount / 2))
         });
 
         if (j != 0) {
           this.graph.addLink(grid[i][j], grid[i + 1][j - 1], {
-            weight: 1.5
+            weight: 1.5 + Math.max(0, Math.floor(this.pathCount / 2) - j)
           });
         }
 
         if (j != this.pathCount - 1) {
           this.graph.addLink(grid[i][j], grid[i + 1][j + 1], {
-            weight: 1.5
+            weight: 1.5 + Math.max(0, j - Math.floor(this.pathCount / 2))
           });
         }
       }
@@ -151,7 +151,7 @@ class SpaceScreen {
 
     let allPaths = [];
 
-    for (let i = 0; i < this.layers * 1.5; i++) {
+    for (let i = 0; i < this.layers; i++) {
 
       const pathFinder = ngraphPath.aStar(this.graph, {
         distance(fromNode, toNode, link) {
