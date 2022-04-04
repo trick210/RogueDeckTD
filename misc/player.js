@@ -7,6 +7,9 @@ class Player {
     this.deckRand = mulberry32(this.deckSeed);
     this.mapRand = mulberry32(this.mapSeed);
 
+    let rewardSeed = this.deckRand() * 0xFFFFFFFF;
+    this.rewardRand = mulberry32(rewardSeed);
+
     let pad = function(str) {
       let s = "0000000" + str;
       return s.substring(s.length - 8);
@@ -49,6 +52,10 @@ class Player {
 
   getNextMapSeed() {
     return Math.round(this.mapRand() * 0xFFFFFFFF);
+  }
+
+  getNextRewardSeed() {
+    return Math.round(this.rewardRand() * 0xFFFFFFFF);
   }
 
 

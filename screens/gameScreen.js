@@ -1,7 +1,9 @@
 class GameScreen {
 
-  constructor(mapSeed) {
+  constructor(mapSeed, rewardSeed, stage) {
 
+    this.rewardSeed = rewardSeed;
+    this.stage = stage;
 
     this.map = new GrassMap(mapSeed);
     this.ui = new UI(this);
@@ -63,10 +65,10 @@ class GameScreen {
 
     this.keySpace.press = () => this.startLevel();
 
-
+    this.ended = false;
     this.mouseOnMap = false;
 
-    this.maxRounds = 10;
+    this.maxRounds = 1;
     this.round = 1;
   
     this.energy = player.maxEnergy;
@@ -195,6 +197,9 @@ class GameScreen {
   }
 
   checkEnd() {
+
+    if (this.ended) return;
+
     if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0 && player.hp > 0) {
       if (this.round < this.maxRounds) {
         this.levelStarted = false;
@@ -204,8 +209,10 @@ class GameScreen {
         this.drawPhase();
       } else {
         this.cleanup();
-        setActiveScreen(spaceScreen);
+        setActiveScreen(new RewardScreen(this.rewardSeed, this.stage));
       }
+
+      this.ended = true;
     }
   }
 

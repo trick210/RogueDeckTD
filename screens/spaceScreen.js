@@ -27,7 +27,7 @@ class SpaceScreen {
 
     this.setupSpaceMap();
 
-
+    this.currentStage = 0;
 
   }
 
@@ -54,8 +54,9 @@ class SpaceScreen {
     }
 
     this.lastPlanet = planet;
+    this.currentStage++;
 
-    gameScreen = new GameScreen(planet.planetSeed);
+    gameScreen = new GameScreen(planet.planetSeed, player.getNextRewardSeed(), this.currentStage);
     setActiveScreen(gameScreen);
   }
 
@@ -151,7 +152,7 @@ class SpaceScreen {
 
     let allPaths = [];
 
-    for (let i = 0; i < this.layers; i++) {
+    for (let i = 0; i < this.layers * 1.5; i++) {
 
       const pathFinder = ngraphPath.aStar(this.graph, {
         distance(fromNode, toNode, link) {
@@ -189,7 +190,7 @@ class SpaceScreen {
     for (let p of [...new Set(activePoints)]) {
       let posX = (p[0] / (this.layers + 1)) * (width - 200) + 100;
       let posY = (p[1] / (this.pathCount - 1)) * (height - 400) + 200;
-      let planet = new Planet(posX, posY, p, this.cretePlanetSeed());
+      let planet = new Planet(posX, posY, p, this.createPlanetSeed());
       if (p === this.startPoint) {
         planet.setActive(true);
       }
@@ -208,7 +209,7 @@ class SpaceScreen {
 
   }
 
-  cretePlanetSeed() {
+  createPlanetSeed() {
     return Math.round(this.planetSeedRand() * 0xFFFFFFFF);
   }
 
