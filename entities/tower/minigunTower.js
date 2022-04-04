@@ -124,15 +124,12 @@ class MinigunTower extends DamageTower {
   }
 
   updateStats() {
-    let text = 
-      "TC: " + this.TC +
-      "\nDamage: " + this.dmg +
-      "\nAttack speed: " + this.attackSpeed +
-      "\nRange: " + this.range +
-      "\nDPS: " + this.getDPS() +
+    super.updateStats();
+
+    let text =
       "\n\nBarrel Speed: " + this.stacks + " stacks"
 
-      this.infoText.text = text;
+      this.infoText.text += text;
   }
 
 }

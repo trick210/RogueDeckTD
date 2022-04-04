@@ -91,7 +91,7 @@ class Bullet extends Entity {
         flatPen: this.flatPen
       }
       
-      monsterHit.recieveDamage(dmgObj);
+      monsterHit.recieveDamage(dmgObj, this.srcTower);
 
       this.srcTower.onHit(monsterHit);
 
@@ -127,7 +127,7 @@ class Bullet extends Entity {
           amount: this.dmg,
           damageType: "NORMAL"
         }
-        target.recieveDamage(dmgObj);
+        target.recieveDamage(dmgObj, this.srcTower);
       }
     });
 

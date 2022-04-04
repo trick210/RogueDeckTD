@@ -20,6 +20,8 @@ class DamageTower extends Tower {
     this.clickFirst();
 
     this.shootCD = 1000 / this.attackSpeed;
+
+    this.totalDamageDealt = 0;
   }
 
   update() {
@@ -148,9 +150,14 @@ class DamageTower extends Tower {
       "\nDamage: " + this.dmg +
       "\nAttack speed: " + this.attackSpeed +
       "\nRange: " + this.range +
-      "\nDPS: " + this.getDPS();
+      "\nDPS: " + this.getDPS() +
+      "\nTotal damage dealt: " + Math.round(this.totalDamageDealt);
 
       this.infoText.text = text;
+  }
+
+  countDamage(amount) {
+    this.totalDamageDealt += amount;
   }
 
 

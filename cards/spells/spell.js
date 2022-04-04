@@ -98,6 +98,10 @@ class Spell extends Entity {
     return false;;
   }
 
+  countDamage(amount) {
+    console.log(amount);
+  }
+
 
 
 }

@@ -66,7 +66,7 @@ class Monster extends Entity {
     this.baseArmor = armor;
   }
 
-  recieveDamage(damageObj) {
+  recieveDamage(damageObj, origin) {
     if (damageObj.percentagePen == null) damageObj.percentagePen = 0;
     if (damageObj.flatPen == null) damageObj.flatPen = 0;
     
@@ -77,16 +77,18 @@ class Monster extends Entity {
     effectiveArmor -= damageObj.flatPen;
 
     if (damageObj.damageType == "NORMAL") {
-      this.hp -= 100 / (100 + effectiveArmor) * amount;
-    } else {
-      this.hp -= amount;
+      amount = 100 / (100 + effectiveArmor) * amount;
     }
 
+    amount = Math.min(this.hp, amount);
 
+    this.hp -= amount;
     
     if (this.hp <= 0) {
       this.remove();
     }
+
+    origin.countDamage(amount);
   }
 
 }

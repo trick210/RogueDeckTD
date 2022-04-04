@@ -11,6 +11,10 @@ class GrassMap {
 
     let pathGenerator = new PathGenerator(mapSeed);
 
+    let waveSeed = mulberry32(mapSeed)() * 0xFFFFFFFF;
+
+    this.waveRand = mulberry32(waveSeed);
+
     let config = JSON.parse(mapConfig1);
     config.width = this.bg.width;
     config.height = this.bg.height;
@@ -35,10 +39,10 @@ class GrassMap {
     let totalHP = 2000;
     let totalMonster = 10;
 
-    let armor = Math.round(Math.random() * 100);
+    let armor = Math.round(this.waveRand() * 100);
 
     if (round != 1) {
-      totalMonster = 2 + Math.floor(Math.random() * 14);
+      totalMonster = 2 + Math.floor(this.waveRand() * 14);
     }
 
     switch (round) {

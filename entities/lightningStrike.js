@@ -47,7 +47,7 @@ class LightningStrike extends Entity {
       damageType: "LIGHTNING"
     }
     
-    target.recieveDamage(dmgObj);
+    target.recieveDamage(dmgObj, srcTower);
 
     srcTower.onHit(target);
 

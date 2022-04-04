@@ -83,16 +83,13 @@ class SniperNest extends DamageTower {
   }
 
   updateStats() {
+    super.updateStats();
+
     let text = 
-      "TC: " + this.TC +
-      "\nDamage: " + this.dmg +
-      "\nAttack speed: " + this.attackSpeed +
-      "\nRange: " + this.range +
-      "\nDPS: " + this.getDPS() +
-      "\n\nThis tower has " + this.penetrationBuff * 100 + "%" +
+      "\nThis tower has " + this.penetrationBuff * 100 + "%" +
       "\narmor penetration";
 
-      this.infoText.text = text;
+      this.infoText.text += text;
   }
 
 }

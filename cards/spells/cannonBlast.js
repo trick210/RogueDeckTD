@@ -37,7 +37,7 @@ class CannonBlast extends Spell {
             amount: this.dmg,
             damageType: "NORMAL"
           }
-          target.recieveDamage(dmgObj)
+          target.recieveDamage(dmgObj, this)
         }
       });
       this.targets = null;
@@ -71,5 +71,6 @@ class CannonBlast extends Spell {
 
       
   }
+
 
 }
