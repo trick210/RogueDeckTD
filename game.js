@@ -52,7 +52,8 @@ loader
   .add('baseTower', 'assets/tower/baseTower.png')
   .add('minigunTower', 'assets/tower/minigunTower.png')
   .add('sniperNest', 'assets/tower/sniperNest.png')
-  .add('particle', 'assets/particles/particle.png');
+  .add('particle', 'assets/particles/particle.png')
+  .add('spaceShip', 'assets/spaceShip.png');
 
 
 

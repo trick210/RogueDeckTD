@@ -26,6 +26,7 @@ class GameScreen {
     this.container.addChild(this.map.container);
     this.container.addChild(this.pc);
     this.container.addChild(this.entityContainer);
+    this.container.addChild(this.map.ship);
     this.container.addChild(this.ui.container);
 
     this.map.container.interactive = true;
@@ -65,10 +66,9 @@ class GameScreen {
 
     this.keySpace.press = () => this.startLevel();
 
-    this.ended = false;
     this.mouseOnMap = false;
 
-    this.maxRounds = 1;
+    this.maxRounds = 10;
     this.round = 1;
   
     this.energy = player.maxEnergy;
@@ -198,11 +198,9 @@ class GameScreen {
 
   checkEnd() {
 
-    if (this.ended) return;
-
     if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0 && player.hp > 0) {
+      this.levelStarted = false;
       if (this.round < this.maxRounds) {
-        this.levelStarted = false;
         this.removeBuffs();
         this.ui.startButton.enable();
         this.round++;
@@ -211,8 +209,6 @@ class GameScreen {
         this.cleanup();
         setActiveScreen(new RewardScreen(this.rewardSeed, this.stage));
       }
-
-      this.ended = true;
     }
   }
 

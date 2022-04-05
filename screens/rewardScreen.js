@@ -30,11 +30,11 @@ class RewardScreen {
     this.container.addChild(this.skipButton);
 
     let rand = mulberry32(rewardSeed);
-    
-    for (let i = 0; i < 3; i++) {
-      let cardName = rewardPool[Math.floor(rand() * rewardPool.length)];
 
-      console.log(cardName);
+    let rewards = [...rewardPool];
+
+    for (let i = 0; i < 3; i++) {
+      let cardName = rewards.splice(Math.floor(rand() * rewards.length), 1)[0];
 
       let card = new Card((Function('return new ' + cardName))());
 

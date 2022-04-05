@@ -105,6 +105,29 @@ class GrassMap {
 
     this.pathHitbox = new PIXI.Polygon(this.polygon);
 
+    let pos, vec;
+
+    if (this.generatedPath.beziers != null) {
+      pos = this.generatedPath.beziers[this.generatedPath.beziers.length - 1].get(0.99);
+      vec = this.generatedPath.beziers[this.generatedPath.beziers.length - 1].derivative(0.99);
+    } else {
+      pos = this.generatedPath.path[this.generatedPath.path.length - 1];
+      vec = {
+        x: this.generatedPath.path[this.generatedPath.path.length - 1].x - this.generatedPath.path[this.generatedPath.path.length - 2].x,
+        y: this.generatedPath.path[this.generatedPath.path.length - 1].y - this.generatedPath.path[this.generatedPath.path.length - 2].y
+      };
+
+    }
+
+    let mag = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+
+    vec.x /= mag;
+    vec.y /= mag;
+
+    let rot =  -Math.atan2(vec.x, vec.y);
+
+    this.ship = new SpaceShip(pos.x, pos.y, rot);
+
   }
 
   collide(texture) {
@@ -118,6 +141,16 @@ class GrassMap {
 
     for (let i = 0; i < this.polygon.length - 1; i++) {
       if (distToSegment(p, this.polygon[i], this.polygon[(i + 1)]) < texture.radius) {
+        return true;
+      }
+    }
+
+    if (new PIXI.Polygon(this.ship.bounds).contains(p.x, p.y)) {
+      return true;
+    }
+
+    for (let i = 0; i < this.ship.bounds.length - 1; i++) {
+      if (distToSegment(p, this.ship.bounds[i], this.ship.bounds[(i + 1)]) < texture.radius) {
         return true;
       }
     }
@@ -152,6 +185,18 @@ class GrassMap {
         }
       }
     }
+  }
+
+  drawShipBounds() {
+    let outlineShip = new PIXI.Graphics();
+    outlineShip.lineStyle(3, 0x000000);
+    outlineShip.moveTo(this.ship.bounds[this.ship.bounds.length - 1].x, this.ship.bounds[this.ship.bounds.length - 1].y);
+
+    for (let i = 0; i < this.ship.bounds.length; i++) {
+      outlineShip.lineTo(this.ship.bounds[i].x, this.ship.bounds[i].y);
+    }
+
+    this.container.addChild(outlineShip);
   }
 
 }
