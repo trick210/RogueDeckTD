@@ -1,6 +1,10 @@
 class Monster extends Entity {
 
-  constructor(posX, posY) {
+  static SPAWN(posX, posY, hp) {
+    return new this(posX, posY, hp);
+  }
+
+  constructor(posX, posY, hp) {
     super(posX, posY);
 
     this.type = entityType.MONSTER;
@@ -25,6 +29,9 @@ class Monster extends Entity {
     this.addChild(hpFrame);
 
 
+    this.setArmor(0);
+    this.setHP(hp);
+
   }
 
   update() {
@@ -35,12 +42,14 @@ class Monster extends Entity {
     let newPos = gameScreen.map.getPosition(this.distTraveled);
 
     if (newPos == null) {
-      gameScreen.recieveDamage(Math.ceil(this.hp / 100));
+      gameScreen.recieveDamage(Math.ceil(this.hp * this.damageMultiplier));
       this.remove();
     } else {
 
       this.x = newPos.x;
       this.y = newPos.y;
+
+      this.rotate(newPos.rot);
     }
 
 
@@ -89,6 +98,10 @@ class Monster extends Entity {
     }
 
     origin.countDamage(amount);
+  }
+
+  rotate(rot) {
+
   }
 
 }

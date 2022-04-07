@@ -416,7 +416,12 @@ class GameScreen {
 
 
   sortEntities() {
-    this.entityContainer.children.sort((a, b) => (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer);
+    this.entityContainer.children.sort((a, b) => {
+      if (a.type == entityType.MONSTER && b.type == entityType.MONSTER) {
+        return b.spawnIndex - a.spawnIndex;
+      }
+      return (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer
+    });
   }
 
   removeBuffs() {

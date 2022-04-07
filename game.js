@@ -49,6 +49,8 @@ setActiveScreen(loadingScreen);
 
 loader
   .add('walker', 'assets/monster/walker.png')
+  .add('snail', 'assets/monster/snail.png')
+  .add('snail2', 'assets/monster/snail2.png')
   .add('baseTower', 'assets/tower/baseTower.png')
   .add('minigunTower', 'assets/tower/minigunTower.png')
   .add('sniperNest', 'assets/tower/sniperNest.png')

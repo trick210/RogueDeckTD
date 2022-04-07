@@ -33,7 +33,7 @@ class Player {
   createDeck() {
     let deck = ["BaseTower", "AmmoRefinery", "CannonBlast"];
 
-    let towers = ["BaseTower", "MinigunTower", "TempestTower", "SniperNest"];
+    let towers = ["BaseTower", "MinigunTower", "TempestTower"];
 
     for (let i = 0; i < 3; i++) {
       let rnd = this.deckRand();

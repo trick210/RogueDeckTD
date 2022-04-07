@@ -36,14 +36,19 @@ class GrassMap {
 
   getWave(round) {
 
-    let totalHP = 2000;
-    let totalMonster = 10;
+    let monsterTypes = [Walker, Snail];
+    let type = monsterTypes[Math.floor(monsterTypes.length * this.waveRand())];
 
+    let totalHP = 2000;
+    let totalMonster = type.UNIT_COUNT;
+
+    /*
     let armor = Math.round(this.waveRand() * 100);
 
     if (round != 1) {
       totalMonster = 2 + Math.floor(this.waveRand() * 14);
     }
+    */
 
     switch (round) {
       case 1:
@@ -77,9 +82,10 @@ class GrassMap {
     let monster = [];
 
     for (let i = 0; i < totalMonster; i++) {
-      let walker = new Walker(this.startPos.x, this.startPos.y, Math.floor((totalHP / totalMonster) / ((armor + 100) / 100)), armor);
-      walker.spawnIndex = i;
-      monster.push(walker);
+      //let walker = new Walker(this.startPos.x, this.startPos.y, Math.floor((totalHP / totalMonster) / ((armor + 100) / 100)), armor);
+      let unit = type.SPAWN(this.startPos.x, this.startPos.y, Math.floor(totalHP / totalMonster))
+      unit.spawnIndex = i;
+      monster.push(unit);
     }
 
     return monster;
@@ -124,9 +130,9 @@ class GrassMap {
     vec.x /= mag;
     vec.y /= mag;
 
-    let rot =  -Math.atan2(vec.x, vec.y);
+    let rot =  Math.PI / 2 - Math.atan2(vec.x, vec.y);
 
-    this.ship = new SpaceShip(pos.x, pos.y, rot);
+    this.ship = new SpaceShip(pos.x + 24 * vec.x, pos.y + 24 * vec.y, rot);
 
   }
 
@@ -166,7 +172,10 @@ class GrassMap {
         let len = this.generatedPath.beziers[i].length();
         if (remainingDist < len) {
           let t = remainingDist / len;
-          return this.generatedPath.beziers[i].get(t);
+          let pos = this.generatedPath.beziers[i].get(t);
+          let vec = this.generatedPath.beziers[i].normal(t);
+          pos.rot = Math.PI / 2 - Math.atan2(vec.x, vec.y);
+          return pos;
         } else {
           remainingDist -= len;
         }
@@ -176,10 +185,24 @@ class GrassMap {
         let len = this.generatedPath.path[i].segLength;
         if (remainingDist < len) {
           let t = remainingDist / len;
-          return {
+          let pos = {
             x: this.generatedPath.path[i - 1].x + t * (this.generatedPath.path[i].x - this.generatedPath.path[i - 1].x),
             y: this.generatedPath.path[i - 1].y + t * (this.generatedPath.path[i].y - this.generatedPath.path[i - 1].y)
           };
+
+          let vec = {
+            x: this.generatedPath.path[i].x - this.generatedPath.path[i - 1].x,
+            y: this.generatedPath.path[i].y - this.generatedPath.path[i - 1].y
+          };
+
+          let mag = Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+
+        vec.x /= mag;
+        vec.y /= mag;
+
+        pos.rot =  Math.PI - Math.atan2(vec.x, vec.y);
+
+          return pos;
         } else {
           remainingDist -= len;
         }
