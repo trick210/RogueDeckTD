@@ -1,11 +1,15 @@
-class GrassMap {
+class CombatMap {
 
-  constructor(mapSeed) {
+  constructor(mapSeed, conf) {
+
+    let config = JSON.parse(conf);
 
     this.bg = new Sprite(PIXI.Texture.WHITE);
     this.bg.width = width;
     this.bg.height = height - 300;
-    this.bg.tint = 0x00AA00;
+    this.bg.tint = config.bgColor;
+
+    this.pathColor = config.pathColor;
 
     this.path = new PIXI.Graphics();
 
@@ -15,7 +19,7 @@ class GrassMap {
 
     this.waveRand = mulberry32(waveSeed);
 
-    let config = JSON.parse(mapConfig1);
+    
     config.width = this.bg.width;
     config.height = this.bg.height;
 
@@ -84,7 +88,6 @@ class GrassMap {
     for (let i = 0; i < totalMonster; i++) {
       //let walker = new Walker(this.startPos.x, this.startPos.y, Math.floor((totalHP / totalMonster) / ((armor + 100) / 100)), armor);
       let unit = type.SPAWN(this.startPos.x, this.startPos.y, Math.floor(totalHP / totalMonster))
-      unit.spawnIndex = i;
       monster.push(unit);
     }
 
@@ -99,7 +102,7 @@ class GrassMap {
 
     this.path.clear();
     this.path.lineStyle(3, 0x000000);
-    this.path.beginFill(0xC2B280);
+    this.path.beginFill(this.pathColor);
     this.path.moveTo(this.polygon[this.polygon.length - 1].x, this.polygon[this.polygon.length - 1].y);
 
 

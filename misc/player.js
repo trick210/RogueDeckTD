@@ -30,6 +30,13 @@ class Player {
 
   }
 
+  heal(amount) {
+    let oldHP = this.hp;
+    this.hp = Math.min(this.hp + amount, 100);
+
+    return this.hp - oldHP;
+  }
+
   createDeck() {
     let deck = ["BaseTower", "AmmoRefinery", "CannonBlast"];
 

@@ -55,6 +55,11 @@ loader
   .add('minigunTower', 'assets/tower/minigunTower.png')
   .add('sniperNest', 'assets/tower/sniperNest.png')
   .add('particle', 'assets/particles/particle.png')
+  .add('grassPlanet', 'assets/planets/grassPlanet.png')
+  .add('spaceMarket', 'assets/planets/spaceMarket.png')
+  .add('wastePlanet', 'assets/planets/wastePlanet.png')
+  .add('crystalPlanet', 'assets/planets/crystalPlanet.png')
+  .add('gasPlanet', 'assets/planets/gasPlanet.png')
   .add('spaceShip', 'assets/spaceShip.png');
 
 

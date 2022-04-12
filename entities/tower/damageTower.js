@@ -52,7 +52,7 @@ class DamageTower extends Tower {
 
 
   getMonsterInRange() {
-    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => a.spawnIndex - b.spawnIndex);
+    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => b.distTraveled - a.distTraveled);
 
     let monsterHit = [];
 

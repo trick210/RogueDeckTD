@@ -1,11 +1,11 @@
 class GameScreen {
 
-  constructor(mapSeed, rewardSeed, stage) {
+  constructor(config, mapSeed, rewardSeed, stage) {
 
     this.rewardSeed = rewardSeed;
     this.stage = stage;
 
-    this.map = new GrassMap(mapSeed);
+    this.map = new CombatMap(mapSeed, config);
     this.ui = new UI(this);
 
     this.container = new PIXI.Container();
@@ -418,7 +418,7 @@ class GameScreen {
   sortEntities() {
     this.entityContainer.children.sort((a, b) => {
       if (a.type == entityType.MONSTER && b.type == entityType.MONSTER) {
-        return b.spawnIndex - a.spawnIndex;
+        return a.distTraveled - b.distTraveled;
       }
       return (a.layer == b.layer) ? a.y - b.y : a.layer - b.layer
     });

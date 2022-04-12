@@ -29,14 +29,78 @@ class SpaceScreen {
 
     this.currentStage = 0;
 
+    this.spaceShip = new SpaceShip(-200, 0, -Math.PI / 2);
+    this.spaceShip.texture.width = 24;
+    this.spaceShip.texture.height = 48;
+    this.container.addChild(this.spaceShip);
+
+    let holo = this.createHolo();
+    holo.y = height - 256;
+    this.container.addChild(holo);
+
+  }
+
+  createHolo() {
+    let holoContainer = new PIXI.Container();
+    let holoBG = new PIXI.Graphics();
+    holoBG.beginFill(0x003000);
+    holoBG.drawRoundedRect(0, 0, 128, 256, 10);
+    holoBG.endFill();
+    holoContainer.addChild(holoBG);
+
+    let pTex = [
+      new PIXI.Sprite(resources['grassPlanet'].texture),
+      new PIXI.Sprite(resources['crystalPlanet'].texture),
+      new PIXI.Sprite(resources['gasPlanet'].texture),
+      new PIXI.Sprite(resources['wastePlanet'].texture),
+      new PIXI.Sprite(resources['spaceMarket'].texture)
+    ];
+
+    for (let p of pTex) {
+      p.width = 32;
+      p.height = 32;
+      p.anchor.set(0.5);
+      holoBG.addChild(p);
+    }
+
+    pTex[0].x = 20;
+    pTex[0].y = 50;
+    pTex[1].x = 60;
+    pTex[1].y = 50;
+    pTex[2].x = 100;
+    pTex[2].y = 50;
+    pTex[3].x = 20;
+    pTex[3].y = 130;
+    pTex[4].x = 20;
+    pTex[4].y = 210;
+
+    let text1 = new PIXI.Text("Inhabited:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
+    text1.x = 5;
+    text1.y = 5;
+    holoContainer.addChild(text1);
+
+    let text2 = new PIXI.Text("Uninhabited:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
+    text2.x = 5;
+    text2.y = 85;
+    holoContainer.addChild(text2);
+
+    let text3 = new PIXI.Text("Market:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
+    text3.x = 5;
+    text3.y = 165;
+    holoContainer.addChild(text3);
+
+    holoContainer.alpha = 0.8;
+    return holoContainer;
   }
 
   update() {
-
+    
   }
 
   clickPlanet(planet) {
 
+    this.spaceShip.x = planet.x;
+    this.spaceShip.y = planet.y - 64;
     
     if (this.lastPlanet != null) {
       this.highlightPath.moveTo(this.lastPlanet.x, this.lastPlanet.y);
@@ -45,19 +109,23 @@ class SpaceScreen {
 
     planet.setVisited();
 
+    this.nextPlanetPath.clear();
+    this.nextPlanetPath.lineStyle(3, 0xAAFFAA);
+
     for (let p of this.planets) {
       p.setActive(false);
     }
 
     for (let nextP of planet.nextPlanets) {
       nextP.setActive(true);
+      this.nextPlanetPath.moveTo(planet.x, planet.y);
+      this.nextPlanetPath.lineTo(nextP.x, nextP.y);
     }
 
     this.lastPlanet = planet;
     this.currentStage++;
 
-    gameScreen = new GameScreen(planet.planetSeed, player.getNextRewardSeed(), this.currentStage);
-    setActiveScreen(gameScreen);
+    setActiveScreen(planet.getScreen(this.currentStage));
   }
 
   setupSpaceMap() {
@@ -89,7 +157,10 @@ class SpaceScreen {
 
     this.highlightPath = new PIXI.Graphics();
     this.container.addChild(this.highlightPath);
-    this.highlightPath.lineStyle(10, 0x8080FF);
+    this.highlightPath.lineStyle(3, 0xFFFF80);
+
+    this.nextPlanetPath = new PIXI.Graphics();
+    this.container.addChild(this.nextPlanetPath);
 
     let grid = [];
     for (let i = 0; i < this.layers; i++) {
@@ -190,10 +261,19 @@ class SpaceScreen {
     for (let p of [...new Set(activePoints)]) {
       let posX = (p[0] / (this.layers + 1)) * (width - 200) + 100;
       let posY = (p[1] / (this.pathCount - 1)) * (height - 400) + 200;
-      let planet = new Planet(posX, posY, p, this.createPlanetSeed());
-      if (p === this.startPoint) {
-        planet.setActive(true);
+
+      let type = "default";
+
+      if (p == this.startPoint) {
+        type = "start";
       }
+
+      if (p == this.endPoint) {
+        //TODO: Boss planet
+      }
+
+      let planet = new Planet(posX, posY, p, type, this.createPlanetSeed());
+      
       this.planets.push(planet);
       this.container.addChild(planet);
     }
