@@ -53,7 +53,7 @@ class Bullet extends Entity {
     this.distance += Math.sqrt(distX * distX + distY * distY);
 
     
-    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER).sort((a, b) => b.distTraveled - a.distTraveled);
+    let monster = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER && !e.immune).sort((a, b) => b.distTraveled - a.distTraveled);
 
     let monsterHit = null;
 
@@ -114,7 +114,7 @@ class Bullet extends Entity {
     this.x = p.x;
     this.y = p.y;
 
-    let possibleTargets = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER);
+    let possibleTargets = gameScreen.entityContainer.children.filter(e => e.type == entityType.MONSTER && !e.immune);
 
     let rangeCollider = new PIXI.Sprite();
     rangeCollider.circular = true;

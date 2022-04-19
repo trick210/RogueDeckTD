@@ -1,5 +1,9 @@
 class CombatMap {
 
+  static CREATE(mapSeed, conf) {
+    return new this(mapSeed, conf);
+  }
+
   constructor(mapSeed, conf) {
 
     let config = JSON.parse(conf);
@@ -33,9 +37,10 @@ class CombatMap {
     this.container = new PIXI.Container();
     this.container.addChild(this.bg);
     this.container.addChild(this.path);
+
+    this.initialSpawns = [];
+    this.maxRounds = 1;
   }
-
-
 
 
   getWave(round) {

@@ -140,3 +140,53 @@ gasConfig = `
 
 }
 `;
+
+bossConfig = `
+{
+  "start": [
+    "LEFT",
+    "TOP",
+    "RIGHT",
+    "BOT"
+  ],
+
+  "length": {
+    "min": 5000,
+    "max": 5200
+
+  },
+
+  "segmentLength": {
+    "min": 200,
+    "max": 300
+  },
+
+  "angles": [
+    {
+      "min": -90,
+      "max": -90
+    },
+{
+      "min": 0,
+      "max": 0
+    },
+{
+      "min": 90,
+      "max": 90
+    }
+  ],
+
+  "edgeDistance": 100,
+
+  "pathDistance": 200,
+
+  "pathWidth": 96,
+
+  "overlap": false,
+
+  "splines": true,
+
+  "bgColor": "0x77251c",
+  "pathColor": "0x2f0804"
+
+}`;

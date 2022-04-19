@@ -1,11 +1,11 @@
 class GameScreen {
 
-  constructor(config, mapSeed, rewardSeed, stage) {
+  constructor(config, mapType, mapSeed, rewardSeed, stage) {
 
     this.rewardSeed = rewardSeed;
     this.stage = stage;
 
-    this.map = new CombatMap(mapSeed, config);
+    this.map = mapType.CREATE(mapSeed, config);
     this.ui = new UI(this);
 
     this.container = new PIXI.Container();
@@ -68,7 +68,6 @@ class GameScreen {
 
     this.mouseOnMap = false;
 
-    this.maxRounds = 10;
     this.round = 1;
   
     this.energy = player.maxEnergy;
@@ -87,6 +86,10 @@ class GameScreen {
     this.selectedCard = null;
 
     this.levelStarted = false;
+
+    for (let monster of this.map.initialSpawns) {
+      this.entityContainer.addChild(monster);
+    }
 
     this.spawnClock = 0;
 
@@ -198,18 +201,29 @@ class GameScreen {
 
   checkEnd() {
 
-    if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER).length == 0 && player.hp > 0) {
+    if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER && !e.ignore).length == 0) {
       this.levelStarted = false;
-      if (this.round < this.maxRounds) {
+      if (this.round < this.map.maxRounds) {
         this.removeBuffs();
         this.ui.startButton.enable();
         this.round++;
         this.drawPhase();
       } else {
-        this.cleanup();
-        setActiveScreen(new RewardScreen(this.rewardSeed, this.stage));
+        this.endLevel();
       }
     }
+  }
+
+  endLevel() {
+    if (player.hp > 0) {
+      this.cleanup();
+      setActiveScreen(new RewardScreen(this.rewardSeed, this.stage));
+    }
+  }
+
+  winRun() {
+    this.cleanup();
+    setActiveScreen(new VictoryScreen(this.round));
   }
 
   startLevel() {

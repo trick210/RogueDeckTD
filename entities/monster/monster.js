@@ -20,17 +20,27 @@ class Monster extends Entity {
     this.hpBar = new PIXI.Graphics();
     this.addChild(this.hpBar);
 
-    let hpFrame = new PIXI.Graphics();
-    hpFrame.lineStyle(1, 0x000000, 1);
-    hpFrame.beginFill(0xFFFFFF, 0);
-    hpFrame.drawRect(-24, -45, 48, 5);
-    hpFrame.endFill();
+    this.showBar = true;
 
-    this.addChild(hpFrame);
+    this.barSize = {
+      x: -24,
+      y: -45,
+      width: 48,
+      height: 5,
+      frameWidth: 1
+    };
+
+    this.hpFrame = new PIXI.Graphics();
+
+    this.addChild(this.hpFrame);
 
 
     this.setArmor(0);
     this.setHP(hp);
+
+    this.immune = false;
+
+    //this.drawHPBar();
 
   }
 
@@ -44,6 +54,7 @@ class Monster extends Entity {
     if (newPos == null) {
       gameScreen.recieveDamage(Math.ceil(this.hp * this.damageMultiplier));
       this.remove();
+      this.onLeak();
     } else {
 
       this.x = newPos.x;
@@ -55,10 +66,8 @@ class Monster extends Entity {
 
 
     if (this.oldhp != this.hp) {
-      this.hpBar.clear();
-      this.hpBar.beginFill(0xFF3030);
-      this.hpBar.drawRect(-24, -45, 48 * (this.hp / this.maxHP), 5);
-      this.hpBar.endFill();
+
+      this.drawHPBar();
 
       this.oldhp = this.hp;
     }
@@ -76,9 +85,12 @@ class Monster extends Entity {
   }
 
   recieveDamage(damageObj, origin) {
+
+    if (this.immune) return;
+
     if (damageObj.percentagePen == null) damageObj.percentagePen = 0;
     if (damageObj.flatPen == null) damageObj.flatPen = 0;
-    
+
     let amount = damageObj.amount;
 
     let effectiveArmor = this.armor * (1 - damageObj.percentagePen);
@@ -92,12 +104,36 @@ class Monster extends Entity {
     amount = Math.min(this.hp, amount);
 
     this.hp -= amount;
-    
+
     if (this.hp <= 0) {
       this.remove();
+      this.onDeath();
     }
 
     origin.countDamage(amount);
+  }
+
+  drawHPBar() {
+    this.hpBar.clear();
+    this.hpFrame.clear();
+
+    if (this.showBar) {
+      this.hpBar.beginFill(0xFF3030);
+      this.hpBar.drawRect(this.barSize.x, this.barSize.y, this.barSize.width * (this.hp / this.maxHP), this.barSize.height);
+      this.hpBar.endFill();
+
+
+      this.hpFrame.lineStyle(this.barSize.frameWidth, 0x000000, 1);
+      this.hpFrame.drawRect(this.barSize.x, this.barSize.y, this.barSize.width, this.barSize.height);
+    }
+  }
+
+  onDeath() {
+
+  }
+
+  onLeak() {
+
   }
 
   rotate(rot) {

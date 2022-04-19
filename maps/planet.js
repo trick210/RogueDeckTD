@@ -11,7 +11,7 @@ class Planet extends PIXI.Container {
     this.planetRand = mulberry32(planetSeed);
 
     this.defaultBorder = 0xFF0000;
-    this.defaultSize = 48 + Math.round(this.planetRand() * 32);
+    this.defaultSize = (type == "boss") ? 196 : (48 + Math.round(this.planetRand() * 32));
 
     this.planetType = this.getType(type);
 
@@ -59,7 +59,7 @@ class Planet extends PIXI.Container {
   }
 
   setVisited() {
-    this.defaultSize = 64;
+    //this.defaultSize = 64;
   }
 
   click() {
@@ -72,19 +72,22 @@ class Planet extends PIXI.Container {
         name: "combat",
         percentage: 20,
         texture: new PIXI.Sprite(resources['grassPlanet'].texture),
-        config: grassConfig
+        config: grassConfig,
+        mapType: CombatMap
       },
       {
         name: "combat2",
         percentage: 20,
         texture: new PIXI.Sprite(resources['crystalPlanet'].texture),
-        config: crystalConfig
+        config: crystalConfig,
+        mapType: CombatMap
       },
       {
         name: "combat3",
         percentage: 20,
         texture: new PIXI.Sprite(resources['gasPlanet'].texture),
-        config: gasConfig
+        config: gasConfig,
+        mapType: CombatMap
       },
       {
         name: "market",
@@ -104,12 +107,26 @@ class Planet extends PIXI.Container {
       return types.find(t => t.name == name);
     }
 
+    if (type == "boss") {
+      return {
+        name: "boss",
+        texture: new PIXI.Sprite(resources['bossPlanet'].texture),
+        config: bossConfig,
+        mapType: CentipedeBossMap
+      };
+    }
+
     let rand = this.planetRand() * 100;
     let counter = 0;
 
     for (let t of types) {
       counter += t.percentage;
       if (rand < counter) {
+        let unkown = this.planetRand() * 100;
+        if (unkown < 15) {
+          t.texture = new PIXI.Sprite(resources['unknownPlanet'].texture);
+          this.defaultSize = 64;
+        }
         return t;
       }
     }
@@ -125,7 +142,8 @@ class Planet extends PIXI.Container {
     if (this.planetType.name == "waste") {
       return new WastePlanetScreen(this.planetRand() * 0xFFFFFFFF, player.getNextRewardSeed());
     }
-    gameScreen = new GameScreen(this.planetType.config, this.planetRand() * 0xFFFFFFFF, player.getNextRewardSeed(), stage);
+
+    gameScreen = new GameScreen(this.planetType.config, this.planetType.mapType, this.planetRand() * 0xFFFFFFFF, player.getNextRewardSeed(), stage);
     return gameScreen;
   }
 

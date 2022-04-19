@@ -51,6 +51,9 @@ loader
   .add('walker', 'assets/monster/walker.png')
   .add('snail', 'assets/monster/snail.png')
   .add('snail2', 'assets/monster/snail2.png')
+  .add('centipedeBossHead1', 'assets/monster/centipedeBossHead1.png')
+  .add('centipedeBossHead2', 'assets/monster/centipedeBossHead2.png')
+  .add('centipedeBossPart', 'assets/monster/centipedeBossPart.png')
   .add('baseTower', 'assets/tower/baseTower.png')
   .add('minigunTower', 'assets/tower/minigunTower.png')
   .add('sniperNest', 'assets/tower/sniperNest.png')
@@ -60,6 +63,8 @@ loader
   .add('wastePlanet', 'assets/planets/wastePlanet.png')
   .add('crystalPlanet', 'assets/planets/crystalPlanet.png')
   .add('gasPlanet', 'assets/planets/gasPlanet.png')
+  .add('bossPlanet', 'assets/planets/bossPlanet.png')
+  .add('unknownPlanet', 'assets/planets/unknownPlanet.png')
   .add('spaceShip', 'assets/spaceShip.png');
 
 

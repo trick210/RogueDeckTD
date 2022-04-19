@@ -35,7 +35,7 @@ class SpaceScreen {
     this.container.addChild(this.spaceShip);
 
     let holo = this.createHolo();
-    holo.y = height - 256;
+    holo.y = height - 300;
     this.container.addChild(holo);
 
   }
@@ -44,7 +44,7 @@ class SpaceScreen {
     let holoContainer = new PIXI.Container();
     let holoBG = new PIXI.Graphics();
     holoBG.beginFill(0x003000);
-    holoBG.drawRoundedRect(0, 0, 128, 256, 10);
+    holoBG.drawRoundedRect(0, 0, 170, 300, 10);
     holoBG.endFill();
     holoContainer.addChild(holoBG);
 
@@ -53,7 +53,9 @@ class SpaceScreen {
       new PIXI.Sprite(resources['crystalPlanet'].texture),
       new PIXI.Sprite(resources['gasPlanet'].texture),
       new PIXI.Sprite(resources['wastePlanet'].texture),
-      new PIXI.Sprite(resources['spaceMarket'].texture)
+      new PIXI.Sprite(resources['spaceMarket'].texture),
+      new PIXI.Sprite(resources['bossPlanet'].texture),
+      new PIXI.Sprite(resources['unknownPlanet'].texture)
     ];
 
     for (let p of pTex) {
@@ -70,9 +72,13 @@ class SpaceScreen {
     pTex[2].x = 100;
     pTex[2].y = 50;
     pTex[3].x = 20;
-    pTex[3].y = 130;
+    pTex[3].y = 125;
     pTex[4].x = 20;
-    pTex[4].y = 210;
+    pTex[4].y = 200;
+    pTex[5].x = 140;
+    pTex[5].y = 50;
+    pTex[6].x = 20;
+    pTex[6].y = 275;
 
     let text1 = new PIXI.Text("Inhabited:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
     text1.x = 5;
@@ -81,13 +87,18 @@ class SpaceScreen {
 
     let text2 = new PIXI.Text("Uninhabited:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
     text2.x = 5;
-    text2.y = 85;
+    text2.y = 80;
     holoContainer.addChild(text2);
 
-    let text3 = new PIXI.Text("Market:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
+    let text3 = new PIXI.Text("Space Market:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
     text3.x = 5;
-    text3.y = 165;
+    text3.y = 155;
     holoContainer.addChild(text3);
+
+    let text4 = new PIXI.Text("Unknown:", { fontFamily: 'Arial', fontSize: 20, fill: 'white' });
+    text4.x = 5;
+    text4.y = 230;
+    holoContainer.addChild(text4);
 
     holoContainer.alpha = 0.8;
     return holoContainer;
@@ -269,7 +280,7 @@ class SpaceScreen {
       }
 
       if (p == this.endPoint) {
-        //TODO: Boss planet
+        type = "boss";
       }
 
       let planet = new Planet(posX, posY, p, type, this.createPlanetSeed());
