@@ -329,6 +329,7 @@ class GameScreen {
     if (this.selectedCard == card) {
       card.deselect();
       this.selectedCard = null;
+      this.ui.clearTargets();
     }
   }
 
@@ -340,6 +341,7 @@ class GameScreen {
     if (this.selectedCard == card) {
       card.deselect();
       this.selectedCard = null;
+      this.ui.clearTargets();
     }
   }
 
@@ -348,6 +350,7 @@ class GameScreen {
 
     if (card.select()) {
       this.selectedCard = card;
+      this.ui.highlightTargets(card);
     }
 
     this.ui.bringCardToFront(card);
@@ -360,6 +363,7 @@ class GameScreen {
       this.selectedCard.deselect();
       this.selectedCard = null;
       this.ui.bringCardToFront(null);
+      this.ui.clearTargets();
     }
   }
 

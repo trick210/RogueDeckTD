@@ -48,6 +48,11 @@ class DoubleBarrel extends Spell {
     return true;
   }
 
-  
+  getTargets(entities) {
+    let towers = entities.filter(e => e.type == entityType.TOWER);
+
+    return towers.filter(e => e.tags.includes(towerTags.BULLET));
+    
+  }
 
 }

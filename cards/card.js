@@ -107,7 +107,7 @@ class Card extends PIXI.Container {
   }
 
   select() {
-    if (gameScreen.energy >= this.cost) {
+    if (this.isPlayable()) {
       this.cardFrame.tint = 0xFF0000;
       gameScreen.entityContainer.interactiveChildren = false;
       gameScreen.entityContainer.children.forEach(entity => {
@@ -140,15 +140,39 @@ class Card extends PIXI.Container {
 
   clickMap(pos) {
     if (this.cardObject.clickMap(pos)) {
+
+      gameScreen.energy -= this.cost;
+
       if (this.type == cardType.TOWER || this.cardObject.tags.includes(spellTags.DEPLETE)) {
         gameScreen.destroyCard(this);
       } else {
         gameScreen.discardCard(this);
       }
 
-      gameScreen.energy -= this.cost;
-      
     }
+  }
+
+  isPlayable(gs) {
+
+    if (gs == null) {
+      gs = gameScreen;
+    }
+
+    if (this.cost > gs.energy) {
+      return false;
+    }
+    if (this.type == cardType.TOWER) {
+      return true;
+    }
+
+    if (this.type == cardType.SPELL) {
+      if (this.cardObject.tags.includes(spellTags.TARGET_TOWER)) {
+        let targets = this.cardObject.getTargets(gs.entityContainer.children);
+        return (targets.length != 0);
+      }
+    }
+
+    return true;
   }
 }
 

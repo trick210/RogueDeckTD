@@ -15,6 +15,14 @@ class UI {
 
     this.container.y = height - this.bg.height;
 
+    this.highlightContainer =  new PIXI.Container();
+    this.highlightContainer.y = -height + this.bg.height;
+
+    this.container.addChild(this.highlightContainer);
+
+    this.highlightGraphics = new PIXI.Graphics();
+    this.highlightContainer.addChild(this.highlightGraphics);
+
     this.container.addChild(this.bg);
 
     this.container.addChild(this.startButton);
@@ -132,18 +140,36 @@ class UI {
     for (let i = 0; i < cards.length; i++) {
       cards[i].handIndex = i;
       if (cards[i] != this.gs.selectedCard) {
-        cards[i].cardFrame.tint = 0x00000;
+        cards[i].cardFrame.tint = cards[i].isPlayable(this.gs) ? 0x00FF00 : 0x000000;
+        cards[i].y = 20;
       }
     }
 
     if (card != null) {
       card.handIndex = -1;
+      card.y = 10;
       if (card != this.gs.selectedCard) {
-        card.cardFrame.tint = 0xFFFF00;
+        //card.cardFrame.tint = 0xFFFF00;1
       }
     }
 
     this.handContainer.children.sort((a, b) => b.handIndex - a.handIndex);
+  }
+
+  highlightTargets(card) {
+    this.highlightGraphics.clear();
+    this.highlightGraphics.lineStyle(3, 0x00FF00);
+
+    if (card.type == cardType.SPELL) {
+      let targets = card.cardObject.getTargets(this.gs.entityContainer.children);
+      for (let target of targets) {
+        this.highlightGraphics.drawCircle(target.x, target.y, target.texture.radius);
+      }
+    }
+  }
+
+  clearTargets() {
+    this.highlightGraphics.clear();
   }
 
   showTowerInfo(tower) {

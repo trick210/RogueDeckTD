@@ -46,13 +46,25 @@ class Spell extends Entity {
       this.x = pos.x;
       this.y = pos.y;
     }
+
+    if (this.tags.includes(spellTags.TARGET_TOWER)) {
+      gameScreen.entityContainer.children.forEach(entity => {
+        if (entity.type == entityType.TOWER) {
+          if (collider.hitTestPoint(pos, entity.texture)) {
+            if (!entity.entered) entity.enter();
+          } else {
+            if (entity.entered) entity.leave();
+          }
+        }
+      });
+    }
     
   }
 
   leaveMap() {
     this.removeChild(this.rangeCircle);
     this.remove();
-    this.onMap = false;    
+    this.onMap = false;
   }
 
   clickMap(pos) {
@@ -70,7 +82,7 @@ class Spell extends Entity {
       if (target != null) {
         let result = this.clickTarget(target);
         
-        target.enter();
+        //target.enter();
         target.click();
         return result;
         
@@ -95,7 +107,15 @@ class Spell extends Entity {
       return true;
     }
 
-    return false;;
+    return false;
+  }
+
+  getTargets(entities) {
+    if (this.tags.includes(spellTags.TARGET_TOWER)) {
+      return entities.filter(e => e.type == entityType.TOWER);
+    } else {
+      return [];
+    }
   }
 
   countDamage(amount) {
