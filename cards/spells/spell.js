@@ -82,7 +82,7 @@ class Spell extends Entity {
       if (target != null) {
         let result = this.clickTarget(target);
         
-        //target.enter();
+        target.enter();
         target.click();
         return result;
         
