@@ -1,8 +1,9 @@
 class Player {
 
-  constructor(mapSeed, deckSeed) {
+  constructor(playerName, mapSeed, deckSeed) {
     this.mapSeed = mapSeed;
     this.deckSeed = deckSeed;
+    this.playerName = playerName;
 
     this.deckRand = mulberry32(this.deckSeed);
     this.mapRand = mulberry32(this.mapSeed);
@@ -20,19 +21,24 @@ class Player {
     seedText.appendChild(document.createTextNode(text));
 
 
-
-    this.hp = 100;
+    this.maxHP = 100;
+    this.hp = this.maxHP;
     this.maxEnergy = 5;
     this.maxTC = 12;
 
+    this.galaxy = 1;
+    this.stage = 0;
+
     this.deck = this.createDeck();
+
+    Topbar.CREATE(this.playerName);
 
 
   }
 
   heal(amount) {
     let oldHP = this.hp;
-    this.hp = Math.min(this.hp + amount, 100);
+    this.hp = Math.min(this.hp + amount, this.maxHP);
 
     return this.hp - oldHP;
   }
@@ -64,6 +70,8 @@ class Player {
   getNextRewardSeed() {
     return Math.round(this.rewardRand() * 0xFFFFFFFF);
   }
+
+
 
 
 }

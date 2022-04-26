@@ -10,7 +10,7 @@ class CombatMap {
 
     this.bg = new Sprite(PIXI.Texture.WHITE);
     this.bg.width = width;
-    this.bg.height = height - 300;
+    this.bg.height = height - 275;
     this.bg.tint = config.bgColor;
 
     this.pathColor = config.pathColor;

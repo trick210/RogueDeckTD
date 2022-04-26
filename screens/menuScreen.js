@@ -3,6 +3,7 @@ class MenuScreen {
   constructor() {
 
     document.getElementById("seedText").textContent = "";
+    Topbar.REMOVE();
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -88,7 +89,7 @@ class MenuScreen {
     this.mapSeedInput.destroy();
     this.deckSeedInput.destroy();
     
-    player = new Player(mapSeed, deckSeed);
+    player = new Player("Spaceship", mapSeed, deckSeed);
     spaceScreen = new SpaceScreen();
 
     setActiveScreen(spaceScreen);
@@ -104,6 +105,7 @@ class MenuScreen {
         color: '#26272E',
         textAlign: 'center',
         fontFamily: 'Consolas',
+        resolution: 2
       },
       box: {
         default: { fill: 0xFFFFFF, rounded: 10, stroke: { color: 0x000000, width: 4 } },
@@ -111,6 +113,8 @@ class MenuScreen {
         disabled: { fill: 0xFFFFFF, rounded: 10, stroke: { color: 0x000000, width: 4 } }
       }
     });
+
+    box._surrogate.resolution = 2;
 
     box.pivot.x = box.width / 2;
 

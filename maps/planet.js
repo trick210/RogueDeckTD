@@ -134,7 +134,7 @@ class Planet extends PIXI.Container {
 
   }
 
-  getScreen(stage) {
+  getScreen() {
     if (this.planetType.name == "market") {
       return new MarketPlanetScreen(this.planetRand() * 0xFFFFFFFF, player.getNextRewardSeed());
     }
@@ -143,7 +143,7 @@ class Planet extends PIXI.Container {
       return new WastePlanetScreen(this.planetRand() * 0xFFFFFFFF, player.getNextRewardSeed());
     }
 
-    gameScreen = new GameScreen(this.planetType.config, this.planetType.mapType, this.planetRand() * 0xFFFFFFFF, player.getNextRewardSeed(), stage);
+    gameScreen = new GameScreen(this.planetType.config, this.planetType.mapType, this.planetRand() * 0xFFFFFFFF, player.getNextRewardSeed());
     return gameScreen;
   }
 

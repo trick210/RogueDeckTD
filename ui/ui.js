@@ -6,10 +6,20 @@ class UI {
 
     this.bg = new Sprite(PIXI.Texture.WHITE);
     this.bg.width = width;
-    this.bg.height = 300;
+    this.bg.height = 275;
     this.bg.tint = 0x01579B;
 
-    this.startButton = new Button("Start", width - 190, 20, 150, 50, this.gs.startLevel.bind(this.gs));
+    this.bgLine = new PIXI.Graphics();
+    this.bgLine.lineStyle(5, 0x000000);
+    this.bgLine.moveTo(0, 0);
+    this.bgLine.lineTo(width, 0);
+
+    this.startButton = new Button("Start", width - 190, 20, 150, 40, this.gs.startLevel.bind(this.gs));
+
+    this.slowButton = new Button(">", width - 190, 70, 70, 40, this.clickSlowButton.bind(this));
+    this.fastButton = new Button(">>>", width - 110, 70, 70, 40, this.clickFastButton.bind(this));
+
+    this.slowButton.disable();
 
     this.container = new PIXI.Container();
 
@@ -24,8 +34,11 @@ class UI {
     this.highlightContainer.addChild(this.highlightGraphics);
 
     this.container.addChild(this.bg);
+    this.container.addChild(this.bgLine);
 
     this.container.addChild(this.startButton);
+    this.container.addChild(this.slowButton);
+    this.container.addChild(this.fastButton);
 
     this.handContainer = new PIXI.Container();
     this.container.addChild(this.handContainer);
@@ -62,32 +75,27 @@ class UI {
 
     this.roundText = new PIXI.Text("Round: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
     this.roundText.x = width - 190;
-    this.roundText.y = 80;
+    this.roundText.y = 120;
     this.container.addChild(this.roundText);
-
-    this.hpText = new PIXI.Text("HP: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0x00FF00, stroke: 'black', strokeThickness: 3});
-    this.hpText.x = width - 190;
-    this.hpText.y = 110;
-    this.container.addChild(this.hpText);
 
     this.energyText = new PIXI.Text("Energy: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFD700, stroke: 'black', strokeThickness: 3});
     this.energyText.x = width - 190;
-    this.energyText.y = 140;
+    this.energyText.y = 150;
     this.container.addChild(this.energyText);
 
     this.deckText = new PIXI.Text("Deck: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
     this.deckText.x = width - 190;
-    this.deckText.y = 170;
+    this.deckText.y = 180;
     this.container.addChild(this.deckText);
 
     this.discardText = new PIXI.Text("Discard Pile: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
     this.discardText.x = width - 190;
-    this.discardText.y = 200;
+    this.discardText.y = 210;
     this.container.addChild(this.discardText);
 
     this.TCText = new PIXI.Text("TC: 0 / 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
     this.TCText.x = width - 190;
-    this.TCText.y = 230;
+    this.TCText.y = 240;
     this.container.addChild(this.TCText);
 
 
@@ -98,7 +106,6 @@ class UI {
     this.deckText.text = `Deck: ${this.gs.deck.length}`
     this.discardText.text = `Discard Pile: ${this.gs.discardPile.length}`
     this.roundText.text = `Round: ${this.gs.round}`;
-    this.hpText.text = `HP: ${player.hp}`;
     this.energyText.text = `Energy: ${this.gs.energy}`;
     this.TCText.text = `TC: ${this.gs.currentTC} / ${player.maxTC}`
     this.TCText.tint = (this.gs.currentTC > player.maxTC) ? 0xFF0000 : 0xFFFFFF;
@@ -109,6 +116,20 @@ class UI {
     }
     
 
+  }
+
+  clickFastButton() {
+    this.slowButton.enable();
+    this.fastButton.disable();
+
+    speed = 2;
+  }
+
+  clickSlowButton() {
+    this.slowButton.disable();
+    this.fastButton.enable();
+
+    speed = 1;
   }
 
   cardToHand(card) {

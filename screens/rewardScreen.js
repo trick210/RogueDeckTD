@@ -1,6 +1,6 @@
 class RewardScreen {
 
-  constructor(rewardSeed, stage) {
+  constructor(rewardSeed) {
 
     this.container = new PIXI.Container();
 
@@ -9,7 +9,7 @@ class RewardScreen {
     this.bg.height = height;
     this.bg.tint = 0x2C3539;
 
-    this.stageText = new PIXI.Text("You cleared stage " + stage, { fontFamily: 'Arial', fontSize: 64, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5 });
+    this.stageText = new PIXI.Text("You cleared planet " + player.stage, { fontFamily: 'Arial', fontSize: 64, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5 });
     this.rewardText = new PIXI.Text('Pick a reward', { fontFamily: 'Arial', fontSize: 48, fill: 'lime', align: 'center', stroke: 'black', strokeThickness: 5 });
     
 

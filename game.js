@@ -4,6 +4,8 @@ let activeScreen = null;
 
 let player;
 
+let topbar = null;
+
 let collider = new Bump(PIXI);
 
 let showFrames = false;
@@ -15,6 +17,8 @@ let width = 1920;
 let height = 1080;
 let deltaTime = 0;
 let lastTime = 0;
+
+let speed = 1;
 
 //Aliases
 let Application = PIXI.Application,
@@ -111,15 +115,19 @@ function setActiveScreen(screen) {
     app.stage.removeChild(activeScreen.container);
   }
   activeScreen = screen;
-  app.stage.addChild(activeScreen.container);
+  app.stage.addChildAt(activeScreen.container, 0);
 }
 
 function update(time) {
 
-  deltaTime = (time - lastTime) % 100;
+  deltaTime = speed * ((time - lastTime) % 100);
   lastTime = time;
 
   activeScreen.update();
+
+  if (topbar != null) {
+    topbar.update();
+  }
 
   if (showFrames) {
     frameText.text = "FPS: " + Math.floor(1000 / deltaTime);

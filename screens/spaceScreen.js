@@ -27,8 +27,6 @@ class SpaceScreen {
 
     this.setupSpaceMap();
 
-    this.currentStage = 0;
-
     this.spaceShip = new SpaceShip(-200, 0, -Math.PI / 2);
     this.spaceShip.texture.width = 24;
     this.spaceShip.texture.height = 48;
@@ -44,7 +42,7 @@ class SpaceScreen {
     let holoContainer = new PIXI.Container();
     let holoBG = new PIXI.Graphics();
     holoBG.beginFill(0x003000);
-    holoBG.drawRoundedRect(0, 0, 170, 300, 10);
+    holoBG.drawRoundedRect(-20, 0, 190, 320, 10);
     holoBG.endFill();
     holoContainer.addChild(holoBG);
 
@@ -134,9 +132,10 @@ class SpaceScreen {
     }
 
     this.lastPlanet = planet;
-    this.currentStage++;
+    
+    player.stage++;
 
-    setActiveScreen(planet.getScreen(this.currentStage));
+    setActiveScreen(planet.getScreen());
   }
 
   setupSpaceMap() {

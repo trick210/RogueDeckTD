@@ -1,9 +1,8 @@
 class GameScreen {
 
-  constructor(config, mapType, mapSeed, rewardSeed, stage) {
+  constructor(config, mapType, mapSeed, rewardSeed) {
 
     this.rewardSeed = rewardSeed;
-    this.stage = stage;
 
     this.map = mapType.CREATE(mapSeed, config);
     this.ui = new UI(this);
@@ -142,6 +141,7 @@ class GameScreen {
   recieveDamage(amount) {
     player.hp -= amount;
     if (player.hp <= 0) {
+      player.hp = 0;
       this.cleanup();
       setActiveScreen(new DeathScreen(this.round));
     }
@@ -217,7 +217,7 @@ class GameScreen {
   endLevel() {
     if (player.hp > 0) {
       this.cleanup();
-      setActiveScreen(new RewardScreen(this.rewardSeed, this.stage));
+      setActiveScreen(new RewardScreen(this.rewardSeed));
     }
   }
 
@@ -470,6 +470,8 @@ class GameScreen {
 
     this.cannonBlastEmitter.destroy();
     this.explosiveRoundsEmitter.destroy();
+
+    speed = 1;
   }
 
 

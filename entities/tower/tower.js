@@ -210,7 +210,7 @@ class Tower extends Entity {
   enter() {
     if (!this.clicked) {
       this.addChildAt(this.rangeCircle, 0);
-      this.layer += 5;
+      //this.layer += 5;
       this.entered = true;
     }
   }
@@ -218,7 +218,7 @@ class Tower extends Entity {
   leave() {
     if (!this.clicked) {
       this.removeChild(this.rangeCircle);
-      this.layer -= 5;
+      //this.layer -= 5;
       this.entered = false;
     }
   }
