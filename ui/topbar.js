@@ -73,6 +73,51 @@ class Topbar extends PIXI.Container {
 
     this.addChild(this.hpText);
 
+
+    this.gearIcon = new PIXI.Sprite(resources['gearIcon'].texture);
+    this.gearIcon.x = barWidth - 40;
+    this.gearIcon.y = 2;
+
+    this.gearIcon.width = 32;
+    this.gearIcon.height = 32;
+
+    this.gearIcon.interactive = true;
+    this.gearIcon.buttonMode = true;
+
+    this.addChild(this.gearIcon);
+
+    this.deckIcon = new PIXI.Sprite(resources['deckIcon'].texture);
+    this.deckIcon.x = barWidth - 85;
+    this.deckIcon.y = 4;
+
+    this.deckIcon.width = 32;
+    this.deckIcon.height = 32;
+
+    this.deckIcon.interactive = true;
+    this.deckIcon.buttonMode = true;
+
+    this.addChild(this.deckIcon);
+
+    this.mapIcon = new PIXI.Sprite(resources['mapIcon'].texture);
+    this.mapIcon.x = barWidth - 130;
+    this.mapIcon.y = 2;
+
+    this.mapIcon.width = 32;
+    this.mapIcon.height = 32;
+
+    this.mapIcon.interactive = true;
+    this.mapIcon.buttonMode = true;
+
+    let colorMatrix = new PIXI.filters.ColorMatrixFilter();
+    colorMatrix.desaturate();
+
+    this.mapIcon.filters = [colorMatrix];
+
+
+    this.addChild(this.mapIcon);
+
+
+
   }
 
   update() {

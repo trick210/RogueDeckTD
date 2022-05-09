@@ -69,6 +69,9 @@ loader
   .add('gasPlanet', 'assets/planets/gasPlanet.png')
   .add('bossPlanet', 'assets/planets/bossPlanet.png')
   .add('unknownPlanet', 'assets/planets/unknownPlanet.png')
+  .add('mapIcon', 'assets/icons/mapIcon.png')
+  .add('deckIcon', 'assets/icons/deckIcon.png')
+  .add('gearIcon', 'assets/icons/gearIcon.png')
   .add('spaceShip', 'assets/spaceShip.png');
 
 
