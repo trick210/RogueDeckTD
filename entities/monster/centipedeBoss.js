@@ -58,6 +58,10 @@ class CentipedeBossHead extends Monster {
     gameScreen.winRun();
   }
 
+  onDamaged(amount, src) {
+    this.distTraveled -= 5;
+  }
+
   update() {
     super.update();
 

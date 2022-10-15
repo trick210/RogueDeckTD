@@ -43,10 +43,18 @@ class CombatMap {
   }
 
 
-  getWave(round) {
+  getWave(round, types) {
 
-    let monsterTypes = [Walker, Snail];
+    
+    let monsterTypes = [Walker, Snail, Swarmer];
+    
+    if (types != null) {
+     monsterTypes = types; 
+    }
+
     let type = monsterTypes[Math.floor(monsterTypes.length * this.waveRand())];
+
+    
 
     let totalHP = 2000;
     let totalMonster = type.UNIT_COUNT;
@@ -90,10 +98,14 @@ class CombatMap {
 
     let monster = [];
 
+    let spawnTimer = 0;
+    let spawnIntervall = 10000;
+
     for (let i = 0; i < totalMonster; i++) {
       //let walker = new Walker(this.startPos.x, this.startPos.y, Math.floor((totalHP / totalMonster) / ((armor + 100) / 100)), armor);
-      let unit = type.SPAWN(this.startPos.x, this.startPos.y, Math.floor(totalHP / totalMonster))
-      monster.push(unit);
+      let unit = type.SPAWN(this.startPos.x, this.startPos.y, Math.floor(totalHP / totalMonster), spawnTimer, this.waveRand);
+      spawnTimer += spawnIntervall / (totalMonster - 1);
+      monster.push(...unit);
     }
 
     return monster;

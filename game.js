@@ -55,6 +55,7 @@ loader
   .add('walker', 'assets/monster/walker.png')
   .add('snail', 'assets/monster/snail.png')
   .add('snail2', 'assets/monster/snail2.png')
+  .add('swarmer', 'assets/monster/swarmer.png')
   .add('centipedeBossHead1', 'assets/monster/centipedeBossHead1.png')
   .add('centipedeBossHead2', 'assets/monster/centipedeBossHead2.png')
   .add('centipedeBossPart', 'assets/monster/centipedeBossPart.png')

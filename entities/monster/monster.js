@@ -1,7 +1,9 @@
 class Monster extends Entity {
 
-  static SPAWN(posX, posY, hp) {
-    return new this(posX, posY, hp);
+  static SPAWN(posX, posY, hp, spawnCD, rand) {
+    let unit = new this(posX, posY, hp);
+    unit.spawnCD = spawnCD;
+    return [unit];
   }
 
   constructor(posX, posY, hp) {
@@ -14,6 +16,8 @@ class Monster extends Entity {
     this.oldvx = 0;
     this.oldvy = 0;
     this.oldhp = 0;
+
+    this.spawnCD = 0;
 
 
 
@@ -105,6 +109,8 @@ class Monster extends Entity {
 
     this.hp -= amount;
 
+    this.onDamaged(amount, origin);
+
     if (this.hp <= 0) {
       this.remove();
       this.onDeath();
@@ -133,6 +139,10 @@ class Monster extends Entity {
   }
 
   onLeak() {
+
+  }
+
+  onDamaged(amount, src) {
 
   }
 

@@ -127,7 +127,7 @@ class WastePlanetScreen {
 
     let text3 = "...TRASH\n\n" +
                 "a card from your deck.\n" +
-                "The additional waste\nwon'tdisturb anyone.";
+                "The additional waste\nwon't disturb anyone.";
 
     let btn1 = new Button("", 400, 350, 300, 150, this.clickRepair.bind(this));
     let btn2 = new Button("", 900, 350, 300, 150, this.clickTrash.bind(this));
