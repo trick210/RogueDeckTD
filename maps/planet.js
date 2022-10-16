@@ -25,6 +25,7 @@ class Planet extends PIXI.Container {
     this.border = new PIXI.Graphics();
 
     this.setActive(type == "start");
+    //this.setActive(true);
 
     this.addChild(this.texture);
     this.addChild(this.border)

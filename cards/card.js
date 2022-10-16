@@ -33,6 +33,8 @@ class Card extends PIXI.Container {
 
     this.cost = this.cardObject.cost;
 
+    this.marketPrice = 20;
+
     this.cardBG = new PIXI.Graphics();
     this.cardBG.beginFill(this.fill);
     this.cardBG.drawRect(0, 0, this.cardWidth, this.cardHeight);
@@ -85,16 +87,18 @@ class Card extends PIXI.Container {
     this.addChild(this.cardFrame);
 
 
-
     this.interactive = true;
     this.buttonMode = true;
-    this.on('click', this.click.bind(this));
-    this.on('mouseover', this.enter.bind(this));
-    this.on("mouseout", this.leave.bind(this));
 
   }
 
-  click() {
+  addListeners() {
+    this.on('click', this.clickCard.bind(this));
+    this.on('mouseover', this.enter.bind(this));
+    this.on("mouseout", this.leave.bind(this));
+  }
+
+  clickCard() {
     gameScreen.selectCard(this);
   }
 

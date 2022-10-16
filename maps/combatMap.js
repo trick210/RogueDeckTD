@@ -39,7 +39,7 @@ class CombatMap {
     this.container.addChild(this.path);
 
     this.initialSpawns = [];
-    this.maxRounds = 1;
+    this.maxRounds = 3;
   }
 
 

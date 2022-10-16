@@ -4,6 +4,8 @@ let activeScreen = null;
 
 let player;
 
+let events;
+
 let topbar = null;
 
 let collider = new Bump(PIXI);
@@ -73,6 +75,7 @@ loader
   .add('mapIcon', 'assets/icons/mapIcon.png')
   .add('deckIcon', 'assets/icons/deckIcon.png')
   .add('gearIcon', 'assets/icons/gearIcon.png')
+  .add('heartIcon', 'assets/icons/heart.png')
   .add('spaceShip', 'assets/spaceShip.png');
 
 

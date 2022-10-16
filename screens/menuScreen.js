@@ -92,6 +92,9 @@ class MenuScreen {
     player = new Player("Spaceship", mapSeed, deckSeed);
     spaceScreen = new SpaceScreen();
 
+    events = new EventManager();
+    MarketPlanetScreen.CREATE_OFFERS();
+
     setActiveScreen(spaceScreen);
   }
 

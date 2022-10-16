@@ -25,7 +25,7 @@ class Topbar extends PIXI.Container {
     this.bg.lineStyle(5, 0x000000);
     this.bg.beginFill(0x303030);
 
-    let barWidth = 1200;
+    let barWidth = 1300;
     let barHeight = 60;
 
     this.x = (width - barWidth) / 2;
@@ -46,11 +46,18 @@ class Topbar extends PIXI.Container {
 
 
     this.stageText = new PIXI.Text("", {fontFamily: 'Arial', align: 'center', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
-    this.stageText.x = barWidth / 2;
+    this.stageText.x = barWidth / 2 - 180;
     this.stageText.y = 6;
     this.stageText.anchor.set(0.5, 0);
 
     this.addChild(this.stageText);
+
+    this.waveText = new PIXI.Text("", {fontFamily: 'Arial', align: 'center', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.waveText.x = barWidth / 2 + 200;
+    this.waveText.y = 6;
+    this.waveText.anchor.set(0.5, 0);
+
+    this.addChild(this.waveText);
 
     this.hpIcon = new PIXI.Graphics();
     this.hpIcon.beginFill(0xFF3030);
@@ -60,18 +67,27 @@ class Topbar extends PIXI.Container {
     this.hpIcon.lineStyle(0, 0x000000);
     this.hpIcon.drawRect(7, 9, 10, 6);
     this.hpIcon.endFill();
-    this.hpIcon.x = 180;
+    this.hpIcon.x = 200;
     this.hpIcon.y = 8;
 
     this.addChild(this.hpIcon);
 
     this.hpText = new PIXI.Text("0 / 0", {fontFamily: 'Arial', fontSize: 20, fontWeight: "bold", fill: 0xFF3030, stroke: 'black', strokeThickness: 3});
-    this.hpText.x = 300;
+    this.hpText.x = 320;
     this.hpText.y = 6;
 
     this.hpText.anchor.set(1, 0);
 
     this.addChild(this.hpText);
+
+
+    this.moneyText = new PIXI.Text("0 G", {fontFamily: 'Arial', fontSize: 20, fontWeight: "bold", fill: 'gold', stroke: 'black', strokeThickness: 3});
+    this.moneyText.x = 120;
+    this.moneyText.y = 6;
+
+    this.moneyText.anchor.set(0, 0);
+
+    this.addChild(this.moneyText);
 
 
     this.gearIcon = new PIXI.Sprite(resources['gearIcon'].texture);
@@ -122,6 +138,19 @@ class Topbar extends PIXI.Container {
 
   update() {
     this.stageText.text = ((player.stage == 0) ? "" : ("Planet " + player.stage + " - ")) + "Galaxy " + player.galaxy;
-    this.hpText.text = player.hp + " / " + player.maxHP
+    this.hpText.text = player.hp + " / " + player.maxHP;
+
+    this.moneyText.text = player.money + " G";
+
+    if (activeScreen == gameScreen) {
+      let round = gameScreen.round;
+      let waves = gameScreen.waves;
+      let currentWave = waves[round - 1];
+      let nextWave = waves[round];
+      this.waveText.text = "Wave " + round + ": " + currentWave.length + " " + currentWave[0].constructor.name + 
+        " - Wave " + (round + 1) + ": " + nextWave[0].constructor.name;
+    } else {
+      this.waveText.text = "";
+    }
   }
 }

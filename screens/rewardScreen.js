@@ -11,6 +11,8 @@ class RewardScreen {
 
     this.stageText = new PIXI.Text("You cleared planet " + player.stage, { fontFamily: 'Arial', fontSize: 64, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5 });
     this.rewardText = new PIXI.Text('Pick a reward', { fontFamily: 'Arial', fontSize: 48, fill: 'lime', align: 'center', stroke: 'black', strokeThickness: 5 });
+
+    this.moneyText = new PIXI.Text('+ x G', { fontFamily: 'Arial', fontSize: 32, fill: 'gold', align: 'center', stroke: 'black', strokeThickness: 5 });
     
 
     this.skipButton = new Button("Skip", width / 2 - 100, height / 2 + 100, 200, 50, this.click.bind(this));
@@ -23,11 +25,16 @@ class RewardScreen {
     this.stageText.y = 50;
     this.stageText.anchor.set(0.5, 0);
 
+    this.moneyText.x = width / 2;
+    this.moneyText.y = height / 2 + 200;
+    this.moneyText.anchor.set(0.5, 0);
+
 
     this.container.addChild(this.bg);
     this.container.addChild(this.rewardText);
     this.container.addChild(this.stageText);
     this.container.addChild(this.skipButton);
+    this.container.addChild(this.moneyText);
 
     let rand = mulberry32(rewardSeed);
 
@@ -41,13 +48,16 @@ class RewardScreen {
       card.x = width / 2 - card.cardWidth / 2 + (i - 1) * 250;
       card.y = 300;
 
-      card.removeAllListeners();
       card.on('mouseover', () => this.cardEnter(card));
       card.on('mouseout', () => this.cardLeave(card));
       card.on('click', () => this.click(cardName));
 
       this.container.addChild(card);
     }
+
+    let money = 20 + Math.floor(rand() * 11);
+    this.moneyText.text = "+ " + money + " G";
+    player.money += money;
 
   }
 
@@ -73,7 +83,7 @@ class RewardScreen {
 }
 
 const rewardPool = [
-  "BaseTower", 
+  "AmmoRefinery", 
   "MinigunTower", 
   "TempestTower", 
   "SniperNest", 

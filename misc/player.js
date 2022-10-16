@@ -29,7 +29,11 @@ class Player {
     this.galaxy = 1;
     this.stage = 0;
 
+    this.money = 300;
+
     this.deck = this.createDeck();
+
+    this.accessories = [];
 
     Topbar.CREATE(this.playerName);
 
@@ -70,8 +74,5 @@ class Player {
   getNextRewardSeed() {
     return Math.round(this.rewardRand() * 0xFFFFFFFF);
   }
-
-
-
 
 }

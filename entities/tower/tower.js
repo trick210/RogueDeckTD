@@ -23,7 +23,7 @@ class Tower extends Entity {
     this.buffContainer.on('childRemoved', this.sortBuffs.bind(this));
 
     this.infoContainer = new PIXI.Container();
-    this.infoText = new PIXI.Text("text", {fontFamily: 'Arial', fontSize: 20, fill: 0x000000});
+    this.infoText = new PIXI.Text("text", { fontFamily: 'Arial', fontSize: 20, fill: 0x000000 });
     this.infoContainer.addChild(this.infoText);
 
     this.layerOffset = 100;
@@ -73,19 +73,19 @@ class Tower extends Entity {
       buff.effect(this);
 
       buff.updateBuffIcon();
-      
-        
+
+
     }
 
     this.attackSpeed *= Math.min(player.maxTC / gameScreen.currentTC, 1);
-    this.cooldown  /= Math.min(player.maxTC / gameScreen.currentTC, 1);
+    this.cooldown /= Math.min(player.maxTC / gameScreen.currentTC, 1);
 
     this.attackSpeed = Math.round(this.attackSpeed * 100) / 100;
     this.cooldown = Math.round(this.cooldown);
 
     this.rangeCollider.radius = this.range;
 
-    
+
     this.buffed = this.buffs.length != 0;
 
     this.towerEffects.forEach(effect => effect());
@@ -93,7 +93,7 @@ class Tower extends Entity {
     if (this.tags.includes(towerTags.ON_COOLDOWN)) {
       this.updateCD();
     }
-    
+
 
     if (this.entered) {
       this.rangeCircle.clear();
@@ -147,7 +147,7 @@ class Tower extends Entity {
     this.rangeCircle.beginFill(0xFFFFFF, 0.2);
     this.rangeCircle.drawCircle(0, 0, this.range);
     this.rangeCircle.endFill();
-    
+
     let hit = this.canPlace(pos);
 
     this.rangeCircle.tint = !hit ? 0xFF8080 : 0xAAAAAA;
@@ -194,6 +194,9 @@ class Tower extends Entity {
 
       this.enter();
       this.click();
+
+      events.onTowerPlaced(this);
+
       return true;
     }
 

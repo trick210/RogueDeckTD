@@ -68,6 +68,10 @@ class GameScreen {
     this.mouseOnMap = false;
 
     this.round = 1;
+
+    this.waves = [];
+    this.waves.push(this.map.getWave(this.round));
+    this.waves.push(this.map.getWave(this.round + 1));
   
     this.energy = player.maxEnergy;
 
@@ -202,9 +206,11 @@ class GameScreen {
     if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER && !e.ignore).length == 0) {
       this.levelStarted = false;
       if (this.round < this.map.maxRounds) {
+        events.onClear();
         this.removeBuffs();
         this.ui.startButton.enable();
         this.round++;
+        this.waves.push(this.map.getWave(this.round + 1));
         this.drawPhase();
       } else {
         this.endLevel();
@@ -227,9 +233,10 @@ class GameScreen {
   startLevel() {
 
     if (!this.levelStarted) {
-      this.currentMonsterList = this.map.getWave(this.round);
+      this.currentMonsterList = [...this.waves[this.round - 1]];
       this.monsterInWave = this.currentMonsterList.length;
-      //this.spawnClock = 10000 / (this.monsterInWave - 1);
+
+      
       this.spawnClock = 0;
       this.levelStarted = true;
       this.ui.startButton.disable();
@@ -240,7 +247,9 @@ class GameScreen {
   setupDeck() {
     
     for (let card of player.deck) {
-      this.deck.push(new Card((Function('return new ' + card))()));
+      let c = new Card((Function('return new ' + card))());
+      c.addListeners();
+      this.deck.push(c);
     }
 
     shuffle(this.deck, player.deckRand);
@@ -293,12 +302,14 @@ class GameScreen {
     this.discardHand();
     this.energy = player.maxEnergy;
 
-    let remainingCards = this.drawTurret() ? 4 : 5;
+    let remainingCards = (this.round == 1 && this.drawTurret()) ? 4 : 5;
 
     for (let i = 0; i < remainingCards; i++) {
       this.drawCard();
 
     }
+
+    events.onDrawPhase();
 
   }
 
