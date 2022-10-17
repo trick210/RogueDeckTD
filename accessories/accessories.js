@@ -26,7 +26,11 @@ class Accessories extends PIXI.Container {
 
     graphics.endFill();
 
-    let letter = new PIXI.Text(name.charAt(0), { fontFamily: 'Arial', fontSize: 36, fill: 'white', stroke: 'black', strokeThickness: 4 });
+    let words = name.split(" ");
+    let letters = "";
+    words.forEach(w => letters += w.charAt(0));
+
+    let letter = new PIXI.Text(letters, { fontFamily: 'Arial', fontSize: 36, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 4 });
     letter.x = 80;
     letter.y = 75;
 
@@ -54,7 +58,7 @@ class Accessories extends PIXI.Container {
     tooltipBG.alpha = 0.8;
     this.tooltip.addChild(tooltipBG);
 
-    let nameText = new PIXI.Text(name, { fontFamily: 'Arial', fontSize: 48, fill: 'white', stroke: 'black', strokeThickness: 4 });
+    let nameText = new PIXI.Text(name, { fontFamily: 'Arial', fontSize: 48, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 6 });
     nameText.x = 10;
     nameText.y = 20;
     nameText.anchor.set(0, 0.5);
@@ -65,13 +69,13 @@ class Accessories extends PIXI.Container {
     nameText.width = (gx > fx) ? hgt * fx : wdh;
     nameText.height = (fx > gx) ? wdh / fx : hgt;
 
-    let descriptionText = new PIXI.Text(description, { fontFamily: 'Arial', fontSize: 16, fill: 'white', stroke: 'black', strokeThickness: 2 });
+    let descriptionText = new PIXI.Text(description, { fontFamily: 'Arial', fontSize: 16, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 2 });
     descriptionText.x = 10;
     descriptionText.y = 50;
     descriptionText.style.wordWrap = true;
     descriptionText.style.wordWrapWidth = 180;
 
-    let upgradeText = new PIXI.Text("Upgrade: " + upgradeDesc, { fontFamily: 'Arial', fontSize: 16, fill: 'white', stroke: 'black', strokeThickness: 2 });
+    let upgradeText = new PIXI.Text("Upgrade: " + upgradeDesc, { fontFamily: 'Arial', fontSize: 16, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 2 });
     upgradeText.x = 10;
     upgradeText.y = 70 + descriptionText.height;
     upgradeText.style.wordWrap = true;

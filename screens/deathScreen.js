@@ -10,8 +10,8 @@ class DeathScreen {
     this.bg.height = height;
     this.bg.tint = 0x2C3539;
 
-    this.deathText = new PIXI.Text('Game Over', {fontFamily: 'Arial', fontSize: 144, fill: 'red', align: 'center', stroke: 'black', strokeThickness: 5});
-    this.waveText = new PIXI.Text("You died on planet " + player.stage + " on wave " + wave, {fontFamily: 'Arial', fontSize: 72, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5});
+    this.deathText = new PIXI.Text('Game Over', {fontFamily: 'Arial', fontSize: 144, fill: 'red', align: 'center', stroke: 'black', lineJoin: "bevel", strokeThickness: 5});
+    this.waveText = new PIXI.Text("You died on planet " + player.stage + " on wave " + wave, {fontFamily: 'Arial', fontSize: 72, fill: 'white', align: 'center', stroke: 'black', lineJoin: "bevel", strokeThickness: 5});
 
     this.returnButton = new Button("Back to Menu", width / 2 - 100, height / 2, 200, 50, this.click.bind(this));
 

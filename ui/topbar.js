@@ -38,21 +38,21 @@ class Topbar extends PIXI.Container {
 
     this.addChild(this.bg);
 
-    this.playerName = new PIXI.Text(playerName, {fontFamily: 'Arial', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.playerName = new PIXI.Text(playerName, {fontFamily: 'Arial', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.playerName.x = 10;
     this.playerName.y = 6;
 
     this.addChild(this.playerName);
 
 
-    this.stageText = new PIXI.Text("", {fontFamily: 'Arial', align: 'center', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.stageText = new PIXI.Text("", {fontFamily: 'Arial', align: 'center', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.stageText.x = barWidth / 2 - 180;
     this.stageText.y = 6;
     this.stageText.anchor.set(0.5, 0);
 
     this.addChild(this.stageText);
 
-    this.waveText = new PIXI.Text("", {fontFamily: 'Arial', align: 'center', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.waveText = new PIXI.Text("", {fontFamily: 'Arial', align: 'center', fontSize: 20, fill: 0xFFFFFF, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.waveText.x = barWidth / 2 + 200;
     this.waveText.y = 6;
     this.waveText.anchor.set(0.5, 0);
@@ -72,7 +72,7 @@ class Topbar extends PIXI.Container {
 
     this.addChild(this.hpIcon);
 
-    this.hpText = new PIXI.Text("0 / 0", {fontFamily: 'Arial', fontSize: 20, fontWeight: "bold", fill: 0xFF3030, stroke: 'black', strokeThickness: 3});
+    this.hpText = new PIXI.Text("0 / 0", {fontFamily: 'Arial', fontSize: 20, fontWeight: "bold", fill: 0xFF3030, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.hpText.x = 320;
     this.hpText.y = 6;
 
@@ -81,7 +81,7 @@ class Topbar extends PIXI.Container {
     this.addChild(this.hpText);
 
 
-    this.moneyText = new PIXI.Text("0 G", {fontFamily: 'Arial', fontSize: 20, fontWeight: "bold", fill: 'gold', stroke: 'black', strokeThickness: 3});
+    this.moneyText = new PIXI.Text("0 G", {fontFamily: 'Arial', fontSize: 20, fontWeight: "bold", fill: 'gold', stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.moneyText.x = 120;
     this.moneyText.y = 6;
 

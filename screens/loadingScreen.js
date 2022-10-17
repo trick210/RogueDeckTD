@@ -2,7 +2,7 @@ class LoadingScreen {
 
   constructor() {    
 
-    this.loadingText = new PIXI.Text("Loading...", {fontFamily: 'Arial', fontSize: 72, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5});
+    this.loadingText = new PIXI.Text("Loading...", {fontFamily: 'Arial', fontSize: 72, fill: 'white', align: 'center', stroke: 'black', lineJoin: "bevel", strokeThickness: 5});
 
     this.loadingText.x = width / 2;
     this.loadingText.y = height / 2 - 200;

@@ -52,6 +52,9 @@ class GameScreen {
 
     this.keySpace = keyboard(" ");
 
+    this.keyRight = keyboard("ArrowRight");
+    this.keyLeft = keyboard("ArrowLeft");
+
     this.key1.press = () => this.selectCardFromIndex(0);
     this.key2.press = () => this.selectCardFromIndex(1);
     this.key3.press = () => this.selectCardFromIndex(2);
@@ -64,6 +67,9 @@ class GameScreen {
     this.key0.press = () => this.selectCardFromIndex(9);
 
     this.keySpace.press = () => this.startLevel();
+
+    this.keyRight.press = () => this.ui.clickFastButton();
+    this.keyLeft.press = () => this.ui.clickSlowButton();
 
     this.mouseOnMap = false;
 
@@ -150,6 +156,9 @@ class GameScreen {
   }
 
   updateBuffs() {
+
+    this.hand.forEach(card => card.cost = card.cardObject.cost);
+
     for (let i = this.globalBuffs.length - 1; i >= 0; i--) {
       let buff = this.globalBuffs[i];
 
@@ -309,7 +318,7 @@ class GameScreen {
 
     }
 
-    events.onDrawPhase();
+    events.onDrawPhase(this);
 
   }
 
@@ -320,8 +329,12 @@ class GameScreen {
   }
 
   discardHand() {
-    while (this.hand.length != 0) {
-      let card = this.hand[0];
+    for (let i = this.hand.length - 1; i >= 0; i--) {
+      let card = this.hand[i];
+      if (card.persistentKey) {
+        card.persistentKey = false;
+        continue;
+      }
       if (!card.cardObject.tags.includes(spellTags.DEPLETE)) {
         this.discardCard(card);
       } else {
@@ -477,6 +490,9 @@ class GameScreen {
     this.key0.unsubscribe();
 
     this.keySpace.unsubscribe();
+
+    this.keyRight.unsubscribe();
+    this.keyLeft.unsubscribe();
 
     this.cannonBlastEmitter.destroy();
     this.explosiveRoundsEmitter.destroy();

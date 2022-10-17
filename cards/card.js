@@ -90,12 +90,18 @@ class Card extends PIXI.Container {
     this.interactive = true;
     this.buttonMode = true;
 
+    this.persistentKey = false;
+
   }
 
   addListeners() {
     this.on('click', this.clickCard.bind(this));
     this.on('mouseover', this.enter.bind(this));
     this.on("mouseout", this.leave.bind(this));
+  }
+
+  update() {
+    this.cardCost.text = this.cost;
   }
 
   clickCard() {
@@ -153,6 +159,8 @@ class Card extends PIXI.Container {
         gameScreen.discardCard(this);
       }
 
+      events.onCardPlayed(this);
+
     }
   }
 
@@ -185,4 +193,5 @@ const cardType = {
   TOWER: "Tower",
   CURSE: "Curse",
 }
+
 

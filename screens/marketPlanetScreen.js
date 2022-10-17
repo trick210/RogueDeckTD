@@ -85,7 +85,7 @@ class MarketPlanetScreen {
     uiGraphics.endFill();
     uiContainer.addChild(uiGraphics);
 
-    let titleText = new PIXI.Text('Shop', { fontFamily: 'Arial', fontSize: 48, fill: 'white', stroke: 'black', strokeThickness: 4 });
+    let titleText = new PIXI.Text('Shop', { fontFamily: 'Arial', fontSize: 48, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 4 });
 
 
     let backButton = new Button("Leave", uiWidth - 150, uiHeight - 100, 100, 50, this.clickLeave.bind(this));
@@ -125,7 +125,7 @@ class MarketPlanetScreen {
         let card = offer.card;
         let cardName = offer.cardName;
 
-        let priceTag = new PIXI.Text(card.marketPrice + " G", { fontFamily: 'Arial', fontSize: 24, fill: 'gold', stroke: 'black', strokeThickness: 4 });
+        let priceTag = new PIXI.Text(card.marketPrice + " G", { fontFamily: 'Arial', fontSize: 24, fill: 'gold', stroke: 'black', lineJoin: "bevel", strokeThickness: 4 });
 
         card.x = i * 200 + uiWidth / 2 - card.width - 5 + (j - 1) * 500;
         card.y = 100;
@@ -222,7 +222,7 @@ class MarketPlanetScreen {
 
     acc.on('click', () => this.clickAccessory(acc));
 
-    let priceAcc = new PIXI.Text(price + " G", { fontFamily: 'Arial', fontSize: 24, fill: 'gold', stroke: 'black', strokeThickness: 4 });
+    let priceAcc = new PIXI.Text(price + " G", { fontFamily: 'Arial', fontSize: 24, fill: 'gold', stroke: 'black', lineJoin: "bevel", strokeThickness: 4 });
 
     priceAcc.x = 80;
     priceAcc.y = 160;
@@ -251,14 +251,14 @@ class MarketPlanetScreen {
     heart.price = price;
     heart.hpIncrease = amount;
 
-    let priceHeart = new PIXI.Text(price + " G", { fontFamily: 'Arial', fontSize: 24, fill: 'gold', stroke: 'black', strokeThickness: 4 });
+    let priceHeart = new PIXI.Text(price + " G", { fontFamily: 'Arial', fontSize: 24, fill: 'gold', stroke: 'black', lineJoin: "bevel", strokeThickness: 4 });
 
     priceHeart.x = 64;
     priceHeart.y = 140;
 
     priceHeart.anchor.set(0.5, 0);
 
-    let hpText = new PIXI.Text("+" + amount + " max HP", { fontFamily: 'Arial', fontSize: 16, fill: 'white', stroke: 'black', strokeThickness: 2 });
+    let hpText = new PIXI.Text("+" + amount + " max HP", { fontFamily: 'Arial', fontSize: 16, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 2 });
 
     hpText.x = 64;
     hpText.y = 60;
@@ -314,7 +314,9 @@ class MarketPlanetScreen {
   static CREATE_OFFERS() {
     availableAccessories = [
       Accumulators,
-      BetterPowder
+      BetterPowder,
+      PersistentStorage,
+      PrechargedAttackSystems
     ];
   }
 

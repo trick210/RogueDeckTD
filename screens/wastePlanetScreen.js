@@ -113,7 +113,7 @@ class WastePlanetScreen {
                 "Facing the amounts of trashed spacecraft components you\n" +
                 "contemplate what to do...";
 
-    let titleText = new PIXI.Text(text1, { fontFamily: 'Arial', fontSize: 24, fill: 'white', stroke: 'black', strokeThickness: 3 });
+    let titleText = new PIXI.Text(text1, { fontFamily: 'Arial', fontSize: 24, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 3 });
 
     titleText.x = 10;
     titleText.y = 10;
@@ -169,7 +169,7 @@ class WastePlanetScreen {
                 "you decided to leave these parts for somebody else to find." :
                 "After some tinkering your ship regained " + this.repairAmount + " HP.";
 
-    let titleText = new PIXI.Text(text1, { fontFamily: 'Arial', fontSize: 24, fill: 'white', stroke: 'black', strokeThickness: 3 });
+    let titleText = new PIXI.Text(text1, { fontFamily: 'Arial', fontSize: 24, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 3 });
 
     titleText.x = 10;
     titleText.y = 10;
@@ -204,7 +204,7 @@ class WastePlanetScreen {
 
     let text1 = "Choose a card.";
 
-    let titleText = new PIXI.Text(text1, { fontFamily: 'Arial', fontSize: 24, fill: 'white', stroke: 'black', strokeThickness: 3 });
+    let titleText = new PIXI.Text(text1, { fontFamily: 'Arial', fontSize: 24, fill: 'white', stroke: 'black', lineJoin: "bevel", strokeThickness: 3 });
 
     titleText.x = 30;
     titleText.y = 10;

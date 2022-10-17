@@ -15,7 +15,7 @@ class MenuScreen {
     this.bg.height = height;
     this.bg.tint = 0x2C3539;
 
-    this.titleText = new PIXI.Text("RogueDeckTD", { fontFamily: 'Arial', fontSize: 96, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 5 });
+    this.titleText = new PIXI.Text("RogueDeckTD", { fontFamily: 'Arial', fontSize: 96, fill: 'white', align: 'center', stroke: 'black', lineJoin: "bevel", strokeThickness: 5 });
     this.startButton = new Button("Start Game", width / 2 - 100, height / 2 - 200, 200, 50, this.click.bind(this));
 
     this.mapSeedInput = this.createInputBox();
@@ -45,7 +45,7 @@ class MenuScreen {
     this.titleText.anchor.set(0.5, 0);
 
 
-    this.errorText = new PIXI.Text("Error", { fontFamily: 'Arial', fontSize: 24, fill: 'red', align: 'center', stroke: 'black', strokeThickness: 2 });
+    this.errorText = new PIXI.Text("Error", { fontFamily: 'Arial', fontSize: 24, fill: 'red', align: 'center', stroke: 'black', lineJoin: "bevel", strokeThickness: 2 });
 
     this.errorText.x = width / 2;
     this.errorText.y = height / 2 + 20;

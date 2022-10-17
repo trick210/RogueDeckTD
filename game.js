@@ -46,6 +46,8 @@ window.addEventListener("resize", function (event) {
   seedText.style.transform = getScaleMatrix();
 });
 
+PIXI.settings.PRECISION_FRAGMENT = 'highp';
+
 document.oncontextmenu = document.body.oncontextmenu = function(e) { e.preventDefault(); }
 
 let loadingScreen = new LoadingScreen();
@@ -110,7 +112,7 @@ function setup() {
 
 function showFPS() {
   showFrames = true;
-  frameText = new PIXI.Text('', { fontFamily: 'Arial', fontSize: 32, fill: 'white', align: 'center', stroke: 'black', strokeThickness: 2 });
+  frameText = new PIXI.Text('', { fontFamily: 'Arial', fontSize: 32, fill: 'white', align: 'center', stroke: 'black', lineJoin: "bevel", strokeThickness: 2 });
   frameText.x = width - 10;
   frameText.y = 10;
   frameText.anchor.set(1, 0);

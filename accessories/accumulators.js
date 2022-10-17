@@ -11,10 +11,10 @@ class Accumulators extends Accessories {
     this.retainedEnergy = Math.min(this.maxEnergy, gameScreen.energy);
   }
 
-  onDrawPhase() {
-    try {
-      gameScreen.energy += this.retainedEnergy;
-    } catch { }
+  onDrawPhase(gs) {
+    
+    gs.energy += this.retainedEnergy;
+    
     this.retainedEnergy = 0;
   }
 

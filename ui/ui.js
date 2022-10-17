@@ -73,27 +73,27 @@ class UI {
     this.towerInfoContainer.addChild(this.towerInfoDestroy);
 
 
-    this.roundText = new PIXI.Text("Round: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.roundText = new PIXI.Text("Round: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.roundText.x = width - 190;
     this.roundText.y = 120;
     this.container.addChild(this.roundText);
 
-    this.energyText = new PIXI.Text("Energy: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFD700, stroke: 'black', strokeThickness: 3});
+    this.energyText = new PIXI.Text("Energy: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFD700, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.energyText.x = width - 190;
     this.energyText.y = 150;
     this.container.addChild(this.energyText);
 
-    this.deckText = new PIXI.Text("Deck: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.deckText = new PIXI.Text("Deck: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.deckText.x = width - 190;
     this.deckText.y = 180;
     this.container.addChild(this.deckText);
 
-    this.discardText = new PIXI.Text("Discard Pile: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.discardText = new PIXI.Text("Discard Pile: 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.discardText.x = width - 190;
     this.discardText.y = 210;
     this.container.addChild(this.discardText);
 
-    this.TCText = new PIXI.Text("TC: 0 / 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', strokeThickness: 3});
+    this.TCText = new PIXI.Text("TC: 0 / 0", {fontFamily: 'Arial', fontSize: 24, fill: 0xFFFFFF, stroke: 'black', lineJoin: "bevel", strokeThickness: 3});
     this.TCText.x = width - 190;
     this.TCText.y = 240;
     this.container.addChild(this.TCText);
@@ -102,6 +102,8 @@ class UI {
   }
 
   update() {
+
+    this.gs.hand.forEach(card => card.update());
 
     this.deckText.text = `Deck: ${this.gs.deck.length}`
     this.discardText.text = `Discard Pile: ${this.gs.discardPile.length}`
