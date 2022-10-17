@@ -148,6 +148,7 @@ class GameScreen {
 
   recieveDamage(amount) {
     player.hp -= amount;
+    events.onPlayerDamage(amount);
     if (player.hp <= 0) {
       player.hp = 0;
       this.cleanup();
@@ -222,6 +223,7 @@ class GameScreen {
         this.waves.push(this.map.getWave(this.round + 1));
         this.drawPhase();
       } else {
+        events.onLevelEnd();
         this.endLevel();
       }
     }

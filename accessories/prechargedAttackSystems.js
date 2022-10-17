@@ -54,6 +54,7 @@ class PrechargedAttackSystems extends Accessories {
   equip() {
     super.equip()
     events.onClearListener.push(this.onClear.bind(this));
+    events.onLevelEndListener.push(this.onClear.bind(this));
     events.onDrawPhaseListener.push(this.onDrawPhase.bind(this));
   }
 

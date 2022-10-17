@@ -6,6 +6,8 @@ class EventManager {
     this.onDrawPhaseListener = [];
     this.onTowerPlacedListener = [];
     this.onCardPlayedListener = [];
+    this.onPlayerDamageListener = [];
+    this.onLevelEndListener = [];
   }
 
   onClear() {
@@ -22,6 +24,14 @@ class EventManager {
 
   onCardPlayed(card) {
     this.onCardPlayedListener.forEach(e => e(card));
+  }
+
+  onPlayerDamage(amount) {
+    this.onPlayerDamageListener.forEach(e => e(amount));
+  }
+
+  onLevelEnd() {
+    this.onLevelEndListener.forEach(e=> e());
   }
 
 }

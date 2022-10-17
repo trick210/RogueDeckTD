@@ -316,7 +316,8 @@ class MarketPlanetScreen {
       Accumulators,
       BetterPowder,
       PersistentStorage,
-      PrechargedAttackSystems
+      PrechargedAttackSystems,
+      EmergencyReserve
     ];
   }
 
