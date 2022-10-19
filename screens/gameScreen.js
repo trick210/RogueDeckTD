@@ -259,7 +259,6 @@ class GameScreen {
     
     for (let card of player.deck) {
       let c = new Card((Function('return new ' + card))());
-      c.addListeners();
       this.deck.push(c);
     }
 

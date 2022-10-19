@@ -134,6 +134,7 @@ class MarketPlanetScreen {
         priceTag.y = 360;
         priceTag.anchor.set(0.5, 0);
 
+        card.removeAllListeners();
         card.on('mouseover', () => this.cardEnter(card));
         card.on('mouseout', () => this.cardLeave(card));
         card.on('click', () => this.clickCard(card, cardName, priceTag));

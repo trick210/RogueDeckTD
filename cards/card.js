@@ -90,6 +90,8 @@ class Card extends PIXI.Container {
     this.interactive = true;
     this.buttonMode = true;
 
+    this.addListeners();
+
     this.persistentKey = false;
 
   }

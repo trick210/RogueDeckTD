@@ -48,6 +48,7 @@ class RewardScreen {
       card.x = width / 2 - card.cardWidth / 2 + (i - 1) * 250;
       card.y = 300;
 
+      card.removeAllListeners();
       card.on('mouseover', () => this.cardEnter(card));
       card.on('mouseout', () => this.cardLeave(card));
       card.on('click', () => this.click(cardName));
