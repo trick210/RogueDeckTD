@@ -115,4 +115,8 @@ class Accessories extends PIXI.Container {
   upgrade() {
     this.upgraded = true;
   }
+
+  countDamage(amount) {
+    //console.log(amount);
+  }
 }

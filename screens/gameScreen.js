@@ -148,7 +148,7 @@ class GameScreen {
 
   recieveDamage(amount) {
     player.hp -= amount;
-    events.onPlayerDamage(amount);
+    events.invoke('onPlayerDamage', amount);
     if (player.hp <= 0) {
       player.hp = 0;
       this.cleanup();
@@ -216,14 +216,14 @@ class GameScreen {
     if (this.levelStarted && this.currentMonsterList.length == 0 && this.entityContainer.children.filter(e => e.type == entityType.MONSTER && !e.ignore).length == 0) {
       this.levelStarted = false;
       if (this.round < this.map.maxRounds) {
-        events.onClear();
+        events.invoke('onClear');
         this.removeBuffs();
         this.ui.startButton.enable();
         this.round++;
         this.waves.push(this.map.getWave(this.round + 1));
         this.drawPhase();
       } else {
-        events.onLevelEnd();
+        events.invoke('onLevelEnd');
         this.endLevel();
       }
     }
@@ -319,7 +319,7 @@ class GameScreen {
 
     }
 
-    events.onDrawPhase(this);
+    events.invoke('onDrawPhase', this);
 
   }
 

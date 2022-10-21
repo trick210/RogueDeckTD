@@ -12,8 +12,8 @@ class BetterPowder extends Accessories {
   }
 
   equip() {
-    super.equip()
-    events.onTowerPlacedListener.push((tower) => this.onTowerPlaced(tower));
+    super.equip();
+    events.addListener('onTowerPlaced', this.onTowerPlaced.bind(this));
   }
 
   onTowerPlaced(tower) {

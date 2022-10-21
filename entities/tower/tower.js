@@ -195,7 +195,7 @@ class Tower extends Entity {
       this.enter();
       this.click();
 
-      events.onTowerPlaced(this);
+      events.invoke('onTowerPlaced', this);
 
       return true;
     }

@@ -318,7 +318,8 @@ class MarketPlanetScreen {
       BetterPowder,
       PersistentStorage,
       PrechargedAttackSystems,
-      EmergencyReserve
+      EmergencyReserve,
+      ProtectiveCharges
     ];
   }
 

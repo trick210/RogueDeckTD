@@ -161,8 +161,7 @@ class Card extends PIXI.Container {
         gameScreen.discardCard(this);
       }
 
-      events.onCardPlayed(this);
-
+      events.invoke('onCardPlayed', this);
     }
   }
 

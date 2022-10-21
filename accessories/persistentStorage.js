@@ -15,7 +15,7 @@ class PersistentStorage extends Accessories {
 
   equip() {
     super.equip()
-    events.onClearListener.push(this.onClear.bind(this));
+    events.addListener('onClear', this.onClear.bind(this));
   }
 
   upgrade() {

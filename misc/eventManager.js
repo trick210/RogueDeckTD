@@ -1,37 +1,35 @@
 class EventManager {
 
   constructor() {
-
-    this.onClearListener = [];
-    this.onDrawPhaseListener = [];
-    this.onTowerPlacedListener = [];
-    this.onCardPlayedListener = [];
-    this.onPlayerDamageListener = [];
-    this.onLevelEndListener = [];
+    this.eventMap = new Map();
   }
 
-  onClear() {
-    this.onClearListener.forEach(e => e());
+  addListener(event, fn) {
+    let lst = this.eventMap.get(event);
+
+    if (lst == null) {
+      lst = [];
+      this.eventMap.set(event, lst);
+    }
+
+    lst.push(fn);
   }
 
-  onDrawPhase(gs) {
-    this.onDrawPhaseListener.forEach(e => e(gs));
+  removeListener(event, fn) {
+    let lst = this.eventMap.get(event);
+
+    if (lst != null) {
+      let index = lst.indexOf(fn);
+      if (index > -1) lst.splice(index, 1);
+    }
   }
 
-  onTowerPlaced(tower) {
-    this.onTowerPlacedListener.forEach(e => e(tower));
-  }
+  invoke(event, ...args) {
+    let lst = this.eventMap.get(event);
 
-  onCardPlayed(card) {
-    this.onCardPlayedListener.forEach(e => e(card));
-  }
-
-  onPlayerDamage(amount) {
-    this.onPlayerDamageListener.forEach(e => e(amount));
-  }
-
-  onLevelEnd() {
-    this.onLevelEndListener.forEach(e=> e());
+    if (lst != null) {
+      lst.forEach(e => e(...args));
+    }
   }
 
 }

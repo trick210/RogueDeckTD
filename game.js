@@ -46,7 +46,6 @@ window.addEventListener("resize", function (event) {
   seedText.style.transform = getScaleMatrix();
 });
 
-PIXI.settings.PRECISION_FRAGMENT = 'highp';
 
 document.oncontextmenu = document.body.oncontextmenu = function(e) { e.preventDefault(); }
 

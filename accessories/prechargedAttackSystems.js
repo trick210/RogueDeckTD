@@ -25,12 +25,11 @@ class PrechargedAttackSystems extends Accessories {
 
     let onApply = (buff, gs) => {
       this.fn = (card) => onCardPlayed(card, buff, gs)
-      events.onCardPlayedListener.push(this.fn);
+      events.addListener('onCardPlayed', this.fn);
     }
 
     let onRemove = (buff, gs) => {
-      let index = events.onCardPlayedListener.indexOf(this.fn);
-      if (index > -1) events.onCardPlayedListener.splice(index, 1);
+      events.removeListener('onCardPlayed', this.fn);
     }
 
     this.createBuff = () => {
@@ -53,9 +52,9 @@ class PrechargedAttackSystems extends Accessories {
 
   equip() {
     super.equip()
-    events.onClearListener.push(this.onClear.bind(this));
-    events.onLevelEndListener.push(this.onClear.bind(this));
-    events.onDrawPhaseListener.push(this.onDrawPhase.bind(this));
+    events.addListener('onClear', this.onClear.bind(this));
+    events.addListener('onLevelEnd', this.onClear.bind(this));
+    events.addListener('onDrawPhase', this.onDrawPhase.bind(this));
   }
 
   upgrade() {

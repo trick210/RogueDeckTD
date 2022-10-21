@@ -12,16 +12,16 @@ class Accumulators extends Accessories {
   }
 
   onDrawPhase(gs) {
-    
+
     gs.energy += this.retainedEnergy;
-    
+
     this.retainedEnergy = 0;
   }
 
   equip() {
     super.equip()
-    events.onClearListener.push(this.onClear.bind(this));
-    events.onDrawPhaseListener.push(this.onDrawPhase.bind(this));
+    events.addListener('onClear', this.onClear.bind(this));
+    events.addListener('onDrawPhase', this.onDrawPhase.bind(this));
   }
 
   upgrade() {

@@ -21,11 +21,16 @@ class EmergencyReserve extends Accessories {
     this.tookDamage = true;
   }
 
+  onLevelEnd() {
+    this.tookDamage = false;
+  }
+
 
   equip() {
     super.equip()
-    events.onDrawPhaseListener.push(this.onDrawPhase.bind(this));
-    events.onPlayerDamageListener.push(this.onDamage.bind(this));
+    events.addListener('onDrawPhase', this.onDrawPhase.bind(this));
+    events.addListener('onPlayerDamage', this.onDamage.bind(this));
+    events.addListener('onLevelEnd', this.onLevelEnd.bind(this));
   }
 
 }
