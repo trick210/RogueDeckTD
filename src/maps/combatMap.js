@@ -4,9 +4,8 @@ class CombatMap {
     return new this(mapSeed, conf);
   }
 
-  constructor(mapSeed, conf) {
+  constructor(mapSeed, config) {
 
-    let config = JSON.parse(conf);
 
     this.bg = new Sprite(PIXI.Texture.WHITE);
     this.bg.width = width;

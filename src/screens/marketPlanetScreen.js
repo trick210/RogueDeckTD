@@ -319,7 +319,10 @@ class MarketPlanetScreen {
       PersistentStorage,
       PrechargedAttackSystems,
       EmergencyReserve,
-      ProtectiveCharges
+      ProtectiveCharges,
+      StarterPack,
+      Repairbot,
+      HardenedPolish
     ];
   }
 

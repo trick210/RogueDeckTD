@@ -106,6 +106,8 @@ class GameScreen {
 
     this.drawPhase();
 
+    events.invoke('onLevelStart', this);
+
     this.explosiveRoundsEmitter = new PIXI.particles.Emitter(this.pc, explosiveRoundsParticles);
     this.explosiveRoundsEmitter.emit = false;
 

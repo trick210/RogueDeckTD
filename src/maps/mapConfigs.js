@@ -1,4 +1,4 @@
-let grassConfig = `
+let grassConfig = 
 {
   "start": [
     "LEFT",
@@ -38,9 +38,9 @@ let grassConfig = `
   "bgColor": "0x00AA00",
   "pathColor": "0xC2B280"
 
-}`;
+};
 
-let crystalConfig = `
+let crystalConfig = 
 {
   "start": [
     "LEFT",
@@ -92,9 +92,9 @@ let crystalConfig = `
   "bgColor": "0x7b7a8e",
   "pathColor": "0x64336D"
 
-}`;
+};
 
-gasConfig = `
+gasConfig = 
 {
   "start": [
     "LEFT",
@@ -138,10 +138,9 @@ gasConfig = `
   "bgColor": "0xc07d66",
   "pathColor": "0xe0ac9a"
 
-}
-`;
+};
 
-bossConfig = `
+bossConfig = 
 {
   "start": [
     "LEFT",
@@ -189,4 +188,4 @@ bossConfig = `
   "bgColor": "0x77251c",
   "pathColor": "0x2f0804"
 
-}`;
+};
