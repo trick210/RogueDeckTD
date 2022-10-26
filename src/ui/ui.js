@@ -43,6 +43,44 @@ class UI {
     this.handContainer = new PIXI.Container();
     this.container.addChild(this.handContainer);
 
+    this.globalBuffInfoContainer = new PIXI.Container();
+    this.globalBuffInfoContainer.x = width - 750;
+    this.globalBuffInfoContainer.y = 20;
+    this.container.addChild(this.globalBuffInfoContainer);
+
+    this.buffContainerBG = new PIXI.Graphics();
+    this.buffContainerBG.lineStyle(5, 0x000000, 1);
+    this.buffContainerBG.beginFill(0xA0A0A0);
+    this.buffContainerBG.drawRect(0, 0, 230, 250);
+    this.buffContainerBG.drawRect(270, 0, 230, 250);
+    this.buffContainerBG.endFill();
+    this.globalBuffInfoContainer.addChild(this.buffContainerBG);
+
+    this.accessoriesText = new PIXI.Text("Accessories", {fontFamily: 'Arial', fontSize: 24, fill: 0x000000});
+    this.accessoriesText.x = 10;
+    this.accessoriesText.y = 10;
+    this.globalBuffInfoContainer.addChild(this.accessoriesText);
+
+    this.globalBuffsText = new PIXI.Text("Global Buffs", {fontFamily: 'Arial', fontSize: 24, fill: 0x000000});
+    this.globalBuffsText.x = 280;
+    this.globalBuffsText.y = 10;
+    this.globalBuffInfoContainer.addChild(this.globalBuffsText);
+
+    this.accessoriesIconContainer = new PIXI.Container();
+    this.accessoriesIconContainer.x = 10;
+    this.accessoriesIconContainer.y = 50;
+    this.globalBuffInfoContainer.addChild(this.accessoriesIconContainer);
+
+    this.addAccessoriesIcons();
+
+    this.globalBuffIconContainer = new PIXI.Container();
+    this.globalBuffIconContainer.x = 280;
+    this.globalBuffIconContainer.y = 50;
+    this.globalBuffInfoContainer.addChild(this.globalBuffIconContainer);
+
+    this.globalBuffIconContainer.on('childAdded', this.sortGlobalBuffs.bind(this));
+    this.globalBuffIconContainer.on('childRemoved', this.sortGlobalBuffs.bind(this));
+
 
     this.currentTower = null;
 
@@ -118,6 +156,25 @@ class UI {
     }
     
 
+  }
+
+  sortGlobalBuffs() {
+    for (let i = 0; i < this.gs.globalBuffs.length; i++) {
+      let buff = this.gs.globalBuffs[i];
+      buff.iconContainer.x = (i % 5) * 40;
+      buff.iconContainer.y = Math.floor(i / 5) * 40;
+    }
+  }
+
+  addAccessoriesIcons() {
+    for (let i = 0; i < player.accessories.length; i++) {
+      let acc = player.accessories[i];
+      acc.x = (i % 5) * 40;
+      acc.y = Math.floor(i / 5) * 40;
+      acc.width = 32;
+      acc.height = 32;
+      this.accessoriesIconContainer.addChild(acc);
+    }
   }
 
   clickFastButton() {
@@ -212,6 +269,7 @@ class UI {
 
     if (tower == null) {
       this.towerInfoContainer.visible = false;
+      this.globalBuffInfoContainer.visible = true;
       this.currentTower = null;
       return;
     }
@@ -219,6 +277,7 @@ class UI {
     this.currentTower = tower;
     this.currentTower.updateStats();
     this.towerInfoContainer.visible = true;
+    this.globalBuffInfoContainer.visible = false;
 
     if (this.currentTower.buttonContainer != null) {
       this.towerInfoContainer.addChild(this.currentTower.buttonContainer);

@@ -17,7 +17,7 @@ class ProtectiveCharges extends Accessories {
     }
   }
 
-  onLevelEnd(gs) {
+  onLevelEnd() {
     this.tookDamage = false;
   }
 
@@ -62,9 +62,7 @@ class ProtCharge extends Entity {
 
     this.graphics.clear();
     this.graphics.lineStyle(10, 0xFF5050, 1);
-    this.graphics.beginFill(0x000000, 0);
     this.graphics.drawCircle(0, 0, this.radius);
-    this.graphics.endFill();
 
 
     this.rangeCollider.radius = this.radius;

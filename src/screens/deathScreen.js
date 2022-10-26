@@ -39,6 +39,7 @@ class DeathScreen {
 
 
   click() {
+    spaceScreen.cleanup();
   	setActiveScreen(new MenuScreen());
   }
 

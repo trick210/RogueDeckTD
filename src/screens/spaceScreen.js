@@ -36,6 +36,9 @@ class SpaceScreen {
     holo.y = height - 300;
     this.container.addChild(holo);
 
+    this.keyA = keyboard("a");
+    this.keyA.press = () => { this.planets.forEach(p => p.setActive(true)) };
+
   }
 
   createHolo() {
@@ -103,14 +106,14 @@ class SpaceScreen {
   }
 
   update() {
-    
+
   }
 
   clickPlanet(planet) {
 
     this.spaceShip.x = planet.x;
     this.spaceShip.y = planet.y - 64;
-    
+
     if (this.lastPlanet != null) {
       this.highlightPath.moveTo(this.lastPlanet.x, this.lastPlanet.y);
       this.highlightPath.lineTo(planet.x, planet.y);
@@ -132,7 +135,7 @@ class SpaceScreen {
     }
 
     this.lastPlanet = planet;
-    
+
     player.stage++;
 
     setActiveScreen(planet.getScreen());
@@ -283,7 +286,7 @@ class SpaceScreen {
       }
 
       let planet = new Planet(posX, posY, p, type, this.createPlanetSeed());
-      
+
       this.planets.push(planet);
       this.container.addChild(planet);
     }
@@ -303,5 +306,7 @@ class SpaceScreen {
     return Math.round(this.planetSeedRand() * 0xFFFFFFFF);
   }
 
-
+  cleanup() {
+    this.keyA.unsubscribe();
+  }
 }

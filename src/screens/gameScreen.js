@@ -202,13 +202,13 @@ class GameScreen {
     }
     buff.onApply(this);
     this.globalBuffs.push(buff);
-    //this.buffContainer.addChild(buff.iconContainer);
+    this.ui.globalBuffIconContainer.addChild(buff.iconContainer);
   }
 
   removeBuff(buff) {
     buff.onRemove(this);
     this.globalBuffs.splice(this.globalBuffs.indexOf(buff), 1);
-    //this.buffContainer.removeChild(buff.iconContainer);
+    this.ui.globalBuffIconContainer.removeChild(buff.iconContainer);
   }
 
   checkEnd() {

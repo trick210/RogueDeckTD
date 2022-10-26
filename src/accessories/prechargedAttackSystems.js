@@ -33,7 +33,7 @@ class PrechargedAttackSystems extends Accessories {
     }
 
     this.createBuff = () => {
-      let buff = new Buff(this.name, buffEffect, onApply, onRemove);
+      let buff = new Buff('Precharged Attack', buffEffect, onApply, onRemove);
       return buff;
     }
     
