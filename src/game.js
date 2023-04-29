@@ -1,6 +1,7 @@
 let gameScreen;
 let spaceScreen;
 let activeScreen = null;
+let overlayScreen = null;
 
 let player;
 
@@ -126,12 +127,30 @@ function setActiveScreen(screen) {
   app.stage.addChildAt(activeScreen.container, 0);
 }
 
+function setOverlay(screen) {
+  if (overlayScreen != null) {
+    app.stage.removeChild(overlayScreen.container);
+  }
+  overlayScreen = screen;
+
+  if (screen != null) {
+    app.stage.addChildAt(overlayScreen.container, 1);
+    activeScreen.container.interactiveChildren = false;
+  } else {
+    activeScreen.container.interactiveChildren = true;
+  }
+}
+
 function update(time) {
 
   deltaTime = speed * ((time - lastTime) % 100);
   lastTime = time;
 
-  activeScreen.update();
+  if (overlayScreen != null) {
+    overlayScreen.update();
+  } else {
+    activeScreen.update();
+  }
 
   if (topbar != null) {
     topbar.update();

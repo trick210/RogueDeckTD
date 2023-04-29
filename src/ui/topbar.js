@@ -112,6 +112,8 @@ class Topbar extends PIXI.Container {
     this.deckIcon.interactive = true;
     this.deckIcon.buttonMode = true;
 
+    this.deckIcon.on('click', () => { setOverlay(new DeckScreen()); });
+
     this.addChild(this.deckIcon);
 
     this.mapIcon = new PIXI.Sprite(resources['mapIcon'].texture);
@@ -124,10 +126,10 @@ class Topbar extends PIXI.Container {
     this.mapIcon.interactive = true;
     this.mapIcon.buttonMode = true;
 
-    let colorMatrix = new PIXI.filters.ColorMatrixFilter();
-    colorMatrix.desaturate();
+    //let colorMatrix = new PIXI.filters.ColorMatrixFilter();
+    //colorMatrix.desaturate();
 
-    this.mapIcon.filters = [colorMatrix];
+    //this.mapIcon.filters = [colorMatrix];
 
 
     this.addChild(this.mapIcon);
